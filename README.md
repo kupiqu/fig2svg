@@ -82,7 +82,7 @@ Changes in Version 8-Jan-2006
 - linear color interpolation on patches (The interploation needs to be emulated as SVG does not support a linear interpolation of colors between three points. This is done by combination of different patches with linear alpha gradients. See limitation for Firefox 1.5.)
 
 Changes in Version 20-Jun-2009
-- Bugfix '°','±','µ','²','³','¼''½','¾','©''®'
+- Bugfix 'ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½''ï¿½','ï¿½','ï¿½''ï¿½'
 - Bugfix 'projection' in hggroup and hgtransform
 - Added Octave functionality (thanks to Jakob Malm)
   Bugfixe cdatamapping (thanks to Tom)
@@ -165,8 +165,8 @@ Changes in Version 10-11-2010
 Changes in Version 25-08-2011
 - Fix for degree character (thanks to Manes Recheis)
 - Fix for problems with dash-arrays in Inkscape (thanks to
-  Rüdiger Stirnberg)
-- Modified shape of driangles (thanks to Rüdiger Stirnberg)
+  Rï¿½diger Stirnberg)
+- Modified shape of driangles (thanks to Rï¿½diger Stirnberg)
 
 Changes in Version 22-10-2011
 - Removed versn as return value of function fileparts (thanks
