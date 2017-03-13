@@ -1726,7 +1726,7 @@ for i=length(axchild):-1:1
             end
         end
         if size(points,1)==3
-            [x,y,~] = project(points(1,:),points(2,:),points(3,:),projection);
+            [x,y,z] = project(points(1,:),points(2,:),points(3,:),projection);
         else
             [x,y,~] = project(points(1,:),points(2,:),zeros(size(points(1,:))),projection);
         end
