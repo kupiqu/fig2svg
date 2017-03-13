@@ -27,8 +27,8 @@ Usage:
 > plot2svg   % opens a file dialog to plot the active figure
     or
 > plot2svg('myfile.svg', figure handle, pixelfiletype)
-    
-  pixelfiletype = 'png' (default), 'jpg'         
+
+  pixelfiletype = 'png' (default), 'jpg'
 
 See http://www.zhinst.com/blogs/schwizer/ to get more informations
 
@@ -82,7 +82,7 @@ Changes in Version 8-Jan-2006
 - linear color interpolation on patches (The interploation needs to be emulated as SVG does not support a linear interpolation of colors between three points. This is done by combination of different patches with linear alpha gradients. See limitation for Firefox 1.5.)
 
 Changes in Version 20-Jun-2009
-- Bugfix 'ï¿½','ï¿½','ï¿½','ï¿½','ï¿½','ï¿½''ï¿½','ï¿½','ï¿½''ï¿½'
+- Bugfix '°','±','µ','²','³','¼''½','¾','©''®'
 - Bugfix 'projection' in hggroup and hgtransform
 - Added Octave functionality (thanks to Jakob Malm)
   Bugfixe cdatamapping (thanks to Tom)
@@ -149,7 +149,7 @@ Changes in Version 05-05-2010
   Ben Scandella)
 
 Changes in Version 30-10-2010
-- Improved handling of empty cells for labels (thanks to 
+- Improved handling of empty cells for labels (thanks to
   Constantine)
 - Improved HTML character coding (thanks to David Mack)
 - Bugfix for last ')' (thanks to Jonathon Harding and Benjamin)
@@ -157,7 +157,7 @@ Changes in Version 30-10-2010
 - Closing patches if they do not contain NaNs
 
 Changes in Version 10-11-2010
-- Support of the 'Layer' keyword to but the grid on top of 
+- Support of the 'Layer' keyword to but the grid on top of
   of the other axis content using 'top' (Many thanks to Justin
   Ashmall)
 - Tiny optimization of the grid display at axis borders
@@ -165,8 +165,8 @@ Changes in Version 10-11-2010
 Changes in Version 25-08-2011
 - Fix for degree character (thanks to Manes Recheis)
 - Fix for problems with dash-arrays in Inkscape (thanks to
-  Rï¿½diger Stirnberg)
-- Modified shape of driangles (thanks to Rï¿½diger Stirnberg)
+  Rüdiger Stirnberg)
+- Modified shape of driangles (thanks to Rüdiger Stirnberg)
 
 Changes in Version 22-10-2011
 - Removed versn as return value of function fileparts (thanks
@@ -194,4 +194,4 @@ Limitations:
 
 Example of a SVG file is included to the zip file.
 
-Reports of bugs highly welcome. 
+Reports of bugs highly welcome.
