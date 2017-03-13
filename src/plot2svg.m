@@ -13,7 +13,7 @@ function varargout = plot2svg(param1,id,pixelfiletype)
 
 global PLOT2SVG_globals
 global colorname
-progversion='25-Jan-2017';
+progversion='13-Mar-2017';
 PLOT2SVG_globals.runningIdNumber = 0;
 PLOT2SVG_globals.UI = reportUI;
 PLOT2SVG_globals.octave = false;
@@ -134,13 +134,9 @@ figcolor = searchcolor(id,get(id, 'Color'));
 if (~ strcmp(figcolor, 'none'))
     % Draw rectangle in the background of the graphic frame to cover all
     % other graphic elements
-    try % Octave does not have support for InvertHardcopy yet -- Jakob Malm % it does now
-        if strcmp(get(id,'InvertHardcopy'),'on')
-            fprintf(fid,'  <rect x="0" y="0" width="%0.3f" height="%0.3f" fill="#ffffff" stroke="none" />\n',paperpos(3),paperpos(4));
-        else
-            fprintf(fid,'  <rect x="0" y="0" width="%0.3f" height="%0.3f" fill="%s" stroke="none" />\n',paperpos(3),paperpos(4),figcolor);
-        end
-    catch
+    if strcmp(get(id,'InvertHardcopy'),'on')
+        fprintf(fid,'  <rect x="0" y="0" width="%0.3f" height="%0.3f" fill="#ffffff" stroke="none" />\n',paperpos(3),paperpos(4));
+    else
         fprintf(fid,'  <rect x="0" y="0" width="%0.3f" height="%0.3f" fill="%s" stroke="none" />\n',paperpos(3),paperpos(4),figcolor);
     end
 end
@@ -789,11 +785,7 @@ if strcmp(get(ax,'Visible'),'on')
     end
     gridlinestyle=get(ax,'GridLineStyle');
     minor_gridlinestyle=get(ax,'MinorGridLineStyle');
-    try % Octave does not have 'TickLength' yet. --Jakob Malm % SA: it has now
-        both_ticklength = get(ax,'TickLength');
-    catch
-        both_ticklength = [ 0.01 0.025 ];
-    end
+    both_ticklength = get(ax,'TickLength');
     gridBehind = true; % Default setting
     try
         if strcmp(get(ax, 'Layer'), 'top') && projection.xyplane
@@ -2402,25 +2394,6 @@ else
 end
 textpos=get(id,'Position');
 
-% SA: Octave compatibility: this is not needed anymore
-%  if PLOT2SVG_globals.octave
-%      xlim = get(ax, 'XLim');
-%      ylim = get(ax, 'YLim');
-%      zlim = get(ax, 'ZLim');
-%      if get(ax, 'XLabel') == id
-%          textpos = textpos + [mean(xlim) ylim(1)-diff(ylim)./axpos(4)*0.06 0];
-%      elseif get(ax, 'YLabel') == id
-%          textpos = textpos + [xlim(1)-diff(xlim)./axpos(3)*0.06 mean(ylim) 0];
-%      elseif get(ax, 'ZLabel') == id
-%          if projection.xyplane
-%              return;
-%          end
-%          textpos = textpos + [xlim(1)-diff(xlim)./axpos(3)*0.06 0 mean(zlim)];
-%      elseif get(ax, 'Title') == id
-%          textpos = textpos + [mean(xlim) ylim(2)+diff(ylim)./axpos(4)*0.01 0];
-%      end
-%  end
-
 % textfontsize = get(id,'FontSize');
 fontsize = convertunit(get(id,'FontSize'),get(id,'FontUnits'),'points', axpos(4));   % convert fontsize to inches
 % paperposOriginal = get(gcf,'Position');
@@ -2951,83 +2924,83 @@ if ~isempty(StringText)
     StringText=strrep(StringText,'>','&gt;');
     StringText=strrep(StringText,'"','&quot;');
     % Workaround for Firefox and Inkscape
-    StringText=strrep(StringText,'�','&#176;');
-    %StringText=strrep(StringText,'�','&deg;');
-    StringText=strrep(StringText,'�','&plusmn;');
-    StringText=strrep(StringText,'�','&micro;');
-    StringText=strrep(StringText,'�','&sup2;');
-    StringText=strrep(StringText,'�','&sup3;');
-    StringText=strrep(StringText,'�','&frac14;');
-    StringText=strrep(StringText,'�','&frac12;');
-    StringText=strrep(StringText,'�','&frac34;');
-    StringText=strrep(StringText,'�','&copy;');
-    StringText=strrep(StringText,'�','&reg;');
+    StringText=strrep(StringText,'°','&#176;');
+    %StringText=strrep(StringText,'°','&deg;');
+    StringText=strrep(StringText,'±','&plusmn;');
+    StringText=strrep(StringText,'µ','&micro;');
+    StringText=strrep(StringText,'²','&sup2;');
+    StringText=strrep(StringText,'³','&sup3;');
+    StringText=strrep(StringText,'Œ','&frac14;');
+    StringText=strrep(StringText,'œ','&frac12;');
+    StringText=strrep(StringText,'Ÿ','&frac34;');
+    StringText=strrep(StringText,'©','&copy;');
+    StringText=strrep(StringText,'®','&reg;');
     if any(StringText > 190)
-        StringText=strrep(StringText,'�','&#191;');
-        StringText=strrep(StringText,'�','&#192;');
-        StringText=strrep(StringText,'�','&#193;');
-        StringText=strrep(StringText,'�','&#194;');
-        StringText=strrep(StringText,'�','&#195;');
-        StringText=strrep(StringText,'�','&#196;');
-        StringText=strrep(StringText,'�','&#197;');
-        StringText=strrep(StringText,'�','&#198;');
-        StringText=strrep(StringText,'�','&#199;');
-        StringText=strrep(StringText,'�','&#200;');
-        StringText=strrep(StringText,'�','&#201;');
-        StringText=strrep(StringText,'�','&#202;');
-        StringText=strrep(StringText,'�','&#203;');
-        StringText=strrep(StringText,'�','&#204;');
-        StringText=strrep(StringText,'�','&#205;');
-        StringText=strrep(StringText,'�','&#206;');
-        StringText=strrep(StringText,'�','&#207;');
-        StringText=strrep(StringText,'�','&#208;');
-        StringText=strrep(StringText,'�','&#209;');
-        StringText=strrep(StringText,'�','&#210;');
-        StringText=strrep(StringText,'�','&#211;');
-        StringText=strrep(StringText,'�','&#212;');
-        StringText=strrep(StringText,'�','&#213;');
-        StringText=strrep(StringText,'�','&#214;');
-        StringText=strrep(StringText,'�','&#215;');
-        StringText=strrep(StringText,'�','&#216;');
-        StringText=strrep(StringText,'�','&#217;');
-        StringText=strrep(StringText,'�','&#218;');
-        StringText=strrep(StringText,'�','&#219;');
-        StringText=strrep(StringText,'�','&#220;');
-        StringText=strrep(StringText,'�','&#221;');
-        StringText=strrep(StringText,'�','&#222;');
-        StringText=strrep(StringText,'�','&#223;');
-        StringText=strrep(StringText,'�','&#224;');
-        StringText=strrep(StringText,'�','&#225;');
-        StringText=strrep(StringText,'�','&#226;');
-        StringText=strrep(StringText,'�','&#227;');
-        StringText=strrep(StringText,'�','&#228;');
-        StringText=strrep(StringText,'�','&#229;');
-        StringText=strrep(StringText,'�','&#230;');
-        StringText=strrep(StringText,'�','&#231;');
-        StringText=strrep(StringText,'�','&#232;');
-        StringText=strrep(StringText,'�','&#233;');
-        StringText=strrep(StringText,'�','&#234;');
-        StringText=strrep(StringText,'�','&#235;');
-        StringText=strrep(StringText,'�','&#236;');
-        StringText=strrep(StringText,'�','&#237;');
-        StringText=strrep(StringText,'�','&#238;');
-        StringText=strrep(StringText,'�','&#239;');
-        StringText=strrep(StringText,'�','&#240;');
-        StringText=strrep(StringText,'�','&#241;');
-        StringText=strrep(StringText,'�','&#242;');
-        StringText=strrep(StringText,'�','&#243;');
-        StringText=strrep(StringText,'�','&#244;');
-        StringText=strrep(StringText,'�','&#245;');
-        StringText=strrep(StringText,'�','&#246;');
-        StringText=strrep(StringText,'�','&#247;');
-        StringText=strrep(StringText,'�','&#248;');
-        StringText=strrep(StringText,'�','&#249;');
-        StringText=strrep(StringText,'�','&#250;');
-        StringText=strrep(StringText,'�','&#251;');
-        StringText=strrep(StringText,'�','&#252;');
-        StringText=strrep(StringText,'�','&#253;');
-        StringText=strrep(StringText,'�','&#254;');
-        StringText=strrep(StringText,'�','&#255;');
+        StringText=strrep(StringText,'¿','&#191;');
+        StringText=strrep(StringText,'À','&#192;');
+        StringText=strrep(StringText,'Á','&#193;');
+        StringText=strrep(StringText,'Â','&#194;');
+        StringText=strrep(StringText,'Ã','&#195;');
+        StringText=strrep(StringText,'Ä','&#196;');
+        StringText=strrep(StringText,'Å','&#197;');
+        StringText=strrep(StringText,'Æ','&#198;');
+        StringText=strrep(StringText,'Ç','&#199;');
+        StringText=strrep(StringText,'È','&#200;');
+        StringText=strrep(StringText,'É','&#201;');
+        StringText=strrep(StringText,'Ê','&#202;');
+        StringText=strrep(StringText,'Ë','&#203;');
+        StringText=strrep(StringText,'Ì','&#204;');
+        StringText=strrep(StringText,'Í','&#205;');
+        StringText=strrep(StringText,'Î','&#206;');
+        StringText=strrep(StringText,'Ï','&#207;');
+        StringText=strrep(StringText,'Ð','&#208;');
+        StringText=strrep(StringText,'Ñ','&#209;');
+        StringText=strrep(StringText,'Ò','&#210;');
+        StringText=strrep(StringText,'Ó','&#211;');
+        StringText=strrep(StringText,'Ô','&#212;');
+        StringText=strrep(StringText,'Õ','&#213;');
+        StringText=strrep(StringText,'Ö','&#214;');
+        StringText=strrep(StringText,'×','&#215;');
+        StringText=strrep(StringText,'Ø','&#216;');
+        StringText=strrep(StringText,'Ù','&#217;');
+        StringText=strrep(StringText,'Ú','&#218;');
+        StringText=strrep(StringText,'Û','&#219;');
+        StringText=strrep(StringText,'Ü','&#220;');
+        StringText=strrep(StringText,'Ý','&#221;');
+        StringText=strrep(StringText,'Þ','&#222;');
+        StringText=strrep(StringText,'ß','&#223;');
+        StringText=strrep(StringText,'à','&#224;');
+        StringText=strrep(StringText,'á','&#225;');
+        StringText=strrep(StringText,'â','&#226;');
+        StringText=strrep(StringText,'ã','&#227;');
+        StringText=strrep(StringText,'ä','&#228;');
+        StringText=strrep(StringText,'å','&#229;');
+        StringText=strrep(StringText,'æ','&#230;');
+        StringText=strrep(StringText,'ç','&#231;');
+        StringText=strrep(StringText,'è','&#232;');
+        StringText=strrep(StringText,'é','&#233;');
+        StringText=strrep(StringText,'ê','&#234;');
+        StringText=strrep(StringText,'ë','&#235;');
+        StringText=strrep(StringText,'ì','&#236;');
+        StringText=strrep(StringText,'í','&#237;');
+        StringText=strrep(StringText,'î','&#238;');
+        StringText=strrep(StringText,'ï','&#239;');
+        StringText=strrep(StringText,'ð','&#240;');
+        StringText=strrep(StringText,'ñ','&#241;');
+        StringText=strrep(StringText,'ò','&#242;');
+        StringText=strrep(StringText,'ó','&#243;');
+        StringText=strrep(StringText,'ô','&#244;');
+        StringText=strrep(StringText,'õ','&#245;');
+        StringText=strrep(StringText,'ö','&#246;');
+        StringText=strrep(StringText,'÷','&#247;');
+        StringText=strrep(StringText,'ø','&#248;');
+        StringText=strrep(StringText,'ù','&#249;');
+        StringText=strrep(StringText,'ú','&#250;');
+        StringText=strrep(StringText,'û','&#251;');
+        StringText=strrep(StringText,'ü','&#252;');
+        StringText=strrep(StringText,'ý','&#253;');
+        StringText=strrep(StringText,'þ','&#254;');
+        StringText=strrep(StringText,'ÿ','&#255;');
     end
     StringText=deblank(StringText);
 end
