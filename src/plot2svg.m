@@ -3354,19 +3354,21 @@ function RemoveDataOffLimits(dataObj,ax)
     end
     if any(size(cdata)) == 1 % colorbar
       cdim = find(size(cdata) == 1);
-      sqdataprev = squeeze(data);
-      % Trunk the data off the limits
-      for i = 1:size(data,1)
-        % a trick to discard points that we don't want to show
-        data(i,1,data(i,1,:)<axlim(i,1)) = axlim(i,1);
-        data(i,1,data(i,1,:)>axlim(i,2)) = axlim(i,2);
-        setDataStr = [setDataStr,'datatype{',num2str(i),'},squeeze(data(',num2str(i),',1,:)),'];
-      end
-      sqdata = squeeze(data);
-      if sqdata(cdim,1) ~= sqdataprev(cdim,1) || sqdata(cdim,end) ~= sqdataprev(cdim,end)
-        b1 = round(0.5+(length(cdata)-1)*(sqdata(cdim,1)-sqdataprev(cdim,1))/(sqdataprev(cdim,end)-sqdataprev(cdim,1)));
-        b2 = round(0.5+(length(cdata)-1)*(sqdata(cdim,end)-sqdataprev(cdim,1))/(sqdataprev(cdim,end)-sqdataprev(cdim,1)));
-        cdata = cdata(b1:b2);
+      if ~isempty(cdim)
+        sqdataprev = squeeze(data);
+        % Trunk the data off the limits
+        for i = 1:size(data,1)
+          % a trick to discard points that we don't want to show
+          data(i,1,data(i,1,:)<axlim(i,1)) = axlim(i,1);
+          data(i,1,data(i,1,:)>axlim(i,2)) = axlim(i,2);
+          setDataStr = [setDataStr,'datatype{',num2str(i),'},squeeze(data(',num2str(i),',1,:)),'];
+        end
+        sqdata = squeeze(data);
+        if sqdata(cdim,1) ~= sqdataprev(cdim,1) || sqdata(cdim,end) ~= sqdataprev(cdim,end)
+          b1 = round(0.5+(length(cdata)-1)*(sqdata(cdim,1)-sqdataprev(cdim,1))/(sqdataprev(cdim,end)-sqdataprev(cdim,1)));
+          b2 = round(0.5+(length(cdata)-1)*(sqdata(cdim,end)-sqdataprev(cdim,1))/(sqdataprev(cdim,end)-sqdataprev(cdim,1)));
+          cdata = cdata(b1:b2);
+        end
       end
     else % 2-D image (limited to integer values, actual axes' bounds set to integer values + [-0.5,0.5])
       % Trunk the data off the limits
