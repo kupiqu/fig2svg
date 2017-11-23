@@ -13,7 +13,7 @@ function varargout = plot2svg(param1,id,pixelfiletype)
 
 global PLOT2SVG_globals
 global colorname
-progversion='13-Mar-2017';
+progversion='23-Nov-2017';
 PLOT2SVG_globals.runningIdNumber = 0;
 PLOT2SVG_globals.UI = reportUI;
 PLOT2SVG_globals.octave = false;
