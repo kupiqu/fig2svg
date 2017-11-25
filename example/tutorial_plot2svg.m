@@ -22,7 +22,8 @@ set(gca, 'LineWidth', 2);
 [h1,h2] = legend(h, {'Max T', 'Avg T', 'Min T'});
 % Next we add a title, ylabel, grid, box on
 title('Temperature in Germany (1961-1990)');
-ylabel('T [°C]');
+str = sprintf('T [%cC]', char(176));
+ylabel(str);
 grid on
 box on
 axis([1 12 -5 25])
@@ -48,7 +49,7 @@ end
 plot2svg('temperature_nicer.svg');
 % But, this is not enough. To make it perfect we replace the line color by
 % a background pixel image (1px x 50px). This pixel image is scaled to cover
-% the whole axes region. 
+% the whole axes region.
 colors = reshape(flipud(jet(50)),[50 1 3]);
 imwrite(colors, 'gradient.png', 'png')
 % To add the pixel image the used filter chain is modified.
@@ -147,7 +148,7 @@ for i = 1:length(s)
     userdata.svg.Filter(next).Subfilter.Type = 'feSpecularLighting';
     userdata.svg.Filter(next).Subfilter.Source = source;
     userdata.svg.Filter(next).Subfilter.Result = result;
-    userdata.svg.Filter(next).Subfilter.SpecularConstant = specularConstant; 
+    userdata.svg.Filter(next).Subfilter.SpecularConstant = specularConstant;
     userdata.svg.Filter(next).Subfilter.SpecularExponent = specularExponent;
     userdata.svg.Filter(next).Subfilter.SurfaceScale = surfaceScale;
     userdata.svg.Filter(next).Subfilter.LightType = 'feDistantLight';
@@ -166,7 +167,7 @@ function svgImage(s, file, aspectRatio, result)
 %                'xMinYMin meet', 'xMinYMin slice', 'xMidYMid meet', ...
 %                -> see SVG 1.1 specification
 %   result : String that identifies the filter result for following filter
-%            stages.   
+%            stages.
 for i = 1:length(s)
     userdata = get(s(i),'UserData');
     if isfield(userdata, 'svg') && isfield(userdata.svg, 'Filter')
@@ -190,7 +191,7 @@ function svgGaussianBlur(s, source, deviation, result)
 %            or 'SourceAlpha'.
 %   deviation : Blur strength
 %   result : String that identifies the filter result for following filter
-%            stages.   
+%            stages.
 for i = 1:length(s)
     userdata = get(s(i),'UserData');
     if isfield(userdata, 'svg') && isfield(userdata.svg, 'Filter')
@@ -215,7 +216,7 @@ function svgOffset(s, source, offset, result)
 %            or 'SourceAlpha'.
 %   offset : Offset value [x y]
 %   result : String that identifies the filter result for following filter
-%            stages.   
+%            stages.
 for i = 1:length(s)
     userdata = get(s(i),'UserData');
     if isfield(userdata, 'svg') && isfield(userdata.svg, 'Filter')
@@ -243,7 +244,7 @@ function svgComposite(s, source1, source2, operator, result)
 %              -> see SVG 1.1 specification. 'arithmetic' is not yet
 %              supported.
 %   result : String that identifies the filter result for following filter
-%            stages.   
+%            stages.
 for i = 1:length(s)
     userdata = get(s(i),'UserData');
     if isfield(userdata, 'svg') && isfield(userdata.svg, 'Filter')
