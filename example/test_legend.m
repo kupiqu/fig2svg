@@ -2,6 +2,7 @@ clear;
 close all;
 clc;
 
+prevFontName = get(0,'defaultAxesFontName');
 set(0,'defaultAxesFontName','Arial');
 resolutionScaling = 96/get(0,'ScreenPixelsPerInch');
 fontSize = 16*resolutionScaling;
@@ -15,3 +16,5 @@ l = legend(p,{'data1','data2'},'Location','NorthEastOutside','Orientation','Vert
 % l = legend(p,{'data1','data2'},'Location','SouthWestOutside','Orientation','Vertical','Fontsize',fontSize,'Box','on','LineWidth',lineWidth);
 plot2svg('legend.svg')
 saveas(gca,'legend_saveas.svg')
+
+set(0,'defaultAxesFontName',prevFontName);
