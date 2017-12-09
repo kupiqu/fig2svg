@@ -13,7 +13,7 @@ figure
 x = 1:10;
 y = sin(x);
 e = std(y)*ones(size(x));
-errorbar(x,y,e,e,e/4,e/4,'LineWidth',lineWidth)
+errorbar(x,y,e,e,e/4,e/4,'.','LineWidth',lineWidth)
 xlim([0,11])
 
 set(gca,'TickDir','out','Fontsize',fontSize,'LineWidth',lineWidth)
