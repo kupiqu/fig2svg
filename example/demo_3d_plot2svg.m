@@ -13,7 +13,8 @@ alpha('scaled');
 axis equal
 box on
 grid on
-campos([2 13 10]);
+% campos([2 13 10]);
+view(3)
 if ~UIverlessthan('8.4')
   % set(gca,'XTickLabelRotation',45,'YTickLabelRotation',45,'ZTickLabelRotation',45)
 end

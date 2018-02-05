@@ -17,8 +17,16 @@ lineWidth = 2*resolutionScaling;
 % b = bar([sort(10*rand(1,30));sort(10*rand(1,30),'descend')],1,'LineWidth',lineWidth');
 % b = bar([sort(10*rand(1,10));sort(10*rand(1,10),'descend');sort(10*rand(1,10))],0.8,'LineWidth',lineWidth');
 
-% Baseline offset
-b = bar([0:10;10:-1:0]',0.8,'BaseValue',5,'LineWidth',lineWidth);
+% Baseline offset and arbitrary separation
+% b = bar(([0:4,8])/100,[0:4,8],0.8,'BaseValue',5,'LineWidth',lineWidth);
+
+% ungrouped bars
+figure
+hold on
+b1 = bar(10*rand(1,5),1,'LineWidth',lineWidth');
+b1.UserData = 'ungrouped';
+b2 = bar(-10*rand(1,5),1,'LineWidth',lineWidth');
+b2.UserData = 'ungrouped';
 
 % Stacked Layout
 % b = bar([sort(10*rand(1,10));sort(10*rand(1,10),'descend');sort(10*rand(1,10))]',0.8,'stacked','LineWidth',lineWidth');
@@ -32,7 +40,10 @@ set(gca,'Fontsize',fontSize,'LineWidth',lineWidth)
 
 xlabel('X','Fontsize',fontSize)
 ylabel('Y','Fontsize',fontSize)
-zlabel('Z','Fontsize',fontSize)
+% zlabel('Z','Fontsize',fontSize)
 
-plot2svg('bar_stacked.svg')
-saveas(gca,'bar_stacked_saveas.svg')
+plot2svg('bar_test.svg')
+% saveas(gca,'bar_test_saveas.svg')
+
+% plot2svg('bar_stacked.svg')
+% saveas(gca,'bar_stacked_saveas.svg')
