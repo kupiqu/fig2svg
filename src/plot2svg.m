@@ -24,7 +24,7 @@ function varargout = plot2svg(filename, id, debug, legendicons, clippingmode, fi
 
   global PLOT2SVG_globals
   global colorname
-  progversion = '9-Dec-2017';
+  progversion = '4-Feb-2018';
   PLOT2SVG_globals.runningIdNumber = 0;
   PLOT2SVG_globals.UI = reportUI;
   PLOT2SVG_globals.octave = false;
