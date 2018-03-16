@@ -2791,7 +2791,7 @@ function patternString = lineStyle2svg(lineStyle, lineWidth)
   scaling = 1/PLOT2SVG_globals.resolutionScaling; % max(1, lineWidth * 0.4);
   switch lineStyle
       case '--', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 8*scaling, 8*scaling); % updated to be as it is currently in Matlab
-      case ':', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 2*scaling, 2*scaling);
+      case ':', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 2*scaling, 8*scaling);
       case '-.', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f,%0.3f,%0.3f"', 8*scaling, 2*scaling, 4*scaling, 2*scaling); % updated to be as it is currently in Matlab
       otherwise, patternString = 'stroke-dasharray = "none"';
   end
