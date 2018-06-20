@@ -1,3 +1,5 @@
+This forked version of plot2svg will be renamed to fig2svg (https://github.com/kupiqu/fig2svg) when ready. Please see work in progress here: https://github.com/kupiqu/fig2svg/blob/master/README.md
+
 Scalable Vector Graphics (SVG) Export of Figures
 
 Converts 2D & 3D Matlab plots to the scalable vector format (SVG). This format is specified by W3C (http://www.w3.org) and can be viewed and printed with internet browsers.
