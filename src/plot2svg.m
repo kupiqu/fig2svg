@@ -185,7 +185,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
   ax = get(id,'Children');
   for j = length(ax):-1:1
     currentType = get(ax(j),'Type');
-    if strcmp(currentType,'axes') || strcmp(currentType,'bar')
+    if strcmp(currentType,'axes') || strcmp(currentType,'bar') || strcmp(currentType,'scatter')
       if PLOT2SVG_globals.debugModeOn
       disp(['ax(',num2str(j),') = ', currentType]);
       end
@@ -1267,9 +1267,9 @@ function group = axes2svg(fid,id,ax,group,paperpos)
   if strcmp(get(ax,'Visible'),'on')
       axxtick = get(ax,'XTick');
       axytick = get(ax,'YTick');
+      axztick = get(ax,'ZTick');
       axlabelx = get(ax,'XTickLabel');
       axlabely = get(ax,'YTickLabel');
-      axztick = get(ax,'ZTick');
       axlabelz = get(ax,'ZTickLabel');
       % SA: Octave compatibility
       if PLOT2SVG_globals.octave
@@ -1357,9 +1357,11 @@ function group = axes2svg(fid,id,ax,group,paperpos)
       % linewidth = get(ax,'LineWidth'); % linewidth = PLOT2SVG_globals.resolutionScaling*get(ax,'LineWidth');
       axxindex = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1)+axlimori(4))));
       axyindex = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2)+axlimori(5))));
+      axzindex = find((axztick >= axlimori(3)) & (axztick <= (axlimori(3)+axlimori(6))));
       % remove sticks outside of the axes (-1 of legends)
       axxtick = axxtick(axxindex);
       axytick = axytick(axyindex);
+      axztick = axztick(axzindex);
       if length(axxtick) > 1
           minor_lin_sticks = (0.2:0.2:0.8)*(axxtick(2)-axxtick(1));
           minor_axxtick = [];
@@ -1380,8 +1382,6 @@ function group = axes2svg(fid,id,ax,group,paperpos)
       else
           minor_axytick = [];
       end
-      axzindex = find((axztick >= axlimori(3)) & (axztick <= (axlimori(3)+axlimori(6))));
-      axztick = axztick(axzindex);
       if length(axztick) > 1
           minor_lin_sticks = (0.2:0.2:0.8)*(axztick(2)-axztick(1));
           minor_axztick = [];
@@ -1563,7 +1563,7 @@ function group = axes2svg(fid,id,ax,group,paperpos)
                               end
                           end
                       end
-              end
+                end
           end
       end
   end
@@ -1619,6 +1619,7 @@ function group = axes2svg(fid,id,ax,group,paperpos)
           [~, y_axis_point_index] = max(y);
           [~, z_axis_point_index] = min(x);
       end
+
       % Draw grid
       for pindex = 1:size(front_faces)
           p = front_faces(pindex);
@@ -1661,6 +1662,7 @@ function group = axes2svg(fid,id,ax,group,paperpos)
               end
           end
       end
+
       scolorname = searchcolor(id,get(ax,'XColor'));
       % Draw 'box' of x-axis
       if projection.xyplane == false
@@ -1669,7 +1671,6 @@ function group = axes2svg(fid,id,ax,group,paperpos)
               line2svg(fid,x(edge_line_index),y(edge_line_index),scolorname,'-',linewidth)
           end
       end
-
       % Draw x-tick marks
       if (ticklength(1) ~= 0)
           if axlimx(1) ~= axlimx(2)
@@ -1720,6 +1721,7 @@ function group = axes2svg(fid,id,ax,group,paperpos)
               end
           end
       end
+
       scolorname = searchcolor(id,get(ax,'YColor'));
       % Draw 'box' of y-axis
       if projection.xyplane == false
@@ -1728,7 +1730,6 @@ function group = axes2svg(fid,id,ax,group,paperpos)
               line2svg(fid,x(edge_line_index),y(edge_line_index),scolorname,'-',linewidth)
           end
       end
-
       % Draw y-tick marks
       if (ticklength(1) ~= 0)
           if axlimy(1) ~= axlimy(2)
@@ -1789,6 +1790,7 @@ function group = axes2svg(fid,id,ax,group,paperpos)
               end
           end
       end
+
       scolorname = searchcolor(id,get(ax,'ZColor'));
       % Draw 'box' of z-axis
       if projection.xyplane == false
@@ -1797,7 +1799,6 @@ function group = axes2svg(fid,id,ax,group,paperpos)
               line2svg(fid,x(edge_line_index),y(edge_line_index),scolorname,'-',linewidth)
           end
       end
-
       % Draw z-tick marks
       if (ticklength(1) ~= 0)
           if axlimz(1) ~= axlimz(2)
@@ -1847,6 +1848,7 @@ function group = axes2svg(fid,id,ax,group,paperpos)
               end
           end
       end
+
       exponent2svg(fid,axpos,paperpos,ax,axxtick,axytick,axztick)
       fprintf(fid,'    </g>\n');
   end
@@ -2073,6 +2075,133 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
                   case 'v',patch2svg(fid,x'*ones(1,4)+ones(length(linex),1)*[-1 1 0 -1]*1.15*markersize,y'*ones(1,4)+ones(length(liney),1)*[-0.577 -0.577 1.155 -0.577]*1.15*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
                   case '<',patch2svg(fid,x'*ones(1,4)+ones(length(linex),1)*[0.577 0.577 -1.155 0.577]*1.15*markersize,y'*ones(1,4)+ones(length(liney),1)*[-1 1 0 -1]*1.15*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
                   case '>',patch2svg(fid,x'*ones(1,4)+ones(length(linex),1)*[-0.577 -0.577 1.155 -0.577]*1.15*markersize,y'*ones(1,4)+ones(length(liney),1)*[-1 1 0 -1]*1.15*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
+              end
+              % close the marker group
+              fprintf(fid,'</g>\n');
+          end
+          animation2svg(fid, axchild(i));
+          % close the line group
+          fprintf(fid,'</g>\n');
+      elseif strcmp(get(axchild(i),'Type'),'scatter')
+          linewidth = get(axchild(i),'LineWidth'); % linewidth = PLOT2SVG_globals.resolutionScaling*get(axchild(i),'LineWidth');
+          marker = get(axchild(i),'Marker');
+
+          if strcmp(get(axchild(i),'MarkerEdgeColor'),'flat') || strcmp(get(axchild(i),'MarkerFaceColor'),'flat')
+              cData = get(axchild(i),'CData');
+              clim = get(ax,'CLim');
+              cmap = get(id,'Colormap');
+              pointsc = round((cData-clim(1))/(clim(2)-clim(1))*(size(cmap,1)-1)+1);
+              % Limit index to smallest or biggest color index
+              pointsc = max(pointsc,1);
+              pointsc = min(pointsc,size(cmap,1));
+          end
+
+          if strcmp(get(axchild(i),'MarkerEdgeColor'),'flat')
+              for pointc = 1:numel(pointsc)
+                  c_tmp = cmap(pointsc,:);
+                  markeredgecolorname{pointc} = searchcolor(id,c_tmp(pointc,:));
+              end
+              markeredgecolorname = markeredgecolorname';
+          else
+              markeredgecolor = get(axchild(i),'MarkerEdgeColor');
+              markeredgecolorname = searchcolor(id,markeredgecolor);
+          end
+
+          if strcmp(get(axchild(i),'MarkerFaceColor'),'flat')
+              for pointc = 1:numel(pointsc)
+                  c_tmp = cmap(pointsc,:);
+                  markerfacecolorname{pointc} = searchcolor(id,c_tmp(pointc,:));
+              end
+              markerfacecolorname = markerfacecolorname';
+          else
+              markerfacecolor = get(axchild(i),'MarkerFaceColor');
+              markerfacecolorname = searchcolor(id,markerfacecolor);
+          end
+
+          markersize = 2/3/10*get(axchild(i),'SizeData');
+
+          linex = get(axchild(i),'XData');
+          linex = linex(:)'; % Octave stores the data in a column vector
+          liney = get(axchild(i),'YData');
+          liney = liney(:)'; % Octave stores the data in a column vector
+          linez = get(axchild(i),'ZData');
+          linez = linez(:)'; % Octave stores the data in a column vector
+          try
+            if strcmp(get(ax,'XScale'),'log')
+                linex(linex <= 0) = NaN;
+                linex = log10(linex);
+            end
+            if strcmp(get(ax,'YScale'),'log')
+                liney(liney <= 0) = NaN;
+                liney = log10(liney);
+            end
+            if isempty(linez)
+              linez = zeros(size(linex));
+            end
+            if strcmp(get(ax,'ZScale'),'log')
+              linez(linez <= 0) = NaN;
+              linez = log10(linez);
+            end
+            [x,y,~] = project(linex,liney,linez,projection);
+          catch
+            % children of legend objects
+            x = linex;
+            y = liney;
+            z = linez;
+          end
+          x = (x*axpos(3)+axpos(1))*paperpos(3);
+          y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
+
+          markerOverlap = 0;
+          markerOverlap = max(markerOverlap, convertunit(linewidth*0.5, 'points', 'pixels', axpos(4)));
+          markerOverlap = max(markerOverlap, convertunit(markersize, 'points', 'pixels', axpos(4)));
+
+          % put a line into a group with its markers
+          if PLOT2SVG_globals.ClippingMode ~= 2
+            boundingBoxElement = [min(x)-markerOverlap min(y)-markerOverlap max(x)-min(x)+2*markerOverlap max(y)-min(y)+2*markerOverlap];
+          else
+            boundingBoxElement = boundingBoxAxes;
+          end
+          [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxElement);
+          if PLOT2SVG_globals.ClippingMode == 1 && ~PLOT2SVG_globals.BoxOn
+            boundingBoxAxes = [boundingBoxAxes(1) min([boundingBoxAxes(2) boundingBoxElement(2)]) max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1),0]) boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1),0])]) [boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2),0])]];
+          elseif PLOT2SVG_globals.ClippingMode == 3
+            boundingBoxAxes = [min([boundingBoxAxes(1) boundingBoxElement(1)]) min([boundingBoxAxes(2) boundingBoxElement(2)]) max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1),0]) boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1),0])]) max([boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2),0]) boundingBoxElement(4)+max([boundingBoxElement(2)-boundingBoxAxes(2),0])])];
+          end
+          if strcmp(get(axchild(i),'Clipping'),'on') && PLOT2SVG_globals.ClippingMode ~= 0
+            clippingIdString = clipping2svg(fid, axchild(i), ax, paperpos, axpos, projection, axIdString);
+            fprintf(fid,'<g id = "%s" clip-path = "url(#%s)" %s>\n', createId, clippingIdString, filterString);
+          else
+            fprintf(fid,'<g id = "%s" %s>\n', createId, filterString);
+          end
+          if ~isempty(filterString)
+              % Workaround for Inkscape filter bug
+              fprintf(fid,'<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" fill = "none" stroke = "none" />\n', boundingBox(1), boundingBox(2), boundingBox(3), boundingBox(4));
+          end
+
+          % put the markers into a subgroup of the lines
+          if  ~strcmp(marker, 'none') % but only do it if we actually are drawing markers
+              fprintf(fid,'<g>\n');
+              switch marker
+                  case 'none'
+                  case '.';circle2svg(fid,x,y,markersize/3,'none',markeredgecolorname,linewidth);
+                  case 'o',circle2svg(fid,x,y,markersize,markeredgecolorname,markerfacecolorname,linewidth);
+                  case '+',scatterpatch2svg(fid,x'*ones(1,5)+ones(length(linex),1)*[-1 1 NaN 0 0]*0.85*markersize,y'*ones(1,5)+ones(length(liney),1)*[0 0 NaN -1 1]*0.85*markersize,markeredgecolorname,'-',linewidth,markeredgecolorname, 1, 1, false);
+                  case '*',scatterpatch2svg(fid,x'*ones(1,11)+ones(length(linex),1)*[-1 1 NaN 0 0 NaN -0.7 0.7 NaN -0.7 0.7]*0.85*markersize,y'*ones(1,11)+ones(length(liney),1)*[0 0 NaN -1 1 NaN 0.7 -0.7 NaN -0.7 0.7]*0.85*markersize,markeredgecolorname,'-',linewidth,markeredgecolorname, 1, 1, false);
+                  case 'x',scatterpatch2svg(fid,x'*ones(1,5)+ones(length(linex),1)*[-0.7 0.7 NaN -0.7 0.7]*0.8*markersize,y'*ones(1,5)+ones(length(liney),1)*[0.7 -0.7 NaN -0.7 0.7]*0.8*markersize,markeredgecolorname,'-',linewidth,markeredgecolorname, 1, 1, false);
+                  %% Octave keeps s, d, p and h in the HandleGraphics object, for the square, diamond, pentagram, and hexagram markers, respectively -- Jakob Malm
+                  case {'square', 's'},scatterpatch2svg(fid,x'*ones(1,5)+ones(length(linex),1)*[-1 -1 1 1 -1]*0.75*markersize,y'*ones(1,5)+ones(length(liney),1)*[-1 1 1 -1 -1]*0.75*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
+                  case {'diamond', 'd'},scatterpatch2svg(fid,x'*ones(1,5)+ones(length(linex),1)*[-0.7071 0 0.7071 0 -0.7071]*1.35*markersize,y'*ones(1,5)+ones(length(liney),1)*[0 1 0 -1 0]*1.35*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
+                  case {'pentagram', 'p'},scatterpatch2svg(fid,...
+                          x'*ones(1,11)+ones(length(linex),1)*[0 0.1180 0.5 0.1910 0.3090 0 -0.3090 -0.1910 -0.5 -0.1180 0]*2*markersize,...
+                          y'*ones(1,11)+ones(length(liney),1)*[-0.5257 -0.1625 -0.1625 0.0621 0.4253 0.2008 0.4253 0.0621 -0.1625 -0.1625 -0.5257]*2*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
+                  case {'hexagram', 'h'},scatterpatch2svg(fid,...
+                          x'*ones(1,13)+ones(length(linex),1)*[0 0.2309 0.6928 0.4619 0.6928 0.2309 0 -0.2309 -0.6928 -0.4619 -0.6928 -0.2309 0]*1.3*markersize,...
+                          y'*ones(1,13)+ones(length(liney),1)*[0.8 0.4 0.4 0 -0.4 -0.4 -0.8 -0.4 -0.4 0 0.4 0.4 0.8]*1.3*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
+                  case '^',scatterpatch2svg(fid,x'*ones(1,4)+ones(length(linex),1)*[-1 1 0 -1]*1.15*markersize,y'*ones(1,4)+ones(length(liney),1)*[0.577 0.577 -1.155 0.577]*1.15*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
+                  case 'v',scatterpatch2svg(fid,x'*ones(1,4)+ones(length(linex),1)*[-1 1 0 -1]*1.15*markersize,y'*ones(1,4)+ones(length(liney),1)*[-0.577 -0.577 1.155 -0.577]*1.15*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
+                  case '<',scatterpatch2svg(fid,x'*ones(1,4)+ones(length(linex),1)*[0.577 0.577 -1.155 0.577]*1.15*markersize,y'*ones(1,4)+ones(length(liney),1)*[-1 1 0 -1]*1.15*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
+                  case '>',scatterpatch2svg(fid,x'*ones(1,4)+ones(length(linex),1)*[-0.577 -0.577 1.155 -0.577]*1.15*markersize,y'*ones(1,4)+ones(length(liney),1)*[-1 1 0 -1]*1.15*markersize,markerfacecolorname,'-',linewidth,markeredgecolorname, 1, 1, true);
               end
               % close the marker group
               fprintf(fid,'</g>\n');
@@ -3224,8 +3353,32 @@ end
 function circle2svg(fid,x,y,radius,markeredgecolorname,markerfacecolorname,width)
   for j = 1:length(x)
       if ~isempty(x) && ~isempty(y) && ~(isnan(x(j)) || isnan(y(j)))
-          if ~strcmp(markeredgecolorname,'none') || ~strcmp(markerfacecolorname,'none')
-              fprintf(fid,'<circle cx = "%0.3f" cy = "%0.3f" r = "%0.3f" fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" />\n',x(j),y(j),radius,markerfacecolorname,markeredgecolorname,width);
+          if ~strcmp(markeredgecolorname,'none') | ~strcmp(markerfacecolorname,'none')
+              if size(markeredgecolorname,1) > 1
+                  fprintf(fid,'<circle cx = "%0.3f" cy = "%0.3f" r = "%0.3f" fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" />\n',x(j),y(j),radius,markerfacecolorname,markeredgecolorname{j},width);
+              elseif size(markerfacecolorname,1) > 1
+                  fprintf(fid,'<circle cx = "%0.3f" cy = "%0.3f" r = "%0.3f" fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" />\n',x(j),y(j),radius,markerfacecolorname{j},markeredgecolorname,width);
+              else
+                  fprintf(fid,'<circle cx = "%0.3f" cy = "%0.3f" r = "%0.3f" fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" />\n',x(j),y(j),radius,markerfacecolorname,markeredgecolorname,width);
+              end
+          end
+      end
+  end
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% create a scatter patch
+function scatterpatch2svg(fid, x, y, markerfacecolorname, style, width, markeredgecolorname, face_opacity, edge_opacity, closed)
+  for j = 1:length(x)
+      if ~isempty(x) && ~isempty(y) && ~any(isnan(x(j,:)) | isnan(y(j,:)))
+          if ~strcmp(markeredgecolorname,'none') | ~strcmp(markerfacecolorname,'none')
+              if size(markeredgecolorname,1) > 1
+                  patch2svg(fid, x(j,:), y(j,:), markerfacecolorname, style, width, markeredgecolorname{j}, face_opacity, edge_opacity, closed)
+              elseif size(markerfacecolorname,1) > 1
+                  patch2svg(fid, x(j,:), y(j,:), markerfacecolorname{j}, style, width, markeredgecolorname, face_opacity, edge_opacity, closed)
+              else
+                  patch2svg(fid, x(j,:), y(j,:), markerfacecolorname, style, width, markeredgecolorname, face_opacity, edge_opacity, closed)
+              end
           end
       end
   end
