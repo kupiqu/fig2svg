@@ -26,7 +26,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
 
   global PLOT2SVG_globals
   global colorname
-  progversion = '20-Jun-2018';
+  progversion = '28-Jun-2018';
   PLOT2SVG_globals.runningIdNumber = 0;
   PLOT2SVG_globals.UI = reportUI;
   PLOT2SVG_globals.octave = false;
@@ -84,7 +84,9 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
     f2 = figure('visible', 'off');
   end
   objects = allchild(f1);
+  paperpos = get(f1,'Position');
   copyobj(get(f1,'children'),f2);
+  set(f2,'Position',paperpos);
   if ~UIverlessthan('8.4.0')
     if ~isempty(xl.String)
      set(gca,'xlabel',xl)
@@ -134,12 +136,12 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
   set(0, 'ShowHiddenHandles', 'on');
   originalFigureUnits = get(id,'Units');
   set(id,'Units','pixels');   % All data in the svg-file is saved in pixels
-  paperpos = get(id,'Position');
+  paperpos = get(id,'Position')
   if nargin >= 6 && ~isempty(figureSize)
     paperpos(3) = figureSize(1);
     paperpos(4) = figureSize(2);
   end
-  paperpos = convertunit(paperpos, 'pixels', 'pixels');
+  paperpos = convertunit(paperpos, 'pixels', 'pixels')
   if (nargin < 7) || isempty(pixelFileType)
     PLOT2SVG_globals.pixelFileType = 'png';
   else
