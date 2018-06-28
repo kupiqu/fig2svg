@@ -136,12 +136,12 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
   set(0, 'ShowHiddenHandles', 'on');
   originalFigureUnits = get(id,'Units');
   set(id,'Units','pixels');   % All data in the svg-file is saved in pixels
-  paperpos = get(id,'Position')
+  paperpos = get(id,'Position');
   if nargin >= 6 && ~isempty(figureSize)
     paperpos(3) = figureSize(1);
     paperpos(4) = figureSize(2);
   end
-  paperpos = convertunit(paperpos, 'pixels', 'pixels')
+  paperpos = convertunit(paperpos, 'pixels', 'pixels');
   if (nargin < 7) || isempty(pixelFileType)
     PLOT2SVG_globals.pixelFileType = 'png';
   else
