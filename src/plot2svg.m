@@ -26,7 +26,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
 
   global PLOT2SVG_globals
   global colorname
-  progversion = '28-Jun-2018';
+  progversion = '02-Jul-2018';
   PLOT2SVG_globals.runningIdNumber = 0;
   PLOT2SVG_globals.UI = reportUI;
   PLOT2SVG_globals.octave = false;
@@ -2785,9 +2785,9 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
             boundingBoxElement = boundingBoxAxes;
           end
           [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxElement);
-          if PLOT2SVG_globals.ClippingMode == 1 && ~PLOT2SVG_globals.BoxOn
+          if PLOT2SVG_globals.ClippingMode == 1 && exist('PLOT2SVG_globals.BoxOn','var') && ~PLOT2SVG_globals.BoxOn
             boundingBoxAxes = [boundingBoxAxes(1) min([boundingBoxAxes(2) boundingBoxElement(2)]) max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1),0]) boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1),0])]) [boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2),0])]];
-          elseif PLOT2SVG_globals.ClippingMode == 3
+          elseif PLOT2SVG_globals.ClippingMode == 3 || PLOT2SVG_globals.ClippingMode == 1 && ~exist('PLOT2SVG_globals.BoxOn','var')
             boundingBoxAxes = [min([boundingBoxAxes(1) boundingBoxElement(1)]) min([boundingBoxAxes(2) boundingBoxElement(2)]) max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1),0]) boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1),0])]) max([boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2),0]) boundingBoxElement(4)+max([boundingBoxElement(2)-boundingBoxAxes(2),0])])];
           end
           if strcmp(get(axchild(i),'Clipping'),'on') && PLOT2SVG_globals.ClippingMode ~= 0
