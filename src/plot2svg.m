@@ -71,43 +71,48 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
     PLOT2SVG_globals.debugModeOn = debug;
   end
 
-  % a nice way to keep the original figure safe and work on a temporary copy
-  warning('off', 'MATLAB:copyobj:ObjectNotCopied'); % these warnings don't seem to come from figure content
   f1 = id;
-  xl = get(gca,'xlabel');
-  yl = get(gca,'ylabel');
-  zl = get(gca,'zlabel');
-  tl = get(gca,'title');
-  if PLOT2SVG_globals.debugModeOn % only show the copy in debug mode
-    f2 = figure;
-  else
-    f2 = figure('visible', 'off');
-  end
   objects = allchild(f1);
-  paperpos = get(f1,'Position');
-  copyobj(get(f1,'children'),f2);
-  set(f2,'Position',paperpos);
-  if ~UIverlessthan('8.4.0')
-    if ~isempty(xl.String)
-     set(gca,'xlabel',xl)
+  if all(~ismember(get(objects,'Type'),'wordcloud'))
+    % a nice way to keep the original figure safe and work on a temporary copy (does not work for wordclouds)
+    isWordCloud = 0;
+    warning('off', 'MATLAB:copyobj:ObjectNotCopied'); % these warnings don't seem to come from figure content
+    xl = get(gca,'xlabel');
+    yl = get(gca,'ylabel');
+    zl = get(gca,'zlabel');
+    tl = get(gca,'title');
+    if PLOT2SVG_globals.debugModeOn % only show the copy in debug mode
+      f2 = figure;
+    else
+      f2 = figure('visible', 'off');
     end
-    if ~isempty(yl.String)
-     set(gca,'ylabel',yl)
+    paperpos = get(f1,'Position');
+    copyobj(get(f1,'children'),f2);
+    set(f2,'Position',paperpos);
+    if ~UIverlessthan('8.4.0')
+      if ~isempty(xl.String)
+       set(gca,'xlabel',xl)
+      end
+      if ~isempty(yl.String)
+       set(gca,'ylabel',yl)
+      end
+      if ~isempty(zl.String)
+       set(gca,'zlabel',zl)
+      end
+      if ~isempty(tl.String)
+       set(gca,'title',tl)
+      end
+    else
+      copyobj(xl,gca);
+      copyobj(yl,gca);
+      copyobj(zl,gca);
+      copyobj(tl,gca);
     end
-    if ~isempty(zl.String)
-     set(gca,'zlabel',zl)
-    end
-    if ~isempty(tl.String)
-     set(gca,'title',tl)
-    end
+    id = f2;
+    warning('on', 'MATLAB:copyobj:ObjectNotCopied'); % restoring the warning after copying
   else
-    copyobj(xl,gca);
-    copyobj(yl,gca);
-    copyobj(zl,gca);
-    copyobj(tl,gca);
+    isWordCloud = 1;
   end
-  id = f2;
-  warning('on', 'MATLAB:copyobj:ObjectNotCopied'); % restoring the warning after copying
 
   if nargin < 1 || isempty(filename)
     [filename, pathname] = uiputfile( {'*.svg', 'SVG File (*.svg)'},'Save Figure as SVG File');
@@ -275,35 +280,37 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
   if nargout == 1
     varargout = {0};
   end
-  % set(id,'Units',originalFigureUnits);
-  % set(0, 'ShowHiddenHandles', originalShowHiddenHandles);
-  set(0,'CurrentFigure',f1)
-  if ~UIverlessthan('8.4.0')
-    if ~isempty(xl.String)
-     set(gca,'xlabel',xl)
-    end
-    if ~isempty(yl.String)
-     set(gca,'ylabel',yl)
-    end
-    if ~isempty(zl.String)
-     set(gca,'zlabel',zl)
-    end
-    % weird but title does not come back unless I do this:
-    copyobj(tl,gca);
-    % if ~isempty(tl.String)
-    %  set(gca,'title',tl)
-    % end
-  end
-  if ~PLOT2SVG_globals.debugModeOn % close the temporary copies
-    close(f2);
-  else
-    set(0,'CurrentFigure',f2)
+  if ~isWordCloud
+    % set(id,'Units',originalFigureUnits);
+    % set(0, 'ShowHiddenHandles', originalShowHiddenHandles);
+    set(0,'CurrentFigure',f1)
     if ~UIverlessthan('8.4.0')
-      % in new matlab versions, these look like the same but don't behave internally like axes' labels, so that's why I moved the actual axes' labels from the original to the copied figure, and then back, once the svg file was complete (here I just copy them for visual debugging)
-      copyobj(xl,gca);
-      copyobj(yl,gca);
-      copyobj(zl,gca);
+      if ~isempty(xl.String)
+       set(gca,'xlabel',xl)
+      end
+      if ~isempty(yl.String)
+       set(gca,'ylabel',yl)
+      end
+      if ~isempty(zl.String)
+       set(gca,'zlabel',zl)
+      end
+      % weird but title does not come back unless I do this:
       copyobj(tl,gca);
+      % if ~isempty(tl.String)
+      %  set(gca,'title',tl)
+      % end
+    end
+    if ~PLOT2SVG_globals.debugModeOn % close the temporary copies
+      close(f2);
+    else
+      set(0,'CurrentFigure',f2)
+      if ~UIverlessthan('8.4.0')
+        % in new matlab versions, these look like the same but don't behave internally like axes' labels, so that's why I moved the actual axes' labels from the original to the copied figure, and then back, once the svg file was complete (here I just copy them for visual debugging)
+        copyobj(xl,gca);
+        copyobj(yl,gca);
+        copyobj(zl,gca);
+        copyobj(tl,gca);
+      end
     end
   end
 end
