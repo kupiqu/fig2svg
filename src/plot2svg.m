@@ -921,9 +921,9 @@ function group = colorbar_axes2svg(fid,id,ax,group,paperpos)
           tick_ratio = [xy_ratio 1 1];
       end
       if strcmp(get(ax,'TickDirection'),'out')
-          label_distance = -40*ticklength;
+          label_distance = -60*ticklength;
       else
-          label_distance = -20*ticklength;
+          label_distance = -30*ticklength;
       end
       xlabel_distance = label_distance;
       ylabel_distance = label_distance;
@@ -953,7 +953,7 @@ function group = colorbar_axes2svg(fid,id,ax,group,paperpos)
       else
           minor_axytick = [];
       end
-      PLOT2SVG_globals.BoxOn = strcmp(get(ax,'Box'),'on')
+      PLOT2SVG_globals.BoxOn = strcmp(get(ax,'Box'),'on');
       if strcmp(get(ax,'Box'),'on')
           axxindex_inner = find((axxtick > axlimori(1)) & (axxtick < (axlimori(1)+axlimori(4))));
           axyindex_inner = find((axytick > axlimori(2)) & (axytick < (axlimori(2)+axlimori(5))));
