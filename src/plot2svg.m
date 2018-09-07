@@ -194,72 +194,73 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
     currentType = get(ax(j),'Type');
     if strcmp(currentType,'axes') || strcmp(currentType,'bar') || strcmp(currentType,'scatter')
       if PLOT2SVG_globals.debugModeOn
-      disp(['ax(',num2str(j),') = ', currentType]);
+        disp(['ax(',num2str(j),') = ', currentType]);
       end
       groups = [groups group];
       group = axes2svg(fid,id,ax(j),group,paperpos);
     elseif strcmp(currentType,'colorbar')
       if PLOT2SVG_globals.debugModeOn
-      disp(['ax(',num2str(j),') = ', currentType]);
+        disp(['ax(',num2str(j),') = ', currentType]);
       end
       groups = [groups group];
       group = colorbar_axes2svg(fid,id,ax(j),group,paperpos);
     elseif strcmp(currentType,'legend')
       legendVisible = get(ax(j),'Visible');
       if strcmp(legendVisible,'on')
-      set(ax(j),'AutoUpdate','off'); % sometimes weird things happen with legends including patches (e.g., bar graphs) if not used
-
-      legendPosition = get(ax(j),'Position');
-
-      x = legendPosition(1)*paperpos(3);
-      w = legendPosition(3)*paperpos(3);
-      y = (1-(legendPosition(2)+legendPosition(4)))*paperpos(4);
-      h = legendPosition(4)*paperpos(4);
-      legendBoundingBox = [x y w h];
-
-      legendLabels = get(ax(j),'String');
-      legendBox = get(ax(j),'Box');
-      legendColor = get(ax(j),'Color');
-      legendEdgeColor = get(ax(j),'EdgeColor');
-      legendFontSize = get(ax(j),'FontSize');
-      legendLineWidth = get(ax(j),'LineWidth');
-      legendLocation = get(ax(j),'Location');
-      legendOrientation = get(ax(j),'Orientation');
-      % The following is a trick to automatically get the distinct parts of a legend. However, there are some Matlab limitations, so for a proper legend, it's strongly encouraged to pass the legend icons to plot2svg (see warnind and explanations below)
-      if isempty(legendIcons)
-        % note though that when only a subset of the graph appears in the legend, this trick selects, with the exception of text, not the proper subset of the graph, but the first items that were plotted (Matlab's fault).
-        % one way to workaround the issue is to just plot things in order in the original graph, as they appear in the legend, but that's not always optimal, continue reading:
-        % an additional problem comes from lines appearing under patches, which could be fixed by adding zdata (different layers of depth in the xy projection from the z-axis), but this solution is only expected to work in svg 2, once z index is introduced (limitation of current svg implementation).
-        % there are two possible solutions to this:
-        % 1. Encouraged 'fix': pass the legend icons to plot2svg (see below to know how)
-        % 2. Discouraged 'fix': plot those lines twice, before the patch, so they appear in the legend (matlab's fault), and after the patch, so they appear on top (svg 1.1 limitacion).
-        warning(sprintf('For proper results when lines and patches are present in a figure, pass the legend icons to plot2svg function as a fourth argument, e.g., plot2svg(''filename.svg'','''','''',legendIcons)\nLegend icons can be grabbed by calling legend in the following way: [lgd,legendIcons] = legend(...);'));
-        [~,legendIcons] = legend(legendLabels,'Location',legendLocation,'Orientation',legendOrientation,'FontSize',legendFontSize,'LineWidth',legendLineWidth,'Color',legendColor,'EdgeColor',legendEdgeColor,'Box',legendBox);
-      end
-      if PLOT2SVG_globals.debugModeOn
-        for k = numel(legendIcons):-1:1
-        iconType = get(legendIcons(k),'Type');
-        disp(['legend(',num2str(k),') = ', iconType]);
+        if ~UIverlessthan('9.1.0') % Not defined before Matlab 2016b
+          set(ax(j),'AutoUpdate','off'); % sometimes weird things happen with legends including patches (e.g., bar graphs) if not used
         end
-      end
-      legendGroupax = 1;
-      projection = []; % not used
-      fprintf(fid,'  <g id  = "%s">\n', createId);
-      legendIdString = createId;
-      fprintf(fid,'  <clipPath id = "%s">\n',legendIdString);
-      fprintf(fid,'    <rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n',...
-        legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
-      fprintf(fid,'  </clipPath>\n');
-      if strcmp(legendBox,'on')
-        scolorname = searchcolor(id,legendEdgeColor);
-        fcolorname = searchcolor(id,legendColor);
-        fprintf(fid,'  <g id = "%s">\n',createId);
-        fprintf(fid,'    <rect fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-dasharray = "none" stroke-opacity = "1.000" x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n',...
-          fcolorname, scolorname, legendLineWidth, legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
+        legendPosition = get(ax(j),'Position');
+
+        x = legendPosition(1)*paperpos(3);
+        w = legendPosition(3)*paperpos(3);
+        y = (1-(legendPosition(2)+legendPosition(4)))*paperpos(4);
+        h = legendPosition(4)*paperpos(4);
+        legendBoundingBox = [x y w h];
+
+        legendLabels = get(ax(j),'String');
+        legendBox = get(ax(j),'Box');
+        legendColor = get(ax(j),'Color');
+        legendEdgeColor = get(ax(j),'EdgeColor');
+        legendFontSize = get(ax(j),'FontSize');
+        legendLineWidth = get(ax(j),'LineWidth');
+        legendLocation = get(ax(j),'Location');
+        legendOrientation = get(ax(j),'Orientation');
+        % The following is a trick to automatically get the distinct parts of a legend. However, there are some Matlab limitations, so for a proper legend, it's strongly encouraged to pass the legend icons to plot2svg (see warnind and explanations below)
+        if isempty(legendIcons)
+          % note though that when only a subset of the graph appears in the legend, this trick selects, with the exception of text, not the proper subset of the graph, but the first items that were plotted (Matlab's fault).
+          % one way to workaround the issue is to just plot things in order in the original graph, as they appear in the legend, but that's not always optimal, continue reading:
+          % an additional problem comes from lines appearing under patches, which could be fixed by adding zdata (different layers of depth in the xy projection from the z-axis), but this solution is only expected to work in svg 2, once z index is introduced (limitation of current svg implementation).
+          % there are two possible solutions to this:
+          % 1. Encouraged 'fix': pass the legend icons to plot2svg (see below to know how)
+          % 2. Discouraged 'fix': plot those lines twice, before the patch, so they appear in the legend (matlab's fault), and after the patch, so they appear on top (svg 1.1 limitacion).
+          warning(sprintf('For proper results when lines and patches are present in a figure, pass the legend icons to plot2svg function as a fourth argument, e.g., plot2svg(''filename.svg'','''','''',legendIcons)\nLegend icons can be grabbed by calling legend in the following way: [lgd,legendIcons] = legend(...);'));
+          [~,legendIcons] = legend(legendLabels,'Location',legendLocation,'Orientation',legendOrientation,'FontSize',legendFontSize,'LineWidth',legendLineWidth,'Color',legendColor,'EdgeColor',legendEdgeColor,'Box',legendBox);
+        end
+        if PLOT2SVG_globals.debugModeOn
+          for k = numel(legendIcons):-1:1
+          iconType = get(legendIcons(k),'Type');
+          disp(['legend(',num2str(k),') = ', iconType]);
+          end
+        end
+        legendGroupax = 1;
+        projection = []; % not used
+        fprintf(fid,'  <g id  = "%s">\n', createId);
+        legendIdString = createId;
+        fprintf(fid,'  <clipPath id = "%s">\n',legendIdString);
+        fprintf(fid,'    <rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n',...
+          legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
+        fprintf(fid,'  </clipPath>\n');
+        if strcmp(legendBox,'on')
+          scolorname = searchcolor(id,legendEdgeColor);
+          fcolorname = searchcolor(id,legendColor);
+          fprintf(fid,'  <g id = "%s">\n',createId);
+          fprintf(fid,'    <rect fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-dasharray = "none" stroke-opacity = "1.000" x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n',...
+            fcolorname, scolorname, legendLineWidth, legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
+          fprintf(fid,'  </g>\n');
+        end
+        axchild2svg(fid,id,legendIdString,ax(j),paperpos,legendIcons,legendPosition,legendGroupax,projection,legendBoundingBox);
         fprintf(fid,'  </g>\n');
-      end
-      axchild2svg(fid,id,legendIdString,ax(j),paperpos,legendIcons,legendPosition,legendGroupax,projection,legendBoundingBox);
-      fprintf(fid,'  </g>\n');
       end
     elseif strcmp(currentType,'uicontrol')
       if strcmp(get(ax(j),'Visible'),'on')
