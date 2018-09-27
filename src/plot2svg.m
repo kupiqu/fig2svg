@@ -81,6 +81,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
     yl = get(gca,'ylabel');
     zl = get(gca,'zlabel');
     tl = get(gca,'title');
+    cmap = get(id,'Colormap');
     if PLOT2SVG_globals.debugModeOn % only show the copy in debug mode
       f2 = figure;
     else
@@ -109,6 +110,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
       copyobj(tl,gca);
     end
     id = f2;
+    colormap(cmap);
     warning('on', 'MATLAB:copyobj:ObjectNotCopied'); % restoring the warning after copying
   else
     isWordCloud = 1;
@@ -4276,9 +4278,13 @@ function [projection, edges] = get_projection(ax,id)
         z = [zi(1) zi(1) zi(1) zi(1) zi(2) zi(2) zi(2) zi(2)]/projection.aspect_scaling(3);
     end
     if PLOT2SVG_globals.octave
+      try
             projection.A = get(ax,'x_ViewTransform');
             projection.A(3,:) = -projection.A(3,:);
             projection.A(1:3,4) = 0;
+      catch
+            projection.A = eye(4);
+      end
     else
         if strcmp(get(ax,'Projection'),'orthographic')
             projection.A = viewmtx(vi(1),vi(2));
