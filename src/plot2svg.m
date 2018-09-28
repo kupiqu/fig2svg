@@ -4541,7 +4541,6 @@ function [xlims, ylims, zlims] = AxesChildBounds(ax)
     axisData = {'XData', 'YData'};
   else
     axisData = {'XData', 'YData', 'ZData'};
-    axisData = {'XData', 'YData'};
   end
   for i = 1:numel(axisData)
       % Set extreme bounds that will always be overridden
