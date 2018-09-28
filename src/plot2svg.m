@@ -4195,7 +4195,8 @@ function StringText = convertString(StringText)
       StringText = strrep(StringText,'°','&#176;');
       %StringText = strrep(StringText,'°','&deg;');
       StringText = strrep(StringText,'±','&plusmn;');
-      StringText = strrep(StringText,'µ','&micro;');
+      StringText = strrep(StringText,'µ','&#181;');
+      % StringText = strrep(StringText,'µ','&micro;');
       StringText = strrep(StringText,'²','&sup2;');
       StringText = strrep(StringText,'³','&sup3;');
       StringText = strrep(StringText,'Œ','&frac14;');
@@ -4536,10 +4537,11 @@ function [xlims, ylims, zlims] = AxesChildBounds(ax)
   end
 
   % Iterate through each axis one at a time
-  if (size(get(dataObjs,'Type'),1) == 1 && strcmpi(get(dataObjs,'Type'),'image')) || any(strcmpi(get(dataObjs,'Type'),'bar')) || any(strcmpi(get(dataObjs,'Type'),'errorbar'))
+  if any(strcmpi(get(dataObjs,'Type'),'image')) || any(strcmpi(get(dataObjs,'Type'),'bar')) || any(strcmpi(get(dataObjs,'Type'),'errorbar'))
     axisData = {'XData', 'YData'};
   else
     axisData = {'XData', 'YData', 'ZData'};
+    axisData = {'XData', 'YData'};
   end
   for i = 1:numel(axisData)
       % Set extreme bounds that will always be overridden
