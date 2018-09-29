@@ -3380,26 +3380,6 @@ function gouraud_patch2svg(fid,xtot,ytot,cdata,style,width, edgecolorname, face_
   for ii = 1:size(xtot,1)
       x = xtot(ii,:);
       y = ytot(ii,:);
-      
-%      if length(x) < 2
-%        continue;
-%      end      
-%      xb = [x(1) x(end)];
-%      yb = [y(1) y(end)];
-%      [xc,yc,pseudoindx,pseudoindy] = intersections(x,y,xb,yb);
-%      indx = floor(pseudoindx);
-%      indy = floor(pseudoindy);
-%      for jj = 2:numel(xc)
-%        newx = [xc(jj-1), x(indx(jj-1)+1:indx(jj)), xc(jj)];
-%        newy = [yc(jj-1), y(indx(jj-1)+1:indx(jj)), yc(jj)];
-%        if jj == numel(xc)
-%          newx(end) = [];
-%          newy(end) = [];
-%        end
-%        newx
-%        newy
-%      end
-%      return
       if (any(isnan(x)) || any(isnan(y)))
           % SA: commenting this out as it is overdose
           % fprintf('Warning: Found NaN in Gouraud patch.\n')
