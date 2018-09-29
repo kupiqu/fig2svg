@@ -26,7 +26,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
 
   global PLOT2SVG_globals
   global colorname
-  progversion = '06-Sep-2018';
+  progversion = '29-Sep-2018';
   PLOT2SVG_globals.runningIdNumber = 0;
   PLOT2SVG_globals.UI = reportUI;
   PLOT2SVG_globals.octave = false;
@@ -2475,7 +2475,8 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
                           edgecolor = pointc(p,:);
                       elseif size(pointc,1) == size(points,2)
                           if strcmp(get(axchild(i),'EdgeColor'),'flat')
-                              edgecolor = pointc(faces(p,1));
+                              % edgecolor = pointc(faces(p,1));
+                             edgecolor = pointc;
                           else
                               edgecolor = pointc(faces(p,1));     % TO DO: color interpolation
                           end
@@ -2487,7 +2488,10 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
                               edgecolorname = ['#' colorname(ceil(edgecolor),:)];
                           else
                               if strcmp(get(axchild(i),'EdgeColor'),'flat')   % Bugfix 27.01.2008
-                                  edgecolorname = searchcolor(id,edgecolor/64);
+                                edgecolorname = {};
+                                for ii = 1:size(edgecolor,1)
+                                  edgecolorname{ii} = searchcolor(id,edgecolor(ii,:)/64);
+                                end
                               else
                                   edgecolorname = searchcolor(id,edgecolor);
                               end
@@ -2500,7 +2504,10 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
                   edgecolorname = searchcolor(id,get(axchild(i),'EdgeColor'));
               end
               % Close a patch if the coordinates do not contain NaNs
-              if any(isnan(x)) || any(isnan(y))
+              if isnan(x(end)) || isnan(y(end))
+                closed = false;
+                facecolorname = 'none';
+              elseif any(isnan(x)) || any(isnan(y))
                   closed = false;
               else
                   closed = true;
@@ -3211,62 +3218,154 @@ function patch2svg(fid,xtot,ytot,scolorname,style,width, edgecolorname, face_opa
       edge_opacity = 0.0;
   end
   for i = 1:size(xtot, 1)
-      x = xtot(i, :);
-      y = ytot(i, :);
+    
+    x = xtot(i, :);
+    y = ytot(i, :);
+      
+    if ~iscell(edgecolorname)
       if all(~isnan(x)) && all(~isnan(y))
           for j = 1:20000:length(x)
-              xx = x(j:min(length(x), j + 19999));
-              yy = y(j:min(length(y), j + 19999));
-              if ~isempty(xx) && ~isempty(xx) && (~strcmp(edgecolorname,'none') || ~strcmp(scolorname,'none'))
-                if strcmp(type,'polygon')
-                  if ~strcmp(edgecolorname,'none') && ~strcmp(scolorname,'none')
-                    fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
-                  elseif ~strcmp(scolorname,'none')
-                    fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
-                  else % ~strcmp(edgecolorname,'none')
-                    fprintf(fid,'      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname, width, edge_opacity, pattern);
-                  end
-                  fprintf(fid,'%0.3f,%0.3f ',[xx;yy]);
-                  fprintf(fid,'"/>\n');
-                else
-                  if ~strcmp(edgecolorname,'none') && ~strcmp(scolorname,'none')
-                    fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
-                  elseif ~strcmp(scolorname,'none')
-                    fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
-                  else % ~strcmp(edgecolorname,'none')
-                    fprintf(fid,'      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname, width, edge_opacity, pattern);
-                  end
-                  fprintf(fid,'%0.3f,%0.3f ',[xx;yy]);
-                  fprintf(fid,'"/>\n');
+            xx = x(j:min(length(x), j + 19999));
+            yy = y(j:min(length(y), j + 19999));
+            if ~isempty(xx) && ~isempty(yy) && (~strcmp(edgecolorname,'none') || ~strcmp(scolorname,'none'))
+              if strcmp(type,'polygon')
+                if (~strcmp(edgecolorname,'none')) && ~strcmp(scolorname,'none')
+                  fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
+                elseif ~strcmp(scolorname,'none')
+                  fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+                else % ~strcmp(edgecolorname,'none')
+                  fprintf(fid,'      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname, width, edge_opacity, pattern);
                 end
+                fprintf(fid,'%0.3f,%0.3f ',[xx;yy]);
+                fprintf(fid,'"/>\n');
+              else
+                if ~strcmp(edgecolorname,'none') && ~strcmp(scolorname,'none')
+                  fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
+                elseif ~strcmp(scolorname,'none')
+                  fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+                else % ~strcmp(edgecolorname,'none')
+                  fprintf(fid,'      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname, width, edge_opacity, pattern);
+                end
+                fprintf(fid,'%0.3f,%0.3f ',[xx;yy]);
+                fprintf(fid,'"/>\n');
               end
           end
+        end
       else
-          parts = find(isnan(x) + isnan(y));
-          if ~isempty(parts) && (parts(1) ~= 1)
-              parts = [0 parts];
-          end
-          if parts(length(parts)) ~= length(x)
-              parts = [parts length(x) + 1];
-          end
-          for j = 1:(length(parts) - 1)
-              xx = x((parts(j)+1):(parts(j+1)-1));
-              yy = y((parts(j)+1):(parts(j+1)-1));
-              if ~isempty(xx) && (~strcmp(edgecolorname,'none') || ~strcmp(scolorname,'none'))
-                  if ~isempty(xx)
-                      if strcmp(type,'polygon')
-                        fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "',...
-                          type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
-                      else
-                        fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "',...
-                          type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
-                      end
-                      fprintf(fid,'%0.3f,%0.3f ',[xx;yy]);
-                      fprintf(fid,'"/>\n');
-                  end
+        parts = find(isnan(x) + isnan(y));
+        if ~isempty(parts) && (parts(1) ~= 1)
+          parts = [0 parts];
+        end
+        if parts(length(parts)) ~= length(x)
+          parts = [parts length(x) + 1];
+        end
+        for j = 1:(length(parts) - 1)
+          xx = x((parts(j)+1):(parts(j+1)-1));
+          yy = y((parts(j)+1):(parts(j+1)-1));
+          if ~isempty(xx) && ~isempty(yy) && (~strcmp(edgecolorname,'none') || ~strcmp(scolorname,'none'))
+            if ~isempty(xx) && ~isempty(yy)
+              if strcmp(type,'polygon')
+                fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "',...
+                  type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
+              else
+                fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "',...
+                    type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
               end
+              fprintf(fid,'%0.3f,%0.3f ',[xx;yy]);
+              fprintf(fid,'"/>\n');
+            end
           end
+        end
       end
+    else 
+      if all(~isnan(x)) && all(~isnan(y))
+        for j = 1:20000:length(x)
+          xx = x(j:min(length(x), j + 19999));
+          yy = y(j:min(length(y), j + 19999));
+          if ~isempty(xx) && ~isempty(yy)
+            if strcmp(type,'polygon')
+              if ~strcmp(scolorname,'none')
+                fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+                fprintf(fid,'%0.3f,%0.3f ',[xx;yy]);
+                fprintf(fid,'"/>\n');
+              end
+              for k = 1:numel(edgecolorname)
+                if k ~= numel(edgecolorname)
+                  xxx = [xx(k) xx(k+1)];
+                  yyy = [yy(k) yy(k+1)];
+                else
+                  xxx = [xx(k) xx(1)];
+                  yyy = [yy(k) yy(1)];
+                end
+                fprintf(fid,'      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
+                fprintf(fid,'%0.3f,%0.3f ',[xxx;yyy]);
+                fprintf(fid,'"/>\n');
+              end
+            else
+              if ~strcmp(scolorname,'none')
+                fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+                fprintf(fid,'%0.3f,%0.3f ',[xx;yy]);
+                fprintf(fid,'"/>\n');
+              end
+              for k = 1:numel(edgecolorname)
+                if k ~= numel(edgecolorname)
+                  xxx = [xx(k) xx(k+1)];
+                  yyy = [yy(k) yy(k+1)];
+                else
+                  xxx = [xx(k) xx(1)];
+                  yyy = [yy(k) yy(1)];
+                end
+                fprintf(fid,'      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
+                fprintf(fid,'%0.3f,%0.3f ',[xxx;yyy]);
+                fprintf(fid,'"/>\n');
+              end
+            end
+          end
+        end
+      else
+        parts = find(isnan(x) + isnan(y));
+        if ~isempty(parts) && (parts(1) ~= 1)
+          parts = [0 parts];
+        end
+        if parts(length(parts)) ~= length(x)
+          parts = [parts length(x) + 1];
+        end
+        for j = 1:(length(parts) - 1)
+          xx = x((parts(j)+1):(parts(j+1)-1));
+          yy = y((parts(j)+1):(parts(j+1)-1));
+          if ~isempty(xx) && ~isempty(yy)
+            fprintf(fid,'      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+            if strcmp(type,'polygon')
+              for k = 1:numel(edgecolorname)
+                if k ~= numel(edgecolorname)
+                  xxx = [xx(k) xx(k+1)];
+                  yyy = [yy(k) yy(k+1)];
+                else
+                  xxx = [xx(k) xx(1)];
+                  yyy = [yy(k) yy(1)];
+                end
+                fprintf(fid,'      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
+              end
+              fprintf(fid,'%0.3f,%0.3f ',[xxx;yyy]);
+              fprintf(fid,'"/>\n');
+            else
+              for k = 1:numel(edgecolorname)
+                if k ~= numel(edgecolorname)
+                  xxx = [xx(k) xx(k+1)];
+                  yyy = [yy(k) yy(k+1)];
+                else
+                  xxx = [xx(k) xx(1)];
+                  yyy = [yy(k) yy(1)];
+                end
+                fprintf(fid,'      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
+                fprintf(fid,'%0.3f,%0.3f ',[xxx;yyy]);
+                fprintf(fid,'"/>\n');
+              end
+            end
+          end
+        end
+      end
+    end
   end
 end
 
@@ -3278,14 +3377,34 @@ function gouraud_patch2svg(fid,xtot,ytot,cdata,style,width, edgecolorname, face_
   if strcmp(style, 'none')
       edge_opacity = 0.0;
   end
-  for i = 1:size(xtot,1)
-      x = xtot(i,:);
-      y = ytot(i,:);
+  for ii = 1:size(xtot,1)
+      x = xtot(ii,:);
+      y = ytot(ii,:);
+      
+%      if length(x) < 2
+%        continue;
+%      end      
+%      xb = [x(1) x(end)];
+%      yb = [y(1) y(end)];
+%      [xc,yc,pseudoindx,pseudoindy] = intersections(x,y,xb,yb);
+%      indx = floor(pseudoindx);
+%      indy = floor(pseudoindy);
+%      for jj = 2:numel(xc)
+%        newx = [xc(jj-1), x(indx(jj-1)+1:indx(jj)), xc(jj)];
+%        newy = [yc(jj-1), y(indx(jj-1)+1:indx(jj)), yc(jj)];
+%        if jj == numel(xc)
+%          newx(end) = [];
+%          newy(end) = [];
+%        end
+%        newx
+%        newy
+%      end
+%      return
       if (any(isnan(x)) || any(isnan(y)))
           % SA: commenting this out as it is overdose
           % fprintf('Warning: Found NaN in Gouraud patch.\n')
       else
-          % If there are more than 2 edges always 3 edges are taken togehter
+          % If there are more than 2 edges always 3 edges are taken together
           % to form a triangle
           if length(x) > 2
               for j = 3:length(x)
