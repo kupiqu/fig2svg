@@ -192,6 +192,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
   end
   % Search all axes
   ax = get(id,'Children');
+  contLegend = 0;
   for j = length(ax):-1:1
     currentType = get(ax(j),'Type');
     if strcmp(currentType,'axes') || strcmp(currentType,'bar') || strcmp(currentType,'scatter')
@@ -207,6 +208,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
       groups = [groups group];
       group = colorbar_axes2svg(fid,id,ax(j),group,paperpos);
     elseif strcmp(currentType,'legend')
+      contLegend = contLegend + 1;
       legendVisible = get(ax(j),'Visible');
       if strcmp(legendVisible,'on')
         if ~UIverlessthan('9.1.0') % Not defined before Matlab 2016b
@@ -235,13 +237,17 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
           % an additional problem comes from lines appearing under patches, which could be fixed by adding zdata (different layers of depth in the xy projection from the z-axis), but this solution is only expected to work in svg 2, once z index is introduced (limitation of current svg implementation).
           % there are two possible solutions to this:
           % 1. Encouraged 'fix': pass the legend icons to plot2svg (see below to know how)
-          % 2. Discouraged 'fix': plot those lines twice, before the patch, so they appear in the legend (matlab's fault), and after the patch, so they appear on top (svg 1.1 limitacion).
-          warning(sprintf('For proper results when lines and patches are present in a figure, pass the legend icons to plot2svg function as a fourth argument, e.g., plot2svg(''filename.svg'','''','''',legendIcons)\nLegend icons can be grabbed by calling legend in the following way: [lgd,legendIcons] = legend(...);'));
-          [~,legendIcons] = legend(legendLabels,'Location',legendLocation,'Orientation',legendOrientation,'FontSize',legendFontSize,'LineWidth',legendLineWidth,'Color',legendColor,'EdgeColor',legendEdgeColor,'Box',legendBox);
+          % 2. Discouraged 'fix': plot those lines twice, before the patch, so they appear in the legend (matlab's fault), and after the patch, so they appear on top (svg 1.1 limitation).
+          warning(sprintf('\n\nFor proper results when lines and patches are present in a figure, pass the legend icons to plot2svg function as a fourth argument, e.g., plot2svg(''filename.svg'','''','''',legendIcons)\nLegend icons can be grabbed by calling legend in the following way: [lgd,legendIcons] = legend(...);\nIf more than a legend is present within a figure (e.g., in different subplots) pass the legend icons in a cell array.\n'));
+          [lgd,legendIcons{contLegend}] = legend(legendLabels,'Location',legendLocation,'Orientation',legendOrientation,'FontSize',legendFontSize,'LineWidth',legendLineWidth,'Color',legendColor,'EdgeColor',legendEdgeColor,'Box',legendBox);
+          ax(j) = lgd;
+        elseif ~iscell(legendIcons)
+          tmp_legendIcons{contLegend} = legendIcons;
+          legendIcons = tmp_legendIcons;
         end
         if PLOT2SVG_globals.debugModeOn
-          for k = numel(legendIcons):-1:1
-            iconType = get(legendIcons(k),'Type');
+          for k = numel(legendIcons{contLegend}):-1:1
+            iconType = get(legendIcons{contLegend}(k),'Type');
             disp(['legend(',num2str(k),') = ', iconType]);
           end
         end
@@ -261,7 +267,7 @@ function varargout = plot2svg(filename, id, debug, legendIcons, clippingMode, fi
             fcolorname, scolorname, legendLineWidth, legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
           fprintf(fid,'  </g>\n');
         end
-        axchild2svg(fid,id,legendIdString,ax(j),paperpos,legendIcons,legendPosition,legendGroupax,projection,legendBoundingBox);
+        axchild2svg(fid,id,legendIdString,ax(j),paperpos,legendIcons{contLegend},legendPosition,legendGroupax,projection,legendBoundingBox);
         fprintf(fid,'  </g>\n');
       end
     elseif strcmp(currentType,'uicontrol')
@@ -3730,6 +3736,7 @@ function text2svg(fid,axpos,paperpos,id,ax,projection)
   global PLOT2SVG_globals;
   originalTextUnits = get(id,'Units');
   originalTextPosition = get(id, 'Position');
+
   if ~strcmp(get(ax,'Type'),'annotationpane')
     if PLOT2SVG_globals.octave
       set(id,'Units','data');
