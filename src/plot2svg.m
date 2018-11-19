@@ -386,7 +386,7 @@ function [angle, align] = improvedXLabel(id, angle, align)
       if isfield(struct_data,'svg')
         if isfield(struct_data.svg,'XTickLabelAngle')
           angle = struct_data.svg.XTickLabelAngle;
-          align = 'Left';
+          % align = 'left';
         end
       end
     end
@@ -403,7 +403,7 @@ function [angle, align] = improvedYLabel(id, angle, align)
       if isfield(struct_data,'svg')
         if isfield(struct_data.svg,'YTickLabelAngle')
           angle = struct_data.svg.YTickLabelAngle;
-          align = 'Left';
+          % align = 'left';
         end
       end
     end
@@ -420,7 +420,7 @@ function [angle, align] = improvedZLabel(id, angle, align)
       if isfield(struct_data,'svg')
         if isfield(struct_data.svg,'ZTickLabelAngle')
           angle = struct_data.svg.ZTickLabelAngle;
-          align = 'Left';
+          % align = 'left';
         end
       end
     end
@@ -1080,7 +1080,6 @@ function group = colorbar_axes2svg(fid,id,ax,group,paperpos)
                   end
                   % Note: 3D plot do not support the property XAxisLocation
                   % setting 'top'.
-                  [angle, align] = improvedXLabel(ax, 0, 'Center');
                   if (strcmp(get(ax,'XTickLabelMode'),'manual'))
                       axlabelx = axlabelx(axxindex,:);
                   end
@@ -1089,10 +1088,17 @@ function group = colorbar_axes2svg(fid,id,ax,group,paperpos)
                   end
                   if axpos(3) > axpos(4)
                     if strcmp(get(ax,'XAxisLocation'),'top') && (projection.xyplane == true)
+                      [angle, align] = improvedXLabel(ax, 0, 'center');
                       for i = 1:length(axxindex)
                         label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabelx(i,:)),align,angle,'bottom',1,scolorname);
                       end
+                    elseif projection.xyplane == true
+                      [angle, align] = improvedXLabel(ax, 0, 'center');
+                      for i = 1:length(axxindex)
+                        label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabelx(i,:)),align,angle,'top',1,scolorname);
+                      end
                     else
+                      [angle, align] = improvedXLabel(ax, 0, 'left');
                       for i = 1:length(axxindex)
                         label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabelx(i,:)),align,angle,'top',1,scolorname);
                       end
@@ -1151,22 +1157,20 @@ function group = colorbar_axes2svg(fid,id,ax,group,paperpos)
                   if axpos(3) < axpos(4)
                     if (projection.xyplane == true)
                         if strcmp(get(ax,'YAxisLocation'),'right')
-                            [angle, align] = improvedYLabel(ax, 0, 'Left');
+                            [angle, align] = improvedYLabel(ax, 0, 'left');
                             for i = 1:length(axyindex)
                                 label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'middle',1,scolorname);
                             end
                        else
-                            [angle, align] = improvedYLabel(ax, 0, 'Right');
+                            [angle, align] = improvedYLabel(ax, 0, 'right');
                             for i = 1:length(axyindex)
                                 label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'middle',1,scolorname);
                             end
                         end
                     else
-                        [angle, align] = improvedYLabel(ax, 0, 'Right');
+                        [angle, align] = improvedYLabel(ax, 0, 'right');
                         for i = 1:length(axyindex)
-                            % Not matlab default but seems more proper
-                            % label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'top',1,scolorname);
-                            label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'middle',1,scolorname);
+                            label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'top',1,scolorname);
                         end
                     end
                   end
@@ -1821,7 +1825,6 @@ function group = axes2svg(fid,id,ax,group,paperpos)
                   end
                   % Note: 3D plot do not support the property XAxisLocation
                   % setting 'top'.
-                  [angle, align] = improvedXLabel(ax, 0, 'Center');
                   if (strcmp(get(ax,'XTickLabelMode'),'manual'))
                       axlabelx = axlabelx(axxindex,:);
                   end
@@ -1829,10 +1832,17 @@ function group = axes2svg(fid,id,ax,group,paperpos)
                     axlabelx = axlabelx(:); % SA: Octave compatibility
                   end
                   if strcmp(get(ax,'XAxisLocation'),'top') && (projection.xyplane == true)
+                    [angle, align] = improvedXLabel(ax, 0, 'center');
                     for i = 1:length(axxindex)
                       label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabelx(i,:)),align,angle,'bottom',1,scolorname);
                     end
+                  elseif projection.xyplane == true
+                    [angle, align] = improvedXLabel(ax, 0, 'center');
+                    for i = 1:length(axxindex)
+                      label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabelx(i,:)),align,angle,'top',1,scolorname);
+                    end
                   else
+                    [angle, align] = improvedXLabel(ax, 0, 'left');
                     for i = 1:length(axxindex)
                       label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabelx(i,:)),align,angle,'top',1,scolorname);
                     end
@@ -1888,22 +1898,20 @@ function group = axes2svg(fid,id,ax,group,paperpos)
                   end
                   if (projection.xyplane == true)
                       if strcmp(get(ax,'YAxisLocation'),'right')
-                          [angle, align] = improvedYLabel(ax, 0, 'Left');
+                          [angle, align] = improvedYLabel(ax, 0, 'left');
                           for i = 1:length(axyindex)
                               label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'middle',1,scolorname);
                           end
                      else
-                          [angle, align] = improvedYLabel(ax, 0, 'Right');
+                          [angle, align] = improvedYLabel(ax, 0, 'right');
                           for i = 1:length(axyindex)
                               label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'middle',1,scolorname);
                           end
                       end
                   else
-                      [angle, align] = improvedYLabel(ax, 0, 'Right');
+                      [angle, align] = improvedYLabel(ax, 0, 'right');
                       for i = 1:length(axyindex)
-                          % Not matlab default but seems more proper
-                          % label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'top',1,scolorname);
-                          label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'middle',1,scolorname);
+                          label2svg(fid,axpos,ax,xg_label_end(i),yg_label_end(i),convertString(axlabely(i,:)),align,angle,'top',1,scolorname);
                       end
                   end
               end
@@ -1954,7 +1962,7 @@ function group = axes2svg(fid,id,ax,group,paperpos)
                       % behavior of Matlab
                       axlabelz = repmat(axlabelz, length(axzindex), 1);
                   end
-                  [angle, align] = improvedZLabel(ax, 0, 'Right');
+                  [angle, align] = improvedZLabel(ax, 0, 'right');
                   if (strcmp(get(ax,'ZTickLabelMode'),'manual'))
                       axlabelz = axlabelz(axzindex,:);
                   end
@@ -4038,14 +4046,16 @@ function label2svg(fid,axpos,id,x,y,tex,align,angle,valign,lines,font_color)
   %   fprintf('   Warning: plot2svg does not support proper location of axes'' labels in Octave and Matlab versions < 2014b.\n')
   %   PLOT2SVG_globals.WN = 1;
   % end
+  balign = 'auto';
+  y_offset = '0.3em';
   switch lower(valign)
-  case 'top', balign = 'text-before-edge';
-  case '3d-top', balign = 'central';
-  case '3d-bottom', balign = 'central';
-  case 'cap', error('use top instead of cap');
-  case 'baseline', error('use bottom instead of baseline');
-  case 'bottom', balign = 'text-after-edge';
-  otherwise, balign = 'central'; % middle alignment (default)
+  case 'top', y_offset = '0.8em'; % balign = 'text-before-edge';
+  case '3d-top', y_offset = '0.4em'; % balign = 'middle'; % 'central';
+  case '3d-bottom', y_offset = '-0.4em'; % balign = 'middle'; % 'central';
+  % case 'cap', error('use top instead of cap');
+  % case 'baseline', error('use bottom instead of baseline');
+  case 'bottom', y_offset = '-0.2em'; % 'text-after-edge';
+  % otherwise, % balign = 'middle'; % 'central';
   end
   switch lower(align)
     case 'right', anchor = 'end';
@@ -4058,8 +4068,8 @@ function label2svg(fid,axpos,id,x,y,tex,align,angle,valign,lines,font_color)
     else
       anchor = 'start';
     end
-    dx = sin(angle * pi / 180) * convertunit(fontsize * (-0.25), 'points', 'pixels');
-    dy = cos(angle * pi / 180) * convertunit(fontsize * 0.25, 'points', 'pixels');
+    dx = sin(angle * pi / 180) * convertunit(fontsize * (-0.5), 'points', 'pixels');
+    dy = cos(angle * pi / 180) * convertunit(fontsize * 0, 'points', 'pixels');
   elseif abs(angle) > 1e-10 && strcmp(valign,'bottom') && ~strcmp(get(id,'Type'),'text')
     if angle > 1e-10
       anchor = 'start';
@@ -4068,12 +4078,12 @@ function label2svg(fid,axpos,id,x,y,tex,align,angle,valign,lines,font_color)
     end
     dx = sin(angle * pi / 180) * convertunit(fontsize * 0.5, 'points', 'pixels');
     dy = cos(angle * pi / 180) * convertunit(fontsize * 0, 'points', 'pixels');
-  elseif abs(angle) > 1e-10 && strcmp(align,'Left')
+  elseif abs(angle) > 1e-10 && strcmpi(align,'left')
     dx = cos(angle * pi / 180) * convertunit(fontsize * 0, 'points', 'pixels');
     dy = sin(angle * pi / 180) * convertunit(fontsize * 0.25, 'points', 'pixels');
-  elseif abs(angle) > 1e-10 && strcmp(align,'Right')
+  elseif abs(angle) > 1e-10 && strcmpi(align,'right')
     dx = cos(angle * pi / 180) * convertunit(fontsize * (-0.25), 'points', 'pixels');
-    dy = sin(angle * pi / 180) * convertunit(fontsize * (-0.25), 'points', 'pixels');
+    dy = sin(angle * pi / 180) * convertunit(fontsize * 0, 'points', 'pixels');
   else
     dx = 0;
     dy = 0;
@@ -4203,23 +4213,17 @@ function label2svg(fid,axpos,id,x,y,tex,align,angle,valign,lines,font_color)
   end
   fprintf(fid,'  <g transform = "translate(%0.3f,%0.3f)">\n', x + dx, y + dy);
   fprintf(fid,'    <g transform = "rotate(%0.3f)">\n',-angle);
-  fprintf(fid,'      <text x = "%0.3f" y = "%0.3f" font-family = "%s" text-anchor = "%s" dominant-baseline = "%s" font-size = "%0.3fpt"%s%s fill = "%s">', 0, 0, textfontname, anchor, balign, textfontsize, fweight, fangle, font_color);
+  fprintf(fid,'      <text x = "%0.3f" y = "%s" font-family = "%s" text-anchor = "%s" dominant-baseline = "%s" font-size = "%0.3fpt"%s%s fill = "%s">', 0, y_offset, textfontname, anchor, balign, textfontsize, fweight, fangle, font_color);
   % tex = strrep(tex, '<tspan>', '');
   % tex = strrep(tex, '</tspan>', '');
-  if strcmp(valign, '3d-top')
-    fprintf('   applying baseline-shift to "%s": it may not seem so in browsers but works in inkscape\n',get(id,'String'));
-    fprintf(fid,'<tspan baseline-shift = "-15%%">%s</tspan>',tex);
-  elseif strcmp(valign, '3d-bottom')
-    fprintf(fid,'<tspan baseline-shift = "30%%">%s</tspan>',tex);
-    fprintf('   applying baseline-shift to "%s": it may not seem so in browsers but works in inkscape\n',get(id,'String'));
-  elseif ~strncmp(tex,'<tspan>',7)
+  if ~strncmp(tex,'<tspan>',7)
     fprintf(fid,'<tspan>%s</tspan>',tex);
   else
     fprintf(fid,'%s',tex);
   end
   if PLOT2SVG_globals.debugModeOn
   % useful for debugging:
-    fprintf('balign = "%s" angle = "%0.3f" type = "%s" valign = "%s" tex = "%s"\n',balign, angle, get(id,'Type'),valign,tex);
+    fprintf('balign = "%s" y_offset = "%s" angle = "%0.3f" type = "%s" valign = "%s" tex = "%s"\n',balign, y_offset, angle, get(id,'Type'), valign, tex);
   end
   fprintf(fid,'</text>\n');
   fprintf(fid,'    </g>\n');

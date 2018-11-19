@@ -13,7 +13,7 @@ plot(0:10000,0:10000,'LineWidth',lineWidth)
 %  % 2-d - no rotation control
   set(gca,'TickDir','out') % OK!
 %  % 2-d x axis - top - no rotation
-  set(gca,'TickDir','out','XAxisLocation','top') % OK!
+%  set(gca,'TickDir','out','XAxisLocation','top') % OK!
 %  % 2-d y axis - right - no rotation
 %  set(gca,'TickDir','out','YAxisLocation','right') % OK!
 
@@ -43,6 +43,6 @@ set(gca,'Fontsize',fontSize,'LineWidth',lineWidth)
 xlabel('X','Fontsize',fontSize)
 ylabel('Y','Fontsize',fontSize)
 
-plot2svg('plot2d.svg' ,'',1);
+plot2svg('plot2d.svg'); %  ,'',1);
 
 set(0,'defaultAxesFontName',prevFontName);
