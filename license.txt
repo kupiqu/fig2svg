@@ -1,3 +1,4 @@
+Copyright (c) 2018, Salva Ardid
 Copyright (c) 2005, Juerg Schwizer
 All rights reserved.
 
