@@ -42,8 +42,8 @@ xlabel('X','Fontsize',fontSize)
 ylabel('Y','Fontsize',fontSize)
 % zlabel('Z','Fontsize',fontSize)
 
-plot2svg('bar_test.svg')
+fig2svg('bar_test.svg')
 % saveas(gca,'bar_test_saveas.svg')
 
-% plot2svg('bar_stacked.svg')
+% fig2svg('bar_stacked.svg')
 % saveas(gca,'bar_stacked_saveas.svg')

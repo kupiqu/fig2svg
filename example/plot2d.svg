@@ -1,6 +1,6 @@
 <?xml version = "1.0" encoding = "utf-8" standalone = "no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg preserveAspectRatio = "xMinYMin meet" width = "100%" height = "100%" fill = "none" viewBox = "0 0 560.000 420.000"  version = "1.1" xmlns = "http://www.w3.org/2000/svg" xmlns:xlink = "http://www.w3.org/1999/xlink">
-  <desc>Matlab Figure Converted by PLOT2SVG written by Juerg Schwizer</desc>
+  <desc>Matlab Figure Converted by FIG2SVG</desc>
   <g id = "topgroup">
   <rect x = "0" y = "0" width = "560.000" height = "420.000" fill = "#ffffff" stroke = "none" />
   <g id  = "ID000000">
@@ -18,7 +18,7 @@
 <g id = "ID000003" >
   <g transform = "translate(303.437,394.495)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.8em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>X</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>X</tspan></text>
     </g>
   </g>
 </g>
@@ -50,32 +50,32 @@
       <polyline fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "#262626" stroke-width = "2.000pt" stroke-dasharray = "none" stroke-opacity = "1.000" points = "100.073,31.500 506.800,31.500 "/>
   <g transform = "translate(100.073,366.964)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.8em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>0</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>0</tspan></text>
     </g>
   </g>
   <g transform = "translate(181.419,366.964)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.8em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>2000</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>2000</tspan></text>
     </g>
   </g>
   <g transform = "translate(262.764,366.964)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.8em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>4000</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>4000</tspan></text>
     </g>
   </g>
   <g transform = "translate(344.109,366.964)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.8em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>6000</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>6000</tspan></text>
     </g>
   </g>
   <g transform = "translate(425.455,366.964)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.8em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>8000</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>8000</tspan></text>
     </g>
   </g>
   <g transform = "translate(506.800,366.964)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.8em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>10000</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>10000</tspan></text>
     </g>
   </g>
       <polyline fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "#262626" stroke-width = "2.000pt" stroke-dasharray = "none" stroke-opacity = "1.000" points = "100.073,357.193 96.006,357.193 "/>

@@ -1,6 +1,6 @@
 <?xml version = "1.0" encoding = "utf-8" standalone = "no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg preserveAspectRatio = "xMinYMin meet" width = "100%" height = "100%" fill = "none" viewBox = "0 0 560.000 420.000"  version = "1.1" xmlns = "http://www.w3.org/2000/svg" xmlns:xlink = "http://www.w3.org/1999/xlink">
-  <desc>Matlab Figure Converted by PLOT2SVG written by Juerg Schwizer</desc>
+  <desc>Matlab Figure Converted by FIG2SVG</desc>
   <g id = "topgroup">
   <rect x = "0" y = "0" width = "560.000" height = "420.000" fill = "#ffffff" stroke = "none" />
   <g id  = "ID000000">
@@ -11,14 +11,14 @@
 <g id = "ID000002" >
   <g transform = "translate(25.190,196.517)">
     <g transform = "rotate(-90.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "middle" dominant-baseline = "text-after-edge" font-size = "16.000pt" fill = "#262626"><tspan>Y</tspan></text>
+      <text x = "0.000" y = "-0.2em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>Y</tspan></text>
     </g>
   </g>
 </g>
 <g id = "ID000003" >
   <g transform = "translate(225.699,394.703)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "middle" dominant-baseline = "text-before-edge" font-size = "16.000pt" fill = "#262626"><tspan>X</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>X</tspan></text>
     </g>
   </g>
 </g>
@@ -71,27 +71,27 @@
       <polyline fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "#262626" stroke-width = "2.000pt" stroke-dasharray = "none" stroke-opacity = "1.000" points = "60.137,31.500 391.262,31.500 "/>
   <g transform = "translate(96.928,368.134)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "middle" dominant-baseline = "text-before-edge" font-size = "16.000pt" fill = "#262626"><tspan>2</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>2</tspan></text>
     </g>
   </g>
   <g transform = "translate(170.512,368.134)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "middle" dominant-baseline = "text-before-edge" font-size = "16.000pt" fill = "#262626"><tspan>4</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>4</tspan></text>
     </g>
   </g>
   <g transform = "translate(244.095,368.134)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "middle" dominant-baseline = "text-before-edge" font-size = "16.000pt" fill = "#262626"><tspan>6</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>6</tspan></text>
     </g>
   </g>
   <g transform = "translate(317.678,368.134)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "middle" dominant-baseline = "text-before-edge" font-size = "16.000pt" fill = "#262626"><tspan>8</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>8</tspan></text>
     </g>
   </g>
   <g transform = "translate(391.262,368.134)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "middle" dominant-baseline = "text-before-edge" font-size = "16.000pt" fill = "#262626"><tspan>10</tspan></text>
+      <text x = "0.000" y = "0.9em" font-family = "Arial" text-anchor = "middle" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>10</tspan></text>
     </g>
   </g>
       <polyline fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "#262626" stroke-width = "2.000pt" stroke-dasharray = "none" stroke-opacity = "1.000" points = "60.137,324.863 63.448,324.863 "/>
@@ -106,27 +106,27 @@
       <polyline fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "#262626" stroke-width = "2.000pt" stroke-dasharray = "none" stroke-opacity = "1.000" points = "391.262,361.533 391.262,31.500 "/>
   <g transform = "translate(53.514,324.863)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "end" dominant-baseline = "central" font-size = "16.000pt" fill = "#262626"><tspan>2</tspan></text>
+      <text x = "0.000" y = "0.3em" font-family = "Arial" text-anchor = "end" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>2</tspan></text>
     </g>
   </g>
   <g transform = "translate(53.514,251.522)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "end" dominant-baseline = "central" font-size = "16.000pt" fill = "#262626"><tspan>4</tspan></text>
+      <text x = "0.000" y = "0.3em" font-family = "Arial" text-anchor = "end" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>4</tspan></text>
     </g>
   </g>
   <g transform = "translate(53.514,178.181)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "end" dominant-baseline = "central" font-size = "16.000pt" fill = "#262626"><tspan>6</tspan></text>
+      <text x = "0.000" y = "0.3em" font-family = "Arial" text-anchor = "end" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>6</tspan></text>
     </g>
   </g>
   <g transform = "translate(53.514,104.841)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "end" dominant-baseline = "central" font-size = "16.000pt" fill = "#262626"><tspan>8</tspan></text>
+      <text x = "0.000" y = "0.3em" font-family = "Arial" text-anchor = "end" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>8</tspan></text>
     </g>
   </g>
   <g transform = "translate(53.514,31.500)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "end" dominant-baseline = "central" font-size = "16.000pt" fill = "#262626"><tspan>10</tspan></text>
+      <text x = "0.000" y = "0.3em" font-family = "Arial" text-anchor = "end" dominant-baseline = "auto" font-size = "16.000pt" fill = "#262626"><tspan>10</tspan></text>
     </g>
   </g>
       <polyline fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "#262626" stroke-width = "2.000pt" stroke-dasharray = "none" stroke-opacity = "1.000" points = "60.137,361.533 60.137,361.533 "/>
@@ -158,14 +158,14 @@
 <g id = "ID000014" >
   <g transform = "translate(460.167,71.000)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "start" dominant-baseline = "central" font-size = "16.000pt" fill = "#000000"><tspan>data2</tspan></text>
+      <text x = "0.000" y = "0.3em" font-family = "Arial" text-anchor = "start" dominant-baseline = "auto" font-size = "16.000pt" fill = "#000000"><tspan>data2</tspan></text>
     </g>
   </g>
 </g>
 <g id = "ID000015" >
   <g transform = "translate(460.167,45.500)">
     <g transform = "rotate(-0.000)">
-      <text x = "0.000" y = "0.000" font-family = "Arial" text-anchor = "start" dominant-baseline = "central" font-size = "16.000pt" fill = "#000000"><tspan>data1</tspan></text>
+      <text x = "0.000" y = "0.3em" font-family = "Arial" text-anchor = "start" dominant-baseline = "auto" font-size = "16.000pt" fill = "#000000"><tspan>data1</tspan></text>
     </g>
   </g>
 </g>

@@ -27,7 +27,7 @@ scatter(x,y,sz,c,'o','filled','MarkerFaceAlpha',0.3,'MarkerEdgeColor','flat','Ma
 % scatter3(x,y,z,sz,c,'o','filled','MarkerEdgeColor',[.4 .4 .4],'LineWidth',1.5)
 
 if dbg
-  plot2svg('scatter_example.svg','',1,'',3)
+  fig2svg('scatter_example.svg','',1,'',3)
 else
-  plot2svg('scatter_example.svg','','','',3)
+  fig2svg('scatter_example.svg','','','',3)
 end

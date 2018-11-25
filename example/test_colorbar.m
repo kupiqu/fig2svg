@@ -24,7 +24,7 @@ if out
 end
 
 if dbg
-  plot2svg('colorbar_example.svg','',1)
+  fig2svg('colorbar_example.svg','',1)
 else
-  plot2svg('colorbar_example.svg')
+  fig2svg('colorbar_example.svg')
 end

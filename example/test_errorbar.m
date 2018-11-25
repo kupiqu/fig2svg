@@ -21,6 +21,6 @@ set(gca,'TickDir','out','Fontsize',fontSize,'LineWidth',lineWidth)
 xlabel('X','Fontsize',fontSize)
 ylabel('Y','Fontsize',fontSize)
 
-plot2svg('errorbar.svg');
+fig2svg('errorbar.svg');
 
 set(0,'defaultAxesFontName',prevFontName);

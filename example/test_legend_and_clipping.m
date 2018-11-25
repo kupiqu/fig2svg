@@ -22,10 +22,10 @@ set(gca,'fontSize',fontSize,'lineWidth',lineWidth,'Box','on')
 xlabel('X','fontSize',fontSize)
 ylabel('Y','fontSize',fontSize)
 
-% plot2svg('legend.svg','','',lg_icons,0) % no clipping
-plot2svg('legend.svg','','',lg_icons,1) % box off/on dependent clipping [default]
-% plot2svg('legend.svg','','',lg_icons,2) % strict axes dependent clipping
-% plot2svg('legend.svg','','',lg_icons,3) % axes + data dependent clipping
+% fig2svg('legend.svg','','',lg_icons,0) % no clipping
+fig2svg('legend.svg','','',lg_icons,1) % box off/on dependent clipping [default]
+% fig2svg('legend.svg','','',lg_icons,2) % strict axes dependent clipping
+% fig2svg('legend.svg','','',lg_icons,3) % axes + data dependent clipping
 
 saveas(gca,'legend_saveas.svg')
 
