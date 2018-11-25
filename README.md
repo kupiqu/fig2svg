@@ -1,4 +1,38 @@
-This forked version of plot2svg will be renamed to fig2svg (https://github.com/kupiqu/fig2svg) when ready. Please see work in progress here: https://github.com/kupiqu/fig2svg/blob/master/README.md
+# Matlab/GNU Octave FIG to SVG converter
+
+Matlab/GNU Octave Figures to Scalable Vector Graphics (SVG)
+
+# Updated Features including Matlab graphics > 2014a
+
+## Work in Progress:
+
+- 3D plots improvements (azimuth values)
+- plot2svg rename to fig2svg before first release 
+
+## Done:
+
+- bar plot
+- scatter plot
+- legend
+- colorbar
+- ticklabelrotation
+- annotations
+
+## To Do (few examples):
+
+- horizontal bar plot
+- stairs and stem plots
+- patch enhancements
+- 3D plots improvements (elevation values)
+- your feature request ;-)
+
+## Credit
+
+Built on plot2svg https://github.com/jschwizer99/plot2svg
+
+----
+
+# plot2svg original README:
 
 Scalable Vector Graphics (SVG) Export of Figures
 
