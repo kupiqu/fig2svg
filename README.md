@@ -1,13 +1,8 @@
-# Matlab/GNU Octave FIG to SVG converter
+# fig2svg toolbox: a Matlab/GNU Octave FIG to SVG converter
 
-Matlab/GNU Octave Figures to Scalable Vector Graphics (SVG)
+fig2svg is a Matlab/GNU Octave toolbox that converts Matlab/GNU Octave figures to Scalable Vector Graphics (SVG). The most important feature when comparing fig2svg to plot2svg is that fig2svg has enhanced compatibility, especially for Matlab graphics > 2014a. Note that plot2svg function is deprecated in the fig2svg toolbox and will be removed in the next major release (keeping it now to ease transitions from plot2svg to fig2svg). Thus, plot2svg use in this toolbox is discouraged. Please use fig2svg instead.
 
-# Updated Features including Matlab graphics > 2014a
-
-## Work in Progress:
-
-- 3D plots improvements (azimuth values)
-- plot2svg rename to fig2svg before first release 
+# Updated Features
 
 ## Done:
 
@@ -17,22 +12,23 @@ Matlab/GNU Octave Figures to Scalable Vector Graphics (SVG)
 - colorbar
 - ticklabelrotation
 - annotations
+- 3D plots (distinct azimuth values)
 
-## To Do (few examples):
+## Limitations:
 
 - horizontal bar plot
 - stairs and stem plots
 - patch enhancements
-- 3D plots improvements (elevation values)
+- 3D plots (distinct elevation values)
 - your feature request ;-)
 
 ## Credit
 
-Built on plot2svg https://github.com/jschwizer99/plot2svg
+fig2svg was originally a fork of plot2svg https://github.com/jschwizer99/plot2svg currently unmaintained
 
 ----
 
-# plot2svg original README:
+## plot2svg original README:
 
 Scalable Vector Graphics (SVG) Export of Figures
 
