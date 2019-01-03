@@ -26,7 +26,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2019.01.1'; % year.month.incremental
+  release_version = '2019.01.0'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
