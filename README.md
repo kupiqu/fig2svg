@@ -18,8 +18,8 @@ fig2svg is a Matlab/GNU Octave toolbox that converts Matlab/GNU Octave figures t
 
 - horizontal bar plot
 - stairs and stem plots
-- patch enhancements
-- 3D plots (distinct elevation values)
+- patch enhancements (issue #10)
+- 3D plots (distinct elevation values issue #15)
 - your feature request ;-)
 
 ## Credit

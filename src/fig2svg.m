@@ -26,7 +26,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2018.11.0'; % year.month.incremental
+  release_version = '2019.01.1'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
@@ -3610,13 +3610,13 @@ end
 function patternString = lineStyle2svg(lineStyle, lineWidth)
   global FIG2SVG_globals
   % Create the string for the line style
-  % Note: On Matlab the line style is not identical on screen and in a png.
-  %       We will try to match with the screen format.
+  % Note: The line style is not the same on screen as it appears in png files.
+  %       Getting the screen format as reference.
   scaling = 1/FIG2SVG_globals.resolutionScaling; % max(1, lineWidth * 0.4);
   switch lineStyle
-      case '--', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 8*scaling, 8*scaling); % updated to be as it is currently in Matlab
-      case ':', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 2*scaling, 8*scaling);
-      case '-.', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f,%0.3f,%0.3f"', 8*scaling, 2*scaling, 4*scaling, 2*scaling); % updated to be as it is currently in Matlab
+      case '--', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 6*scaling, 10*scaling); % updated to be similar to Matlab
+      case ':', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 0.25*scaling, 6*scaling); % updated so it looks better
+      case '-.', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f,%0.3f,%0.3f"', 6*scaling, 4.875*scaling, 0.25*scaling, 4.875*scaling); % updated to be similar to Matlab
       otherwise, patternString = 'stroke-dasharray = "none"';
   end
 end
