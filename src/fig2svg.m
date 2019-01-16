@@ -26,7 +26,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2019.01.0'; % year.month.incremental
+  release_version = '2019.01.1'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
@@ -74,7 +74,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
   objects = allchild(f1);
   if all(~ismember(get(objects,'Type'),'wordcloud'))
     % a nice way to keep the original figure safe and work on a temporary copy (does not work for wordclouds)
-    isWordCloud = 0;
+    copyfig = 1;
     warning('off', 'MATLAB:copyobj:ObjectNotCopied'); % these warnings don't seem to come from figure content
     xl = get(gca,'xlabel');
     yl = get(gca,'ylabel');
@@ -86,33 +86,39 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
     else
       f2 = figure('visible', 'off');
     end
-    paperpos = get(f1,'Position');
-    copyobj(get(f1,'children'),f2);
-    set(f2,'Position',paperpos);
-    if ~UIverlessthan('8.4.0')
-      if ~isempty(xl.String)
-       set(gca,'xlabel',xl)
+    try
+      copyobj(get(f1,'children'),f2);
+      paperpos = get(f1,'Position');
+      set(f2,'Position',paperpos);
+      if ~UIverlessthan('8.4.0')
+        if ~isempty(xl.String)
+         set(gca,'xlabel',xl)
+        end
+        if ~isempty(yl.String)
+         set(gca,'ylabel',yl)
+        end
+        if ~isempty(zl.String)
+         set(gca,'zlabel',zl)
+        end
+        if ~isempty(tl.String)
+         set(gca,'title',tl)
+        end
+      else
+        copyobj(xl,gca);
+        copyobj(yl,gca);
+        copyobj(zl,gca);
+        copyobj(tl,gca);
       end
-      if ~isempty(yl.String)
-       set(gca,'ylabel',yl)
-      end
-      if ~isempty(zl.String)
-       set(gca,'zlabel',zl)
-      end
-      if ~isempty(tl.String)
-       set(gca,'title',tl)
-      end
-    else
-      copyobj(xl,gca);
-      copyobj(yl,gca);
-      copyobj(zl,gca);
-      copyobj(tl,gca);
+      id = f2;
+      colormap(cmap);
+    catch
+      fprintf('   Warning: Figure copy failed, fig2svg will proceed on the original figure. Caution for potential distorsion must be taken.\n')
+      copyfig = 0;
+      close(f2);
     end
-    id = f2;
-    colormap(cmap);
     warning('on', 'MATLAB:copyobj:ObjectNotCopied'); % restoring the warning after copying
   else
-    isWordCloud = 1;
+    copyfig = 0;
   end
 
   if nargin < 1 || isempty(filename)
@@ -126,7 +132,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
       end
       finalname = [pathname filename];
     else
-      disp('   Cancel button was pressed.')
+      disp('   Cancelled as requested.')
       return
     end
   else
@@ -294,7 +300,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
   if nargout == 1
     varargout = {0};
   end
-  if ~isWordCloud
+  if copyfig
     % set(id,'Units',originalFigureUnits);
     % set(0, 'ShowHiddenHandles', originalShowHiddenHandles);
     set(0,'CurrentFigure',f1)
