@@ -26,7 +26,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2019.01.1'; % year.month.incremental
+  release_version = '2019.01.2'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
@@ -52,7 +52,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
     varargout = {0};
   end
   if nargin < 8 || isempty(creditPrintBool) || creditPrintBool == 1
-    disp(['   FIG to SVG converter version ' release_version ', maintained by Salva Ardid (sardid@bu.edu).'])
+    disp(['   FIG to SVG converter version ' release_version ', maintained by Salva Ardid (https://github.com/kupiqu/fig2svg).'])
   end
   if strcmp(FIG2SVG_globals.UI,'octave')
     FIG2SVG_globals.octave = true;
