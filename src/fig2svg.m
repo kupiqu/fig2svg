@@ -112,7 +112,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
       id = f2;
       colormap(cmap);
     catch
-      fprintf('   Warning: Figure copy failed, fig2svg will proceed on the original figure. Caution for potential distorsion must be taken.\n')
+      fprintf('   Warning: Figure copy failed, fig2svg will proceed with the original figure.\n   Unnoticed rearrangements of the figure may occur. Caution must be taken.\n');
       copyfig = 0;
       close(f2);
     end
@@ -205,7 +205,16 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
         disp(['ax(',num2str(j),') = ', currentType]);
       end
       groups = [groups group];
-      group = axes2svg(fid,id,ax(j),group,paperpos);
+      try % yyaxis
+        axYAXIS = get(ax(j),'YAxis');
+        yyaxis left;
+        group = axes2svg(fid,id,ax(j),group,paperpos);
+        yyaxis right;
+        set(ax(j),'color','none'); % so it doesn't hide the left content
+        group = axes2svg(fid,id,ax(j),group,paperpos);
+      catch
+        group = axes2svg(fid,id,ax(j),group,paperpos);
+      end
     elseif strcmp(currentType,'colorbar')
       if FIG2SVG_globals.debugModeOn
         disp(['ax(',num2str(j),') = ', currentType]);
