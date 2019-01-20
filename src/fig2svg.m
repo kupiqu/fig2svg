@@ -205,14 +205,14 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
         disp(['ax(',num2str(j),') = ', currentType]);
       end
       groups = [groups group];
-      try % yyaxis
-        axYAXIS = get(ax(j),'YAxis');
+      axYAXIS = get(ax(j),'YAxis');
+      if numel(axYAXIS) == 2 % yyaxis
         yyaxis left;
         group = axes2svg(fid,id,ax(j),group,paperpos);
         yyaxis right;
         set(ax(j),'color','none'); % so it doesn't hide the left content
         group = axes2svg(fid,id,ax(j),group,paperpos);
-      catch
+      else
         group = axes2svg(fid,id,ax(j),group,paperpos);
       end
     elseif strcmp(currentType,'colorbar')
