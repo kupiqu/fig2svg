@@ -26,7 +26,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2019.01.3'; % year.month.incremental
+  release_version = '2019.03.0'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
@@ -75,12 +75,14 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
   if all(~ismember(get(objects,'Type'),'wordcloud'))
     % a nice way to keep the original figure safe and work on a temporary copy (does not work for wordclouds)
     copyfig = 1;
-    warning('off', 'MATLAB:copyobj:ObjectNotCopied'); % these warnings don't seem to come from figure content
-    xl = get(gca,'xlabel');
-    yl = get(gca,'ylabel');
-    zl = get(gca,'zlabel');
-    tl = get(gca,'title');
-    cmap = get(id,'Colormap');
+    if ~FIG2SVG_globals.octave
+      warning('off', 'MATLAB:copyobj:ObjectNotCopied'); % these warnings don't seem to come from figure content
+      xl = get(gca,'xlabel');
+      yl = get(gca,'ylabel');
+      zl = get(gca,'zlabel');
+      tl = get(gca,'title');
+      cmap = get(id,'Colormap');
+    end
     if FIG2SVG_globals.debugModeOn % only show the copy in debug mode
       f2 = figure;
     else
@@ -88,29 +90,31 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
     end
     try
       copyobj(get(f1,'children'),f2);
-      paperpos = get(f1,'Position');
-      set(f2,'Position',paperpos);
-      if ~UIverlessthan('8.4.0')
-        if ~isempty(xl.String)
-         set(gca,'xlabel',xl)
+      if ~FIG2SVG_globals.octave
+        paperpos = get(f1,'Position');
+        set(f2,'Position',paperpos)
+        if ~UIverlessthan('8.4.0')
+          if ~isempty(xl.String)
+           set(gca,'xlabel',xl)
+          end
+          if ~isempty(yl.String)
+           set(gca,'ylabel',yl)
+          end
+          if ~isempty(zl.String)
+           set(gca,'zlabel',zl)
+          end
+          if ~isempty(tl.String)
+           set(gca,'title',tl)
+          end
+        else
+          copyobj(xl,gca);
+          copyobj(yl,gca);
+          copyobj(zl,gca);
+          copyobj(tl,gca);
         end
-        if ~isempty(yl.String)
-         set(gca,'ylabel',yl)
-        end
-        if ~isempty(zl.String)
-         set(gca,'zlabel',zl)
-        end
-        if ~isempty(tl.String)
-         set(gca,'title',tl)
-        end
-      else
-        copyobj(xl,gca);
-        copyobj(yl,gca);
-        copyobj(zl,gca);
-        copyobj(tl,gca);
+        id = f2;
+        colormap(cmap);
       end
-      id = f2;
-      colormap(cmap);
     catch
       fprintf('   Warning: Figure copy failed, fig2svg will proceed with the original figure.\n   Unnoticed rearrangements of the figure may occur. Caution must be taken.\n');
       copyfig = 0;
@@ -205,13 +209,17 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
         disp(['ax(',num2str(j),') = ', currentType]);
       end
       groups = [groups group];
-      axYAXIS = get(ax(j),'YAxis');
-      if numel(axYAXIS) == 2 % yyaxis
-        yyaxis left;
-        group = axes2svg(fid,id,ax(j),group,paperpos);
-        yyaxis right;
-        set(ax(j),'color','none'); % so it doesn't hide the left content
-        group = axes2svg(fid,id,ax(j),group,paperpos);
+      if ~FIG2SVG_globals.octave
+        axYAXIS = get(ax(j),'YAxis');
+        if numel(axYAXIS) == 2 % yyaxis
+          yyaxis left;
+          group = axes2svg(fid,id,ax(j),group,paperpos);
+          yyaxis right;
+          set(ax(j),'color','none'); % so it doesn't hide the left content
+          group = axes2svg(fid,id,ax(j),group,paperpos);
+        else
+          group = axes2svg(fid,id,ax(j),group,paperpos);
+        end
       else
         group = axes2svg(fid,id,ax(j),group,paperpos);
       end
@@ -309,7 +317,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
   if nargout == 1
     varargout = {0};
   end
-  if copyfig
+  if copyfig && ~FIG2SVG_globals.octave
     % set(id,'Units',originalFigureUnits);
     % set(0, 'ShowHiddenHandles', originalShowHiddenHandles);
     set(0,'CurrentFigure',f1)
@@ -334,7 +342,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
     else
       set(0,'CurrentFigure',f2)
       if ~UIverlessthan('8.4.0')
-        % in new matlab versions, these look like the same but don't behave internally like axes' labels, so that's why I moved the actual axes' labels from the original to the copied figure, and then back, once the svg file was complete (here I just copy them for visual debugging)
+        % in new matlab versions, these look like the same but don't behave internally like axes' labels, so that's why I moved the actual axes' labels from the original to the copied figure, and then back again, once the svg file was complete (here I just copy them for visual debugging)
         copyobj(xl,gca);
         copyobj(yl,gca);
         copyobj(zl,gca);
@@ -2560,9 +2568,23 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
           faces = get(axchild(i),'Faces');
           face_index = 1:size(faces,1);
           if size(points,1) == 3
-              [~,face_index] = sort(sum(z(faces(:,:)),2));
-              faces = faces(face_index,:);
+              if any(isnan(faces(:)))
+                  MyData = zeros(size(faces,1),1);
+                  for ii = 1:size(faces,1)
+                      PickMe = ~isnan(faces(ii,:));
+                      MyData(ii) = sum(z(faces(ii,PickMe)),2);
+                  end
+                  [~,face_index] = sort(MyData);
+                  faces = faces(face_index,:);
+              else
+                  [~,face_index] = sort(sum(z(faces(:,:)),2));
+                  faces = faces(face_index,:);
+              end
           end
+%            if size(points,1) == 3
+%                [~,face_index] = sort(sum(z(faces(:,:)),2));
+%                faces = faces(face_index,:);
+%            end
           markerOverlap = 0;
           if ~strcmp(linestyle, 'none')
               markerOverlap = max(markerOverlap, convertunit(linewidth*0.5, 'points', 'pixels', axpos(4)));
@@ -2683,11 +2705,18 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
               else
                   closed = true;
               end
+              CurrNodes = faces(p,:);
+              CurrNodes(isnan(CurrNodes)) = [];
               if flat_shading
-                  patch2svg(fid, x(faces(p,:)), y(faces(p,:)), facecolorname, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, closed)
+                  patch2svg(fid, x(CurrNodes), y(CurrNodes), facecolorname, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, closed)
               else
-                  gouraud_patch2svg(fid, x(faces(p,:)), y(faces(p,:)), cdata, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, id)
+                  gouraud_patch2svg(fid, x(CurrNodes), y(CurrNodes), cdata, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, id)
               end
+%                if flat_shading
+%                    patch2svg(fid, x(faces(p,:)), y(faces(p,:)), facecolorname, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, closed)
+%                else
+%                    gouraud_patch2svg(fid, x(faces(p,:)), y(faces(p,:)), cdata, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, id)
+%                end
               if ~strcmp(marker, 'none')
                   for q = 1:size(faces,2)
                       xmarker = x(faces(p,q));
