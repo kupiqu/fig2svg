@@ -2303,6 +2303,7 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
           end
 
           if strcmp(get(axchild(i),'MarkerEdgeColor'),'flat')
+              markeredgecolorname = {};
               for pointc = 1:numel(pointsc)
                   c_tmp = cmap(pointsc,:);
                   markeredgecolorname{pointc} = searchcolor(id,c_tmp(pointc,:));
