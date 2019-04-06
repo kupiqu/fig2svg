@@ -26,7 +26,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2019.04.0'; % year.month.incremental
+  release_version = '2019.04.1'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
@@ -2315,6 +2315,7 @@ function boundingBoxAxes = axchild2svg(fid,id,axIdString,ax,paperpos,axchild,axp
           end
 
           if strcmp(get(axchild(i),'MarkerFaceColor'),'flat')
+              markerfacecolorname = {};
               for pointc = 1:numel(pointsc)
                   c_tmp = cmap(pointsc,:);
                   markerfacecolorname{pointc} = searchcolor(id,c_tmp(pointc,:));
