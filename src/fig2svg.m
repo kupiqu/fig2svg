@@ -3,30 +3,30 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
   %
   %  Usage: fig2svg(filename, id, debug, legendIcons, clippingMode, figureSize, pixelFileType, creditPrintBool)
   %
-  %     all arguments are optional
+  %  all arguments are optional
   %
-  %     1. filename: name of the svg file (including extension)
-  %     can be omitted (nargin < 1) or left empty ('' or []) and a system dialog will be prompted
+  %  1. filename: name of the svg file (including extension)
+  %  can be omitted (nargin < 1) or left empty ('' or []) and a system dialog will be prompted
   %
-  %     2. id: graphic handle (if omitted or empty, current gcf is taken)
+  %  2. id: graphic handle (if omitted or empty, current gcf is taken)
   %
-  %     3. debug = 0 or 1 (enable to ease debugging of fig2svg functionality; 0 if omitted or empty)
+  %  3. debug = 0 or 1 (enable to ease debugging of fig2svg functionality; 0 if omitted or empty)
   %
-  %     4. legendIcons: legend pieces (necessary in new matlab versions to respect legend appearance)
-  %     can be omitted (nargin < 4) or left empty ('' or [])
+  %  4. legendIcons: legend pieces (necessary in new matlab versions to respect legend appearance)
+  %  can be omitted (nargin < 4) or left empty ('' or [])
   %
-  %     5. clippingMode = 0 (no clipping) or 1 (box on/off dependent clipping) or 2 (strict axes clipping) or 3 (axes+data dependent clipping)
-  %     clippingMode is set to 1 if argument is omitted or empty
+  %  5. clippingMode = 0 (no clipping) or 1 (box on/off dependent clipping) or 2 (strict axes clipping) or 3 (axes+data dependent clipping)
+  %  clippingMode is set to 1 if argument is omitted or empty
   %
-  %     6. figureSize = [width,height] (actual figure size if omitted or empty)
+  %  6. figureSize = [width,height] (actual figure size if omitted or empty)
   %
-  %     7. pixelFileType = 'png' or 'jpg' (png used if omitted or empty)
+  %  7. pixelFileType = 'png' or 'jpg' (png used if omitted or empty)
   %
-  %     8. creditPrintBool - logical argument for whether to display credit information (1 if omitted or empty)
+  %  8. creditPrintBool - logical argument for whether to display credit information (1 if omitted or empty)
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2019.05.1'; % year.month.incremental
+  release_version = '2019.05.2'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
@@ -35,7 +35,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
   FIG2SVG_globals.resolutionScaling = 1;
   FIG2SVG_globals.WN = 0;
   if nargin < 5 || isempty(clippingMode)
-    FIG2SVG_globals.ClippingMode = 1; % needs revision -> note that it does not work fine with Inkscape pdf conversion for latex
+    FIG2SVG_globals.ClippingMode = 1; % nees revision -> note that it does not work fine with Inkscape pdf conversion for latex
   else
     FIG2SVG_globals.ClippingMode = clippingMode;
   end
@@ -47,7 +47,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
     % Keep the default ppi
   end
   % Octave resolution is 96.024, rounding it to 96
-  FIG2SVG_globals.resolutionScaling = FIG2SVG_globals.ScreenPixelsPerInch / 96;
+  FIG2SVG_globals.resolutionScaling = FIG2SVG_globals.ScreenPixelsPerInch/96;
   if nargout == 1
     varargout = {0};
   end
@@ -171,7 +171,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   % Open SVG-file
   [pathstr, name] = fileparts(finalname);
-  %FIG2SVG_globals.basefilename = fullfile(pathstr,name);
+  % FIG2SVG_globals.basefilename = fullfile(pathstr,name);
   FIG2SVG_globals.basefilepath = pathstr;
   FIG2SVG_globals.basefilename = name;
   FIG2SVG_globals.figurenumber = 1;
@@ -181,10 +181,10 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
   % fprintf(fid,'<svg preserveAspectRatio = "xMinYMin meet" width = "100%%" height = "100%%" fill = "#ffffff" viewBox = "0 0 %0.3f %0.3f" ',paperpos(3),paperpos(4));
   fprintf(fid, '<svg preserveAspectRatio = "xMinYMin meet" width = "100%%" height = "100%%" fill = "none" viewBox = "0 0 %0.3f %0.3f" ', paperpos(3), paperpos(4));
   fprintf(fid, ' version = "1.1" xmlns = "http://www.w3.org/2000/svg" xmlns:xlink = "http://www.w3.org/1999/xlink"');
-  %fprintf(fid,' onload = "Init(evt)"');
+  % fprintf(fid,' onload = "Init(evt)"');
   fprintf(fid, '>\n');
   fprintf(fid, '  <desc>Matlab Figure Converted by FIG2SVG</desc>\n');
-  %fprintf(fid,'  <script type = "text/ecmascript" xlink:href = "puzzle_script.js" />\n');
+  % fprintf(fid,'  <script type = "text/ecmascript" xlink:href = "puzzle_script.js" />\n');
   fprintf(fid, '  <g id = "topgroup">\n');
   group = 1;
   groups = [];
@@ -230,7 +230,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
       groups = [groups, group];
       group = colorbar_axes2svg(fid, id, ax(j), group, paperpos);
     elseif strcmp(currentType, 'legend')
-      contLegend = contLegend + 1;
+      contLegend = contLegend+1;
       legendVisible = get(ax(j), 'Visible');
       if strcmp(legendVisible, 'on')
         if ~UIverlessthan('9.1.0') % Not defined before Matlab 2016b
@@ -238,10 +238,10 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
         end
         legendPosition = get(ax(j), 'Position');
 
-        x = legendPosition(1) * paperpos(3);
-        w = legendPosition(3) * paperpos(3);
-        y = (1 - (legendPosition(2) + legendPosition(4))) * paperpos(4);
-        h = legendPosition(4) * paperpos(4);
+        x = legendPosition(1)*paperpos(3);
+        w = legendPosition(3)*paperpos(3);
+        y = (1-(legendPosition(2)+legendPosition(4)))*paperpos(4);
+        h = legendPosition(4)*paperpos(4);
         legendBoundingBox = [x, y, w, h];
 
         legendLabels = get(ax(j), 'String');
@@ -278,15 +278,13 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
         fprintf(fid, '  <g id  = "%s">\n', createId);
         legendIdString = createId;
         fprintf(fid, '  <clipPath id = "%s">\n', legendIdString);
-        fprintf(fid, '  <rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n', ...
-          legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
+        fprintf(fid, '    <rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n', legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
         fprintf(fid, '  </clipPath>\n');
         if strcmp(legendBox, 'on')
           scolorname = searchcolor(id, legendEdgeColor);
           fcolorname = searchcolor(id, legendColor);
           fprintf(fid, '  <g id = "%s">\n', createId);
-          fprintf(fid, '  <rect fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-dasharray = "none" stroke-opacity = "1.000" x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n', ...
-            fcolorname, scolorname, legendLineWidth, legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
+          fprintf(fid, '    <rect fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-dasharray = "none" stroke-opacity = "1.000" x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n', fcolorname, scolorname, legendLineWidth, legendBoundingBox(1), legendBoundingBox(2), legendBoundingBox(3), legendBoundingBox(4));
           fprintf(fid, '  </g>\n');
         end
         axchild2svg(fid, id, legendIdString, ax(j), paperpos, legendIcons{contLegend}, legendPosition, legendGroupax, projection, legendBoundingBox);
@@ -296,10 +294,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
       if strcmp(get(ax(j), 'Visible'), 'on')
         control2svg(fid, id, ax(j), paperpos);
       end
-    elseif strcmp(currentType, 'uicontextmenu') || ...
-        strcmp(currentType, 'uimenu') || ...
-        strcmp(currentType, 'hgjavacomponent') || ...
-        strcmp(currentType, 'uitoolbar')
+    elseif strcmp(currentType, 'uicontextmenu') || strcmp(currentType, 'uimenu') || strcmp(currentType, 'hgjavacomponent') || strcmp(currentType, 'uitoolbar')
       % ignore these types
     elseif strcmp(currentType, 'annotationpane')
       if FIG2SVG_globals.debugModeOn
@@ -386,8 +381,8 @@ function clippingIdString = clipping2svg(fid, id, ax, paperpos, axpos, projectio
             clipz = log10(clipz);
           end
           [x, y, ~] = project(clipx, clipy, clipz, projection);
-          x = (x * axpos(3) + axpos(1)) * paperpos(3);
-          y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
+          x = (x*axpos(3)+axpos(1))*paperpos(3);
+          y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
           clippingIdString = createId;
           fprintf(fid, '<clipPath id = "%s">\n  <polygon fill = "none" stroke = "none" points = "', clippingIdString);
           fprintf(fid, '%0.3f,%0.3f ', [x'; y']);
@@ -475,8 +470,7 @@ function animation2svg(fid, id)
               animationType = 1;
             otherwise, error(['Unknown animation type ''', animation(i).SubAnimation.Type, '''.']);
           end
-          %fprintf(fid,'  <animate attributeType = "XML" attributeName = "%s" from = "%0.3f" to = "%0.3f" dur = "%0.3fs" repeatCount = "%s" />',...
-          %   'opacity' , 0, 1, 5, 'indefinite');
+          % fprintf(fid,'  <animate attributeType = "XML" attributeName = "%s" from = "%0.3f" to = "%0.3f" dur = "%0.3fs" repeatCount = "%s" />', 'opacity' , 0, 1, 5, 'indefinite');
           if animationType == 0
             fprintf(fid, '  <animate attributeType = "XML" attributeName = "%s" dur = "%0.3fs"', type, animation(i).SubAnimation.Duration);
             fprintf(fid, ' values = "');
@@ -531,15 +525,15 @@ function [filterString, boundingBox] = filter2svg(fid, id, boundingBoxAxes, boun
         if isfield(struct_data.svg.BoundingBox, 'Overlap')
           overlap = struct_data.svg.BoundingBox.Overlap;
           if absolute
-            boundingBox(1) = boundingBox(1) - overlap;
-            boundingBox(2) = boundingBox(2) - overlap;
-            boundingBox(3) = boundingBox(3) + 2 * overlap;
-            boundingBox(4) = boundingBox(4) + 2 * overlap;
+            boundingBox(1) = boundingBox(1)-overlap;
+            boundingBox(2) = boundingBox(2)-overlap;
+            boundingBox(3) = boundingBox(3)+2*overlap;
+            boundingBox(4) = boundingBox(4)+2*overlap;
           else
-            boundingBox(1) = boundingBox(1) - boundingBox(3) * overlap;
-            boundingBox(2) = boundingBox(2) - boundingBox(4) * overlap;
-            boundingBox(3) = boundingBox(3) + 2 * boundingBox(3) * overlap;
-            boundingBox(4) = boundingBox(4) + 2 * boundingBox(4) * overlap;
+            boundingBox(1) = boundingBox(1)-boundingBox(3)*overlap;
+            boundingBox(2) = boundingBox(2)-boundingBox(4)*overlap;
+            boundingBox(3) = boundingBox(3)+2*boundingBox(3)*overlap;
+            boundingBox(4) = boundingBox(4)+2*boundingBox(4)*overlap;
           end
         end
         if isfield(struct_data.svg.BoundingBox, 'Visible') && strcmp(struct_data.svg.BoundingBox.Visible, 'on')
@@ -557,15 +551,15 @@ function [filterString, boundingBox] = filter2svg(fid, id, boundingBoxAxes, boun
         filterString = ['filter = "url(#', filterId, ')"'];
         fprintf(fid, '<defs>\n');
         fprintf(fid, '  <filter x = "%0.3f%%" y = "%0.3f%%" width = "%0.3f%%" height = "%0.3f%%" id = "%s">\n', 0, 0, 100, 100, filterId);
-        %if absolute
-        %  fprintf(fid,'  <filter x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" filterUnits = "userSpaceOnUse" id = "%s">\n', boundingBox(1), boundingBox(2), boundingBox(3), boundingBox(4), filterId);
-        %else
-        %  fprintf(fid,'  <filter x = "%0.3f%%" y = "%0.3f%%" width = "%0.3f%%" height = "%0.3f%%" id = "%s">\n', -(offset * 100), -(offset * 100), 100 + (offset * 200), 100 + (offset * 200), filterId);
-        %  % Note: use default -10% for attribute x
-        %  %     use default -10% for attribute y
-        %  %     use default 120% for attribute width
-        %  %     use default 120% for attribute height
-        %end
+        % if absolute
+        %   fprintf(fid,'  <filter x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" filterUnits = "userSpaceOnUse" id = "%s">\n', boundingBox(1), boundingBox(2), boundingBox(3), boundingBox(4), filterId);
+        % else
+        %   fprintf(fid,'  <filter x = "%0.3f%%" y = "%0.3f%%" width = "%0.3f%%" height = "%0.3f%%" id = "%s">\n', -(offset * 100), -(offset * 100), 100 + (offset * 200), 100 + (offset * 200), filterId);
+        % % Note: use default -10% for attribute x
+        % %       use default -10% for attribute y
+        % %       use default 120% for attribute width
+        % %       use default 120% for attribute height
+        % end
         filter = struct_data.svg.Filter;
         for i = 1:length(filter)
           if isfield(filter(i).Subfilter, 'Type')
@@ -693,18 +687,17 @@ function [filterString, boundingBox] = filter2svg(fid, id, boundingBoxAxes, boun
                 printAttributeDouble(fid, 'kernelUnitLength', filter(i).Subfilter, 'KernelUnitLength');
                 fprintf(fid, ' />\n');
 
-                %           case 'feConvolveMatrix'
-                %
-                %             printAttributeDouble(fid, 'order', filter(i).Subfilter);
-                % kernelMatrix
-                %             printAttributeDouble(fid, 'divisor', filter(i).Subfilter, 1.0);
-                %             printAttributeDouble(fid, 'bias', filter(i).Subfilter, 0);
-                % targetX
-                % targetY
-                %             printAttributeString(fid, 'edgeMode', filter(i).Subfilter, 'EdgeMode', 'duplicate');
-                %             fprintf(fid,' kernelUnitLength = "1 1"');
-                %             printAttributeString(fid, 'preserveAlpha', filter(i).Subfilter, 'PreserveAlpha', 'true');
-                %             fprintf(fid,' />\n');
+                % case 'feConvolveMatrix'
+                %   printAttributeDouble(fid, 'order', filter(i).Subfilter);
+                %   kernelMatrix
+                %   printAttributeDouble(fid, 'divisor', filter(i).Subfilter, 1.0);
+                %   printAttributeDouble(fid, 'bias', filter(i).Subfilter, 0);
+                %   targetX
+                %   targetY
+                %   printAttributeString(fid, 'edgeMode', filter(i).Subfilter, 'EdgeMode', 'duplicate');
+                %   fprintf(fid,' kernelUnitLength = "1 1"');
+                %   printAttributeString(fid, 'preserveAlpha', filter(i).Subfilter, 'PreserveAlpha', 'true');
+                %   fprintf(fid,' />\n');
               case {'feComponentTransfer', 'feConvolveMatrix'}
                 error('Filter not yet implemented.');
               otherwise
@@ -901,7 +894,7 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
   set(ax, 'Units', 'normalized');
   axpos = get(ax, 'Position');
   faces = [1, 2, 4, 3; 2, 4, 8, 6; 3, 4, 8, 7; 1, 2, 6, 5; 1, 5, 7, 3; 5, 6, 8, 7];
-  %       x-y  ; y-z  ; x-z  ; y-z  ; x-z  ; x-y
+  % x-y; y-z; x-z; y-z; x-z; x-y
   corners(:, :, 1) = [1, 1, 2, 3, 4; 2, 1, 3, 2, 4];
   corners(:, :, 2) = [2, 2, 4, 6, 8; 3, 2, 6, 4, 8];
   corners(:, :, 3) = [1, 3, 4, 7, 8; 3, 3, 7, 4, 8];
@@ -914,8 +907,8 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
   nomy = [0, 0, 1, 1, 0, 0, 1, 1];
   nomz = [0, 0, 0, 0, 1, 1, 1, 1];
   [projection, edges] = get_projection(ax, id);
-  x = (edges(1, :) * axpos(3) + axpos(1)) * paperpos(3);
-  y = (1 - (edges(2, :) * axpos(4) + axpos(2))) * paperpos(4);
+  x = (edges(1, :)*axpos(3)+axpos(1))*paperpos(3);
+  y = (1-(edges(2, :)*axpos(4)+axpos(2)))*paperpos(4);
   % Depth Sort of view box edges
   if size(edges, 1) == 2
     edges = [edges; ones(1, size(edges, 2))];
@@ -943,10 +936,10 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
   if strcmp(get(ax, 'Direction'), 'reverse')
     axlimy = fliplr(axlimy);
   end
-  axlimori = [axlimxori(1), axlimyori(1), axlimzori(1), axlimxori(2) - axlimxori(1), axlimyori(2) - axlimyori(1), axlimzori(2) - axlimzori(1)];
+  axlimori = [axlimxori(1), axlimyori(1), axlimzori(1), axlimxori(2)-axlimxori(1), axlimyori(2)-axlimyori(1), axlimzori(2)-axlimzori(1)];
   fprintf(fid, '  <g id  = "%s">\n', createId);
   axIdString = createId;
-  boundingBoxAxes = [min(x), min(y), max(x) - min(x), max(y) - min(y)];
+  boundingBoxAxes = [min(x), min(y), max(x)-min(x), max(y)-min(y)];
   if strcmp(get(ax, 'Visible'), 'on')
     axxtick = get(ax, 'XTick');
     axytick = get(ax, 'YTick');
@@ -958,31 +951,31 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
     end
     both_ticklength = get(ax, 'TickLength');
     ticklength = both_ticklength(1);
-    xy_ratio = axpos(3) * paperpos(3) / (axpos(4) * paperpos(4));
+    xy_ratio = axpos(3)*paperpos(3)/(axpos(4)*paperpos(4));
     if xy_ratio < 1
       % disp('2D xy_ratio < 1')
-      tick_ratio = [1, 1 / xy_ratio, 1];
+      tick_ratio = [1, 1/xy_ratio, 1];
     else
       % disp('2D xy_ratio >= 1')
       tick_ratio = [xy_ratio, 1, 1];
     end
     if strcmp(get(ax, 'TickDirection'), 'out')
-      label_distance = -60 * ticklength;
+      label_distance = -60*ticklength;
     else
-      label_distance = -30 * ticklength;
+      label_distance = -30*ticklength;
     end
     xlabel_distance = label_distance;
     ylabel_distance = label_distance;
     % linewidth = get(ax,'LineWidth'); % linewidth = FIG2SVG_globals.resolutionScaling*get(ax,'LineWidth');
-    axxindex = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1) + axlimori(4))));
-    axyindex = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2) + axlimori(5))));
+    axxindex = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1)+axlimori(4))));
+    axyindex = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2)+axlimori(5))));
     % remove sticks outside of the axes (-1 of legends)
     axxtick = axxtick(axxindex);
     axytick = axytick(axyindex);
     if length(axxtick) > 1
-      minor_lin_sticks = (0.2:0.2:0.8) * (axxtick(2) - axxtick(1));
+      minor_lin_sticks = (0.2:0.2:0.8)*(axxtick(2)-axxtick(1));
       minor_axxtick = [];
-      for stick = [2 * axxtick(1) - axxtick(2), axxtick]
+      for stick = [2*axxtick(1)-axxtick(2), axxtick]
         minor_axxtick = [minor_axxtick, minor_lin_sticks + stick];
       end
       minor_axxtick = minor_axxtick(minor_axxtick > min(axlimx) & minor_axxtick < max(axlimx));
@@ -990,9 +983,9 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
       minor_axxtick = [];
     end
     if length(axytick) > 1
-      minor_lin_sticks = (0.2:0.2:0.8) * (axytick(2) - axytick(1));
+      minor_lin_sticks = (0.2:0.2:0.8)*(axytick(2)-axytick(1));
       minor_axytick = [];
-      for stick = [2 * axytick(1) - axytick(2), axytick]
+      for stick = [2*axytick(1)-axytick(2), axytick]
         minor_axytick = [minor_axytick, minor_lin_sticks + stick];
       end
       minor_axytick = minor_axytick(minor_axytick > min(axlimy) & minor_axytick < max(axlimy));
@@ -1001,11 +994,11 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
     end
     FIG2SVG_globals.BoxOn = strcmp(get(ax, 'Box'), 'on');
     if strcmp(get(ax, 'Box'), 'on')
-      axxindex_inner = find((axxtick > axlimori(1)) & (axxtick < (axlimori(1) + axlimori(4))));
-      axyindex_inner = find((axytick > axlimori(2)) & (axytick < (axlimori(2) + axlimori(5))));
+      axxindex_inner = find((axxtick > axlimori(1)) & (axxtick < (axlimori(1)+axlimori(4))));
+      axyindex_inner = find((axytick > axlimori(2)) & (axytick < (axlimori(2)+axlimori(5))));
     else
-      axxindex_inner = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1) + axlimori(4))));
-      axyindex_inner = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2) + axlimori(5))));
+      axxindex_inner = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1)+axlimori(4))));
+      axyindex_inner = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2)+axlimori(5))));
     end
     minor_log_sticks = log10(0.2:0.1:0.9);
     if strcmp(get(ax, 'TickDir'), 'out')
@@ -1022,16 +1015,15 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
     linewidth = get(ax, 'LineWidth');
   end
 
-  fprintf(fid, '  <g>\n');
+  fprintf(fid, '    <g>\n');
   boundingBoxAxes = colorbar2svg(fid, id, axIdString, ax, paperpos, axpos, groupax, projection, boundingBoxAxes);
   fprintf(fid, '  <clipPath id = "%s">\n', axIdString);
-  fprintf(fid, '  <rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n', ...
-    boundingBoxAxes(1), boundingBoxAxes(2), boundingBoxAxes(3), boundingBoxAxes(4));
+  fprintf(fid, '    <rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n', boundingBoxAxes(1), boundingBoxAxes(2), boundingBoxAxes(3), boundingBoxAxes(4));
   fprintf(fid, '  </clipPath>\n');
-  fprintf(fid, '  </g>\n');
+  fprintf(fid, '    </g>\n');
 
   if strcmp(get(ax, 'Visible'), 'on')
-    fprintf(fid, '  <g>\n');
+    fprintf(fid, '    <g>\n');
     % Search axis for labeling
     if projection.xyplane
       [~, x_axis_point_index_top] = min(y);
@@ -1094,13 +1086,9 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
         xg_label_end = interp1(lim, [x_label_end1, x_label_end2], axxtick);
         yg_label_end = interp1(lim, [y_label_end1, y_label_end2], axxtick);
         if axpos(3) > axpos(4)
-          frontTicks(fid, x, y, scolorname, linewidth, ...
-            axxtick, x_axis_point_index, edge_neighbours, [2, 1, 1], ...
-            valid_xsticks, 2*ticklength, tick_ratio, lim, true, true);
+          frontTicks(fid, x, y, scolorname, linewidth, axxtick, x_axis_point_index, edge_neighbours, [2, 1, 1], valid_xsticks, 2*ticklength, tick_ratio, lim, true, true);
         else
-          frontTicks(fid, x, y, scolorname, linewidth, ...
-            axxtick, x_axis_point_index, edge_neighbours, [2, 1, 1], ...
-            [], ticklength, tick_ratio, lim, true);
+          frontTicks(fid, x, y, scolorname, linewidth, axxtick, x_axis_point_index, edge_neighbours, [2, 1, 1], [], ticklength, tick_ratio, lim, true);
         end
         if ~isempty(axlabelx) && ~(iscell(axlabelx) && all(cellfun(@isempty, axlabelx)))
           if ischar(axlabelx) && size(axlabelx, 1) == 1
@@ -1155,13 +1143,9 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
         xg_label_end = interp1(lim, [x_label_end1, x_label_end2], axytick);
         yg_label_end = interp1(lim, [y_label_end1, y_label_end2], axytick);
         if strcmp(get(ax, 'Type'), 'colorbar') && axpos(3) < axpos(4)
-          frontTicks(fid, x, y, scolorname, linewidth, ...
-            axytick, y_axis_point_index, edge_neighbours, [1, 2, 2], ...
-            valid_ysticks, 2*ticklength, tick_ratio, lim, true, true);
+          frontTicks(fid, x, y, scolorname, linewidth, axytick, y_axis_point_index, edge_neighbours, [1, 2, 2], valid_ysticks, 2*ticklength, tick_ratio, lim, true, true);
         else
-          frontTicks(fid, x, y, scolorname, linewidth, ...
-            axytick, y_axis_point_index, edge_neighbours, [1, 2, 2], ...
-            [], ticklength, tick_ratio, lim, true);
+          frontTicks(fid, x, y, scolorname, linewidth, axytick, y_axis_point_index, edge_neighbours, [1, 2, 2], [], ticklength, tick_ratio, lim, true);
         end
         if ~isempty(axlabely) && ~(iscell(axlabely) && all(cellfun(@isempty, axlabely)))
           if ischar(axlabely) && size(axlabely, 1) == 1
@@ -1193,7 +1177,7 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
       end
     end
     exponent2svg(fid, axpos, paperpos, ax, axxtick, axytick, [])
-    fprintf(fid, '  </g>\n');
+    fprintf(fid, '    </g>\n');
   end
   fprintf(fid, '  </g>\n');
   set(ax, 'Units', originalAxesUnits);
@@ -1212,10 +1196,10 @@ function boundingBoxAxes = colorbar2svg(fid, id, axIdString, ax, paperpos, axpos
   filename = [FIG2SVG_globals.basefilename, sprintf('%03d', FIG2SVG_globals.figurenumber), '.', FIG2SVG_globals.pixelFileType];
   imwrite(pointc, cmap, fullfile(FIG2SVG_globals.basefilepath, filename), FIG2SVG_globals.pixelFileType);
   [filterString, boundingBox] = filter2svg(fid, ax, boundingBoxAxes, boundingBoxAxes);
-  lx = axpos(3) * paperpos(3);
-  ly = axpos(4) * paperpos(4);
-  pointsx = axpos(1) * paperpos(3);
-  pointsy = (1 - (axpos(4) + axpos(2))) * paperpos(4);
+  lx = axpos(3)*paperpos(3);
+  ly = axpos(4)*paperpos(4);
+  pointsx = axpos(1)*paperpos(3);
+  pointsy = (1-(axpos(4)+axpos(2)))*paperpos(4);
   [filterString, boundingBox] = filter2svg(fid, ax, boundingBoxAxes, boundingBoxAxes);
   if FIG2SVG_globals.ClippingMode
     clippingIdString = clipping2svg(fid, ax, ax, paperpos, axpos, projection, axIdString);
@@ -1246,7 +1230,7 @@ function group = annotation2svg(fid, id, ax, group, paperpos)
     for i = numel(axchild):-1:1
       if FIG2SVG_globals.debugModeOn
         currentType = get(axchild(i), 'Type');
-        disp(['  axchild(', num2str(i), ') = ', currentType]);
+        disp(['    axchild(', num2str(i), ') = ', currentType]);
       end
       if strcmp(get(axchild(i), 'Visible'), 'off')
         % do nothing
@@ -1278,22 +1262,22 @@ function group = annotation2svg(fid, id, ax, group, paperpos)
         projection = [];
 
         annotationpos = get(axchild(i), 'Position');
-        annotationBox = [annotationpos(1) * paperpos(3), (1 - (annotationpos(2) + annotationpos(4))) * paperpos(4), annotationpos(3) * paperpos(3), annotationpos(4) * paperpos(4)];
+        annotationBox = [annotationpos(1)*paperpos(3), (1-(annotationpos(2)+annotationpos(4)))*paperpos(4), annotationpos(3)*paperpos(3), annotationpos(4)*paperpos(4)];
 
         textalign = get(axchild(i), 'HorizontalAlignment');
         textvalign = get(axchild(i), 'VerticalAlignment');
         margin = convertunit(get(axchild(i), 'Margin'), get(axchild(i), 'FontUnits'), 'pixels', annotationBox(4));
 
         switch textalign
-          case 'left', x = margin + annotationpos(1) * paperpos(3);
-          case 'center', x = (annotationpos(1) + 0.5 * annotationpos(3)) * paperpos(3);
-          case 'right', x = (annotationpos(1) + annotationpos(3)) * paperpos(3) - margin;
+          case 'left', x = margin+annotationpos(1)*paperpos(3);
+          case 'center', x = (annotationpos(1)+0.5*annotationpos(3))*paperpos(3);
+          case 'right', x = (annotationpos(1)+annotationpos(3))*paperpos(3)-margin;
           otherwise
         end
         switch textvalign
-          case 'top', y = (1 - (annotationpos(2) + annotationpos(4))) * paperpos(4);
-          case 'middle', y = (1 - (annotationpos(2) + 0.5 * annotationpos(4))) * paperpos(4);
-          case 'bottom', y = (1 - annotationpos(2)) * paperpos(4);
+          case 'top', y = (1-(annotationpos(2)+annotationpos(4)))*paperpos(4);
+          case 'middle', y = (1-(annotationpos(2)+0.5*annotationpos(4)))*paperpos(4);
+          case 'bottom', y = (1-annotationpos(2))*paperpos(4);
           otherwise
         end
         textpos = [x, y, annotationBox(3), annotationBox(4)];
@@ -1313,8 +1297,7 @@ function group = annotation2svg(fid, id, ax, group, paperpos)
         end
         if ~strcmp(edgecolorname, 'none') || ~strcmp(facecolorname, 'none')
           pattern = lineStyle2svg(linestyle, linewidth);
-          fprintf(fid, '<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" %s />\n', ...
-            box(1), box(2), box(3), box(4), facecolorname, face_opacity, edgecolorname, linewidth, pattern);
+          fprintf(fid, '<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" %s />\n', box(1), box(2), box(3), box(4), facecolorname, face_opacity, edgecolorname, linewidth, pattern);
         end
         text2svg(fid, textpos, paperpos, axchild(i), ax, projection)
         fprintf(fid, '</g>\n');
@@ -1335,7 +1318,7 @@ function group = axes2svg(fid, id, ax, group, paperpos)
   set(ax, 'Units', 'normalized');
   axpos = get(ax, 'Position');
   faces = [1, 2, 4, 3; 2, 4, 8, 6; 3, 4, 8, 7; 1, 2, 6, 5; 1, 5, 7, 3; 5, 6, 8, 7];
-  %       x-y  ; y-z  ; x-z  ; y-z  ; x-z  ; x-y
+  % x-y; y-z; x-z; y-z; x-z; x-y
   corners(:, :, 1) = [1, 1, 2, 3, 4; 2, 1, 3, 2, 4];
   corners(:, :, 2) = [2, 2, 4, 6, 8; 3, 2, 6, 4, 8];
   corners(:, :, 3) = [1, 3, 4, 7, 8; 3, 3, 7, 4, 8];
@@ -1348,8 +1331,8 @@ function group = axes2svg(fid, id, ax, group, paperpos)
   nomy = [0, 0, 1, 1, 0, 0, 1, 1];
   nomz = [0, 0, 0, 0, 1, 1, 1, 1];
   [projection, edges] = get_projection(ax, id);
-  x = (edges(1, :) * axpos(3) + axpos(1)) * paperpos(3);
-  y = (1 - (edges(2, :) * axpos(4) + axpos(2))) * paperpos(4);
+  x = (edges(1, :)*axpos(3)+axpos(1))*paperpos(3);
+  y = (1-(edges(2, :)*axpos(4)+axpos(2)))*paperpos(4);
   % Depth Sort of view box edges
   if size(edges, 1) == 2
     edges = [edges; ones(1, size(edges, 2))];
@@ -1398,10 +1381,10 @@ function group = axes2svg(fid, id, ax, group, paperpos)
   if strcmp(get(ax, 'ZDir'), 'reverse')
     axlimz = fliplr(axlimz);
   end
-  axlimori = [axlimxori(1), axlimyori(1), axlimzori(1), axlimxori(2) - axlimxori(1), axlimyori(2) - axlimyori(1), axlimzori(2) - axlimzori(1)];
+  axlimori = [axlimxori(1), axlimyori(1), axlimzori(1), axlimxori(2)-axlimxori(1), axlimyori(2)-axlimyori(1), axlimzori(2)-axlimzori(1)];
   fprintf(fid, '  <g id  = "%s">\n', createId);
   axIdString = createId;
-  boundingBoxAxes = [min(x), min(y), max(x) - min(x), max(y) - min(y)];
+  boundingBoxAxes = [min(x), min(y), max(x)-min(x), max(y)-min(y)];
   if strcmp(get(ax, 'Visible'), 'on')
     axxtick = get(ax, 'XTick');
     axytick = get(ax, 'YTick');
@@ -1467,16 +1450,16 @@ function group = axes2svg(fid, id, ax, group, paperpos)
     end
     if projection.xyplane
       ticklength = both_ticklength(1);
-      xy_ratio = axpos(3) * paperpos(3) / (axpos(4) * paperpos(4));
+      xy_ratio = axpos(3)*paperpos(3)/(axpos(4)*paperpos(4));
       if xy_ratio < 1
         % disp('2D xy_ratio < 1')
-        tick_ratio = [1, 1 / xy_ratio, 1];
+        tick_ratio = [1, 1/xy_ratio, 1];
       else
         % disp('2D xy_ratio >= 1')
         tick_ratio = [xy_ratio, 1, 1];
       end
       if strcmp(get(ax, 'TickDir'), 'out')
-        label_distance = -(0.02 + ticklength);
+        label_distance = -(0.02+ticklength);
       else
         label_distance = -0.02;
       end
@@ -1486,24 +1469,24 @@ function group = axes2svg(fid, id, ax, group, paperpos)
     else
       % disp('3D')
       ticklength = both_ticklength(2);
-      tick_ratio = 1.5 * [1, 1, 1];
-      label_distance = -2 * abs(ticklength);
-      xlabel_distance = tick_ratio(1) * label_distance;
-      ylabel_distance = tick_ratio(2) * label_distance;
-      zlabel_distance = tick_ratio(3) * label_distance;
+      tick_ratio = 1.5*[1, 1, 1];
+      label_distance = -2*abs(ticklength);
+      xlabel_distance = tick_ratio(1)*label_distance;
+      ylabel_distance = tick_ratio(2)*label_distance;
+      zlabel_distance = tick_ratio(3)*label_distance;
     end
     % linewidth = get(ax,'LineWidth'); % linewidth = FIG2SVG_globals.resolutionScaling*get(ax,'LineWidth');
-    axxindex = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1) + axlimori(4))));
-    axyindex = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2) + axlimori(5))));
-    axzindex = find((axztick >= axlimori(3)) & (axztick <= (axlimori(3) + axlimori(6))));
+    axxindex = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1)+axlimori(4))));
+    axyindex = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2)+axlimori(5))));
+    axzindex = find((axztick >= axlimori(3)) & (axztick <= (axlimori(3)+axlimori(6))));
     % remove sticks outside of the axes (-1 of legends)
     axxtick = axxtick(axxindex);
     axytick = axytick(axyindex);
     axztick = axztick(axzindex);
     if length(axxtick) > 1
-      minor_lin_sticks = (0.2:0.2:0.8) * (axxtick(2) - axxtick(1));
+      minor_lin_sticks = (0.2:0.2:0.8)*(axxtick(2)-axxtick(1));
       minor_axxtick = [];
-      for stick = [2 * axxtick(1) - axxtick(2), axxtick]
+      for stick = [2*axxtick(1)-axxtick(2), axxtick]
         minor_axxtick = [minor_axxtick, minor_lin_sticks + stick];
       end
       minor_axxtick = minor_axxtick(minor_axxtick > min(axlimx) & minor_axxtick < max(axlimx));
@@ -1511,9 +1494,9 @@ function group = axes2svg(fid, id, ax, group, paperpos)
       minor_axxtick = [];
     end
     if length(axytick) > 1
-      minor_lin_sticks = (0.2:0.2:0.8) * (axytick(2) - axytick(1));
+      minor_lin_sticks = (0.2:0.2:0.8)*(axytick(2)-axytick(1));
       minor_axytick = [];
-      for stick = [2 * axytick(1) - axytick(2), axytick]
+      for stick = [2*axytick(1)-axytick(2), axytick]
         minor_axytick = [minor_axytick, minor_lin_sticks + stick];
       end
       minor_axytick = minor_axytick(minor_axytick > min(axlimy) & minor_axytick < max(axlimy));
@@ -1521,9 +1504,9 @@ function group = axes2svg(fid, id, ax, group, paperpos)
       minor_axytick = [];
     end
     if length(axztick) > 1
-      minor_lin_sticks = (0.2:0.2:0.8) * (axztick(2) - axztick(1));
+      minor_lin_sticks = (0.2:0.2:0.8)*(axztick(2)-axztick(1));
       minor_axztick = [];
-      for stick = [2 * axztick(1) - axztick(2), axztick]
+      for stick = [2*axztick(1)-axztick(2), axztick]
         minor_axztick = [minor_axztick, minor_lin_sticks + stick];
       end
       minor_axztick = minor_axztick(minor_axztick > min(axlimz) & minor_axztick < max(axlimz));
@@ -1532,13 +1515,13 @@ function group = axes2svg(fid, id, ax, group, paperpos)
     end
     FIG2SVG_globals.BoxOn = strcmp(get(ax, 'Box'), 'on');
     if strcmp(get(ax, 'Box'), 'on')
-      axxindex_inner = find((axxtick > axlimori(1)) & (axxtick < (axlimori(1) + axlimori(4))));
-      axyindex_inner = find((axytick > axlimori(2)) & (axytick < (axlimori(2) + axlimori(5))));
-      axzindex_inner = find((axztick > axlimori(3)) & (axztick < (axlimori(3) + axlimori(6))));
+      axxindex_inner = find((axxtick > axlimori(1)) & (axxtick < (axlimori(1)+axlimori(4))));
+      axyindex_inner = find((axytick > axlimori(2)) & (axytick < (axlimori(2)+axlimori(5))));
+      axzindex_inner = find((axztick > axlimori(3)) & (axztick < (axlimori(3)+axlimori(6))));
     else
-      axxindex_inner = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1) + axlimori(4))));
-      axyindex_inner = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2) + axlimori(5))));
-      axzindex_inner = find((axztick >= axlimori(3)) & (axztick <= (axlimori(3) + axlimori(6))));
+      axxindex_inner = find((axxtick >= axlimori(1)) & (axxtick <= (axlimori(1)+axlimori(4))));
+      axyindex_inner = find((axytick >= axlimori(2)) & (axytick <= (axlimori(2)+axlimori(5))));
+      axzindex_inner = find((axztick >= axlimori(3)) & (axztick <= (axlimori(3)+axlimori(6))));
     end
     minor_log_sticks = log10(0.2:0.1:0.9);
     if strcmp(get(ax, 'TickDir'), 'out')
@@ -1555,7 +1538,7 @@ function group = axes2svg(fid, id, ax, group, paperpos)
       axxtick = log10(get(ax, 'XTick'));
       minor_axxtick = [];
       if ~isempty(axxtick)
-        all_axxtick = axxtick(1):(axxtick(end) + 1);
+        all_axxtick = axxtick(1):(axxtick(end)+1);
         for stick = all_axxtick
           minor_axxtick = [minor_axxtick, minor_log_sticks + stick];
         end
@@ -1566,7 +1549,7 @@ function group = axes2svg(fid, id, ax, group, paperpos)
       axytick = log10(get(ax, 'YTick'));
       minor_axytick = [];
       if ~isempty(axytick)
-        all_axytick = axytick(1):(axytick(end) + 1);
+        all_axytick = axytick(1):(axytick(end)+1);
         for stick = all_axytick
           minor_axytick = [minor_axytick, minor_log_sticks + stick];
         end
@@ -1577,7 +1560,7 @@ function group = axes2svg(fid, id, ax, group, paperpos)
       axztick = log10(get(ax, 'ZTick'));
       minor_axztick = [];
       if ~isempty(axztick)
-        all_axztick = axztick(1):1:(axztick(end) + 1);
+        all_axztick = axztick(1):1:(axztick(end)+1);
         for stick = all_axztick
           minor_axztick = [minor_axztick, minor_log_sticks + stick];
         end
@@ -1705,7 +1688,7 @@ function group = axes2svg(fid, id, ax, group, paperpos)
       end
     end
   end
-  fprintf(fid, '  <g>\n');
+  fprintf(fid, '    <g>\n');
   axchild = get(ax, 'Children');
   if ~FIG2SVG_globals.octave && ~UIverlessthan('8.4.0')
     % Matlab h2 engine
@@ -1713,12 +1696,11 @@ function group = axes2svg(fid, id, ax, group, paperpos)
   end
   boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchild, axpos, groupax, projection, boundingBoxAxes);
   fprintf(fid, '  <clipPath id = "%s">\n', axIdString);
-  fprintf(fid, '  <rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n', ...
-    boundingBoxAxes(1), boundingBoxAxes(2), boundingBoxAxes(3), boundingBoxAxes(4));
+  fprintf(fid, '    <rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f"/>\n', boundingBoxAxes(1), boundingBoxAxes(2), boundingBoxAxes(3), boundingBoxAxes(4));
   fprintf(fid, '  </clipPath>\n');
-  fprintf(fid, '  </g>\n');
+  fprintf(fid, '    </g>\n');
   if strcmp(get(ax, 'Visible'), 'on')
-    fprintf(fid, '  <g>\n');
+    fprintf(fid, '    <g>\n');
     % Search axis for labeling
     if projection.xyplane
       [~, x_axis_point_index_top] = min(y);
@@ -1844,13 +1826,9 @@ function group = axes2svg(fid, id, ax, group, paperpos)
         y_label_end2 = interp1([0, 1], [y(edge_neighbours(x_axis_point_index(1), 1)), y(edge_neighbours(edge_neighbours(x_axis_point_index(1), 1), 2))], xlabel_distance, 'linear', 'extrap');
         xg_label_end = interp1(lim, [x_label_end1, x_label_end2], axxtick);
         yg_label_end = interp1(lim, [y_label_end1, y_label_end2], axxtick);
-        frontTicks(fid, x, y, scolorname, linewidth, ...
-          axxtick, x_axis_point_index, edge_neighbours, [2, 1, 1], ...
-          valid_xsticks, ticklength, tick_ratio, lim, true);
+        frontTicks(fid, x, y, scolorname, linewidth, axxtick, x_axis_point_index, edge_neighbours, [2, 1, 1], valid_xsticks, ticklength, tick_ratio, lim, true);
         if strcmp(get(ax, 'XTickMode'), 'auto') && (strcmp(get(ax, 'XMinorGrid'), 'on') || strcmp(get(ax, 'XScale'), 'log')) && ~isempty(minor_axxtick)
-          frontTicks(fid, x, y, scolorname, linewidth, ...
-            minor_axxtick, x_axis_point_index, edge_neighbours, [2, 1, 1], ...
-            1:length(minor_axxtick), 0.5*ticklength, tick_ratio, lim, false);
+          frontTicks(fid, x, y, scolorname, linewidth, minor_axxtick, x_axis_point_index, edge_neighbours, [2, 1, 1], 1:length(minor_axxtick), 0.5*ticklength, tick_ratio, lim, false);
         end
         if ~isempty(axlabelx) && ~(iscell(axlabelx) && all(cellfun(@isempty, axlabelx)))
           if ischar(axlabelx) && size(axlabelx, 1) == 1
@@ -1876,11 +1854,11 @@ function group = axes2svg(fid, id, ax, group, paperpos)
               label2svg(fid, axpos, ax, xg_label_end(i), yg_label_end(i), convertString(axlabelx(i, :)), align, angle, 'top', 1, scolorname);
             end
           else
-            v = pi / 180 * get(ax, 'view');
-            if sin(v(1)) * cos(v(1)) > 1e-10 && (sin(v(1)) >= 0.2695 && cos(v(1)) > -1e-10 || sin(v(1)) < -0.2695)
+            v = pi/180*get(ax, 'view');
+            if sin(v(1))*cos(v(1)) > 1e-10 && (sin(v(1)) >= 0.2695 && cos(v(1)) > -1e-10 || sin(v(1)) < -0.2695)
               % disp('right')
               [angle, align] = improvedXLabel(ax, 0, 'right');
-            elseif sin(v(1)) * cos(v(1)) < 1e-10 && (sin(v(1)) <= -0.2695 || (cos(v(1)) < 1e-10 && cos(v(1)) > -0.963))
+            elseif sin(v(1))*cos(v(1)) < 1e-10 && (sin(v(1)) <= -0.2695 || (cos(v(1)) < 1e-10 && cos(v(1)) > -0.963))
               % disp('left')
               [angle, align] = improvedXLabel(ax, 0, 'left');
             else
@@ -1926,13 +1904,9 @@ function group = axes2svg(fid, id, ax, group, paperpos)
         y_label_end2 = interp1([0, 1], [y(edge_neighbours(y_axis_point_index(1), 2)), y(edge_neighbours(edge_neighbours(y_axis_point_index(1), 2), 1))], ylabel_distance, 'linear', 'extrap');
         xg_label_end = interp1(lim, [x_label_end1, x_label_end2], axytick);
         yg_label_end = interp1(lim, [y_label_end1, y_label_end2], axytick);
-        frontTicks(fid, x, y, scolorname, linewidth, ...
-          axytick, y_axis_point_index, edge_neighbours, [1, 2, 2], ...
-          valid_ysticks, ticklength, tick_ratio, lim, true);
+        frontTicks(fid, x, y, scolorname, linewidth, axytick, y_axis_point_index, edge_neighbours, [1, 2, 2], valid_ysticks, ticklength, tick_ratio, lim, true);
         if strcmp(get(ax, 'YTickMode'), 'auto') && (strcmp(get(ax, 'YMinorGrid'), 'on') || strcmp(get(ax, 'YScale'), 'log')) && ~isempty(minor_axytick)
-          frontTicks(fid, x, y, scolorname, linewidth, ...
-            minor_axytick, y_axis_point_index, edge_neighbours, [1, 2, 2], ...
-            1:length(minor_axytick), 0.5*ticklength, tick_ratio, lim, false);
+          frontTicks(fid, x, y, scolorname, linewidth, minor_axytick, y_axis_point_index, edge_neighbours, [1, 2, 2], 1:length(minor_axytick), 0.5*ticklength, tick_ratio, lim, false);
         end
         if ~isempty(axlabely) && ~(iscell(axlabely) && all(cellfun(@isempty, axlabely)))
           if ischar(axlabely) && size(axlabely, 1) == 1
@@ -1960,11 +1934,11 @@ function group = axes2svg(fid, id, ax, group, paperpos)
               end
             end
           else
-            v = pi / 180 * get(ax, 'view');
-            if sin(v(1)) * cos(v(1)) > -1e-10 && (cos(v(1)) <= -0.2339 && sin(v(1)) < 1e-10 || cos(v(1)) > 0.2339)
+            v = pi/180*get(ax, 'view');
+            if sin(v(1))*cos(v(1)) > -1e-10 && (cos(v(1)) <= -0.2339 && sin(v(1)) < 1e-10 || cos(v(1)) > 0.2339)
               % disp('left')
               [angle, align] = improvedYLabel(ax, 0, 'left');
-            elseif sin(v(1)) * cos(v(1)) < -1e-10 && ((sin(v(1)) < 1e-10 && sin(v(1)) > -0.9723) || cos(v(1)) <= -0.2339)
+            elseif sin(v(1))*cos(v(1)) < -1e-10 && ((sin(v(1)) < 1e-10 && sin(v(1)) > -0.9723) || cos(v(1)) <= -0.2339)
               % disp('right')
               [angle, align] = improvedYLabel(ax, 0, 'right');
             else
@@ -1991,10 +1965,10 @@ function group = axes2svg(fid, id, ax, group, paperpos)
     % Box 'on' 3-D plots don't show the frontal lines
     % % Draw 'box' of z-axis
     % if projection.xyplane == false
-    %   if strcmp(get(ax,'Box'),'on')
-    %     edge_line_index = [edge_opposite(most_back_edge_index) edge_neighbours(edge_opposite(most_back_edge_index),3)];
-    %     line2svg(fid,x(edge_line_index),y(edge_line_index),scolorname,'-',linewidth)
-    %   end
+    %     if strcmp(get(ax,'Box'),'on')
+    %         edge_line_index = [edge_opposite(most_back_edge_index) edge_neighbours(edge_opposite(most_back_edge_index),3)];
+    %         line2svg(fid,x(edge_line_index),y(edge_line_index),scolorname,'-',linewidth)
+    %     end
     % end
     % Draw z-tick marks
     if (ticklength(1) ~= 0)
@@ -2056,7 +2030,7 @@ function group = axes2svg(fid, id, ax, group, paperpos)
     end
 
     exponent2svg(fid, axpos, paperpos, ax, axxtick, axytick, axztick)
-    fprintf(fid, '  </g>\n');
+    fprintf(fid, '    </g>\n');
   end
   fprintf(fid, '  </g>\n');
   set(ax, 'Units', originalAxesUnits);
@@ -2076,7 +2050,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
   for i = length(axchild):-1:1
     if FIG2SVG_globals.debugModeOn
       currentType = get(axchild(i), 'Type');
-      disp(['  axchild(', num2str(i), ') = ', currentType]);
+      disp(['    axchild(', num2str(i), ') = ', currentType]);
     end
     if strcmp(get(axchild(i), 'Visible'), 'off')
       % do nothing
@@ -2112,7 +2086,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         markerEdgeAlpha = 1;
       end
 
-      markersize = 2 / 3 * get(axchild(i), 'MarkerSize');
+      markersize = 2/3*get(axchild(i), 'MarkerSize');
       linex = get(axchild(i), 'XData');
       linex = linex(:)';
       liney = get(axchild(i), 'YData');
@@ -2125,14 +2099,14 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         xnegdelta = get(axchild(i), 'XNegativeDelta');
         xposdelta = get(axchild(i), 'XPositiveDelta');
         if ~isempty(xnegdelta)
-          xnegdelta = linex - xnegdelta;
-          xposdelta = linex + xposdelta;
+          xnegdelta = linex-xnegdelta;
+          xposdelta = linex+xposdelta;
         end
         ynegdelta = get(axchild(i), 'YNegativeDelta');
         yposdelta = get(axchild(i), 'YPositiveDelta');
         if ~isempty(ynegdelta)
-          ynegdelta = liney - ynegdelta;
-          yposdelta = liney + yposdelta;
+          ynegdelta = liney-ynegdelta;
+          yposdelta = liney+yposdelta;
         end
         capsize = get(axchild(i), 'CapSize');
       end
@@ -2195,12 +2169,12 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
           z = linez;
         end
       end
-      x = (x * axpos(3) + axpos(1)) * paperpos(3);
-      y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
+      x = (x*axpos(3)+axpos(1))*paperpos(3);
+      y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
       if strcmp(get(axchild(i), 'Type'), 'errorbar')
         if ~isempty(xnegdelta)
-          xerrorbar_x = (xerrorbar_x * axpos(3) + axpos(1)) * paperpos(3);
-          xerrorbar_y = (1 - (xerrorbar_y * axpos(4) + axpos(2))) * paperpos(4);
+          xerrorbar_x = (xerrorbar_x*axpos(3)+axpos(1))*paperpos(3);
+          xerrorbar_y = (1-(xerrorbar_y*axpos(4)+axpos(2)))*paperpos(4);
           xcapsize_y = bsxfun(@plus, 0.5*capsize*[1; -1; NaN]*ones(size(xerrorbar_y(~isnan(xerrorbar_y)))), xerrorbar_y(~isnan(xerrorbar_y)));
           xcapsize_y = xcapsize_y(:)';
           xcapsize_x = bsxfun(@times, [1; 1; NaN]*ones(size(xerrorbar_x(~isnan(xerrorbar_x)))), xerrorbar_x(~isnan(xerrorbar_x)));
@@ -2212,8 +2186,8 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
           xcapsize_x = [];
         end
         if ~isempty(ynegdelta)
-          yerrorbar_x = (yerrorbar_x * axpos(3) + axpos(1)) * paperpos(3);
-          yerrorbar_y = (1 - (yerrorbar_y * axpos(4) + axpos(2))) * paperpos(4);
+          yerrorbar_x = (yerrorbar_x*axpos(3)+axpos(1))*paperpos(3);
+          yerrorbar_y = (1-(yerrorbar_y*axpos(4)+axpos(2)))*paperpos(4);
           ycapsize_x = bsxfun(@plus, 0.5*capsize*[1; -1; NaN]*ones(size(yerrorbar_x(~isnan(yerrorbar_x)))), yerrorbar_x(~isnan(yerrorbar_x)));
           ycapsize_x = ycapsize_x(:)';
           ycapsize_y = bsxfun(@times, [1; 1; NaN]*ones(size(yerrorbar_y(~isnan(yerrorbar_y)))), yerrorbar_y(~isnan(yerrorbar_y)));
@@ -2236,18 +2210,18 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       % put a line into a group with its markers
       if FIG2SVG_globals.ClippingMode ~= 2
         if ~strcmp(get(axchild(i), 'Type'), 'errorbar')
-          boundingBoxElement = [min(x) - markerOverlap, min(y) - markerOverlap, max(x) - min(x) + 2 * markerOverlap, max(y) - min(y) + 2 * markerOverlap];
+          boundingBoxElement = [min(x)-markerOverlap, min(y)-markerOverlap, max(x)-min(x)+2*markerOverlap, max(y)-min(y)+2*markerOverlap];
         else
-          boundingBoxElement = [min([x, xerrorbar_x, xcapsize_y]) - markerOverlap, min([y, yerrorbar_y, ycapsize_x]) - markerOverlap, max([x, xerrorbar_x, xcapsize_y]) - min([x, xerrorbar_x, xcapsize_y]) + 2 * markerOverlap, max([y, yerrorbar_y, ycapsize_x]) - min([y, yerrorbar_y, ycapsize_x]) + 2 * markerOverlap];
+          boundingBoxElement = [min([x, xerrorbar_x, xcapsize_y])-markerOverlap, min([y, yerrorbar_y, ycapsize_x])-markerOverlap, max([x, xerrorbar_x, xcapsize_y])-min([x, xerrorbar_x, xcapsize_y])+2*markerOverlap, max([y, yerrorbar_y, ycapsize_x])-min([y, yerrorbar_y, ycapsize_x])+2*markerOverlap];
         end
       else
         boundingBoxElement = boundingBoxAxes;
       end
       [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxElement);
       if FIG2SVG_globals.ClippingMode == 1 && isfield(FIG2SVG_globals, 'BoxOn') && ~FIG2SVG_globals.BoxOn
-        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), [boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0])]];
+        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), [boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0])]];
       elseif FIG2SVG_globals.ClippingMode == 3 || FIG2SVG_globals.ClippingMode == 1 && ~isfield(FIG2SVG_globals, 'BoxOn')
-        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0]), boundingBoxElement(4) + max([boundingBoxElement(2) - boundingBoxAxes(2), 0])])];
+        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0]), boundingBoxElement(4)+max([boundingBoxElement(2)-boundingBoxAxes(2), 0])])];
       end
       if strcmp(get(axchild(i), 'Clipping'), 'on') && FIG2SVG_globals.ClippingMode ~= 0
         clippingIdString = clipping2svg(fid, axchild(i), ax, paperpos, axpos, projection, axIdString);
@@ -2282,12 +2256,8 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
             %% Octave keeps s, d, p and h in the HandleGraphics object, for the square, diamond, pentagram, and hexagram markers, respectively -- Jakob Malm
           case {'square', 's'}, patch2svg(fid, x'*ones(1, 5)+ones(length(linex), 1)*[-1, -1, 1, 1, -1]*0.75*markersize, y'*ones(1, 5)+ones(length(liney), 1)*[-1, 1, 1, -1, -1]*0.75*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
           case {'diamond', 'd'}, patch2svg(fid, x'*ones(1, 5)+ones(length(linex), 1)*[-0.7071, 0, 0.7071, 0, -0.7071]*1.35*markersize, y'*ones(1, 5)+ones(length(liney), 1)*[0, 1, 0, -1, 0]*1.35*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
-          case {'pentagram', 'p'}, patch2svg(fid, ...
-              x'*ones(1, 11)+ones(length(linex), 1)*[0, 0.1180, 0.5, 0.1910, 0.3090, 0, -0.3090, -0.1910, -0.5, -0.1180, 0]*2*markersize, ...
-              y'*ones(1, 11)+ones(length(liney), 1)*[-0.5257, -0.1625, -0.1625, 0.0621, 0.4253, 0.2008, 0.4253, 0.0621, -0.1625, -0.1625, -0.5257]*2*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
-          case {'hexagram', 'h'}, patch2svg(fid, ...
-              x'*ones(1, 13)+ones(length(linex), 1)*[0, 0.2309, 0.6928, 0.4619, 0.6928, 0.2309, 0, -0.2309, -0.6928, -0.4619, -0.6928, -0.2309, 0]*1.3*markersize, ...
-              y'*ones(1, 13)+ones(length(liney), 1)*[0.8, 0.4, 0.4, 0, -0.4, -0.4, -0.8, -0.4, -0.4, 0, 0.4, 0.4, 0.8]*1.3*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
+          case {'pentagram', 'p'}, patch2svg(fid, x'*ones(1, 11)+ones(length(linex), 1)*[0, 0.1180, 0.5, 0.1910, 0.3090, 0, -0.3090, -0.1910, -0.5, -0.1180, 0]*2*markersize, y'*ones(1, 11)+ones(length(liney), 1)*[-0.5257, -0.1625, -0.1625, 0.0621, 0.4253, 0.2008, 0.4253, 0.0621, -0.1625, -0.1625, -0.5257]*2*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
+          case {'hexagram', 'h'}, patch2svg(fid, x'*ones(1, 13)+ones(length(linex), 1)*[0, 0.2309, 0.6928, 0.4619, 0.6928, 0.2309, 0, -0.2309, -0.6928, -0.4619, -0.6928, -0.2309, 0]*1.3*markersize, y'*ones(1, 13)+ones(length(liney), 1)*[0.8, 0.4, 0.4, 0, -0.4, -0.4, -0.8, -0.4, -0.4, 0, 0.4, 0.4, 0.8]*1.3*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
           case '^', patch2svg(fid, x'*ones(1, 4)+ones(length(linex), 1)*[-1, 1, 0, -1]*1.15*markersize, y'*ones(1, 4)+ones(length(liney), 1)*[0.577, 0.577, -1.155, 0.577]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
           case 'v', patch2svg(fid, x'*ones(1, 4)+ones(length(linex), 1)*[-1, 1, 0, -1]*1.15*markersize, y'*ones(1, 4)+ones(length(liney), 1)*[-0.577, -0.577, 1.155, -0.577]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
           case '<', patch2svg(fid, x'*ones(1, 4)+ones(length(linex), 1)*[0.577, 0.577, -1.155, 0.577]*1.15*markersize, y'*ones(1, 4)+ones(length(liney), 1)*[-1, 1, 0, -1]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
@@ -2307,7 +2277,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         cData = get(axchild(i), 'CData');
         clim = get(ax, 'CLim');
         cmap = get(id, 'Colormap');
-        pointsc = round((cData - clim(1))/(clim(2) - clim(1))*(size(cmap, 1) - 1)+1);
+        pointsc = round((cData-clim(1))/(clim(2)-clim(1))*(size(cmap, 1)-1)+1);
         % Limit index to smallest or biggest color index
         pointsc = max(pointsc, 1);
         pointsc = min(pointsc, size(cmap, 1));
@@ -2340,7 +2310,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       markerFaceAlpha = get(axchild(i), 'MarkerFaceAlpha');
       markerEdgeAlpha = get(axchild(i), 'MarkerEdgeAlpha');
 
-      markersize = 2 / 3 / 10 * max([60, get(axchild(i), 'SizeData')]);
+      markersize = 2/3/10*max([60, get(axchild(i), 'SizeData')]);
 
       linex = get(axchild(i), 'XData');
       linex = linex(:)';
@@ -2371,8 +2341,8 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         y = liney;
         z = linez;
       end
-      x = (x * axpos(3) + axpos(1)) * paperpos(3);
-      y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
+      x = (x*axpos(3)+axpos(1))*paperpos(3);
+      y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
 
       markerOverlap = 0;
       markerOverlap = max(markerOverlap, convertunit(linewidth*0.5, 'points', 'pixels', axpos(4)));
@@ -2380,15 +2350,15 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
 
       % put a line into a group with its markers
       if FIG2SVG_globals.ClippingMode ~= 2
-        boundingBoxElement = [min(x) - markerOverlap, min(y) - markerOverlap, max(x) - min(x) + 2 * markerOverlap, max(y) - min(y) + 2 * markerOverlap];
+        boundingBoxElement = [min(x)-markerOverlap, min(y)-markerOverlap, max(x)-min(x)+2*markerOverlap, max(y)-min(y)+2*markerOverlap];
       else
         boundingBoxElement = boundingBoxAxes;
       end
       [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxElement);
       if FIG2SVG_globals.ClippingMode == 1 && isfield(FIG2SVG_globals, 'BoxOn') && ~FIG2SVG_globals.BoxOn
-        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), [boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0])]];
+        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), [boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0])]];
       elseif FIG2SVG_globals.ClippingMode == 3 || FIG2SVG_globals.ClippingMode == 1 && ~isfield(FIG2SVG_globals, 'BoxOn')
-        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0]), boundingBoxElement(4) + max([boundingBoxElement(2) - boundingBoxAxes(2), 0])])];
+        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0]), boundingBoxElement(4)+max([boundingBoxElement(2)-boundingBoxAxes(2), 0])])];
       end
       if strcmp(get(axchild(i), 'Clipping'), 'on') && FIG2SVG_globals.ClippingMode ~= 0
         clippingIdString = clipping2svg(fid, axchild(i), ax, paperpos, axpos, projection, axIdString);
@@ -2416,12 +2386,8 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
             %% Octave keeps s, d, p and h in the HandleGraphics object, for the square, diamond, pentagram, and hexagram markers, respectively -- Jakob Malm
           case {'square', 's'}, scatterpatch2svg(fid, x'*ones(1, 5)+ones(length(linex), 1)*[-1, -1, 1, 1, -1]*0.75*markersize, y'*ones(1, 5)+ones(length(liney), 1)*[-1, 1, 1, -1, -1]*0.75*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
           case {'diamond', 'd'}, scatterpatch2svg(fid, x'*ones(1, 5)+ones(length(linex), 1)*[-0.7071, 0, 0.7071, 0, -0.7071]*1.35*markersize, y'*ones(1, 5)+ones(length(liney), 1)*[0, 1, 0, -1, 0]*1.35*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
-          case {'pentagram', 'p'}, scatterpatch2svg(fid, ...
-              x'*ones(1, 11)+ones(length(linex), 1)*[0, 0.1180, 0.5, 0.1910, 0.3090, 0, -0.3090, -0.1910, -0.5, -0.1180, 0]*2*markersize, ...
-              y'*ones(1, 11)+ones(length(liney), 1)*[-0.5257, -0.1625, -0.1625, 0.0621, 0.4253, 0.2008, 0.4253, 0.0621, -0.1625, -0.1625, -0.5257]*2*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
-          case {'hexagram', 'h'}, scatterpatch2svg(fid, ...
-              x'*ones(1, 13)+ones(length(linex), 1)*[0, 0.2309, 0.6928, 0.4619, 0.6928, 0.2309, 0, -0.2309, -0.6928, -0.4619, -0.6928, -0.2309, 0]*1.3*markersize, ...
-              y'*ones(1, 13)+ones(length(liney), 1)*[0.8, 0.4, 0.4, 0, -0.4, -0.4, -0.8, -0.4, -0.4, 0, 0.4, 0.4, 0.8]*1.3*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
+          case {'pentagram', 'p'}, scatterpatch2svg(fid, x'*ones(1, 11)+ones(length(linex), 1)*[0, 0.1180, 0.5, 0.1910, 0.3090, 0, -0.3090, -0.1910, -0.5, -0.1180, 0]*2*markersize, y'*ones(1, 11)+ones(length(liney), 1)*[-0.5257, -0.1625, -0.1625, 0.0621, 0.4253, 0.2008, 0.4253, 0.0621, -0.1625, -0.1625, -0.5257]*2*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
+          case {'hexagram', 'h'}, scatterpatch2svg(fid, x'*ones(1, 13)+ones(length(linex), 1)*[0, 0.2309, 0.6928, 0.4619, 0.6928, 0.2309, 0, -0.2309, -0.6928, -0.4619, -0.6928, -0.2309, 0]*1.3*markersize, y'*ones(1, 13)+ones(length(liney), 1)*[0.8, 0.4, 0.4, 0, -0.4, -0.4, -0.8, -0.4, -0.4, 0, 0.4, 0.4, 0.8]*1.3*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
           case '^', scatterpatch2svg(fid, x'*ones(1, 4)+ones(length(linex), 1)*[-1, 1, 0, -1]*1.15*markersize, y'*ones(1, 4)+ones(length(liney), 1)*[0.577, 0.577, -1.155, 0.577]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
           case 'v', scatterpatch2svg(fid, x'*ones(1, 4)+ones(length(linex), 1)*[-1, 1, 0, -1]*1.15*markersize, y'*ones(1, 4)+ones(length(liney), 1)*[-0.577, -0.577, 1.155, -0.577]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
           case '<', scatterpatch2svg(fid, x'*ones(1, 4)+ones(length(linex), 1)*[0.577, 0.577, -1.155, 0.577]*1.15*markersize, y'*ones(1, 4)+ones(length(liney), 1)*[-1, 1, 0, -1]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
@@ -2443,7 +2409,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       face_opacity = 1.0;
       index = 1;
       while index < size(c, 2)
-        patchIndices = (1:c(2, index)) + index;
+        patchIndices = (1:c(2, index))+index;
         % Close a patch if the coordinates do not contain NaNs
         x = c(1, patchIndices);
         y = c(2, patchIndices);
@@ -2453,10 +2419,10 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
           closed = false;
         end
         [x, y, ~] = project(x, y, ones(1, c(2, index))*c(1, index), projection);
-        x = (x * axpos(3) + axpos(1)) * paperpos(3);
-        y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
+        x = (x*axpos(3)+axpos(1))*paperpos(3);
+        y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
         pointc = c(1, index);
-        pointc = round((pointc - clim(1))/(clim(2) - clim(1))*(size(cmap, 1) - 1)+1);
+        pointc = round((pointc-clim(1))/(clim(2)-clim(1))*(size(cmap, 1)-1)+1);
         % Limit index to smallest or biggest color index
         pointc = max(pointc, 1);
         pointc = min(pointc, size(cmap, 1));
@@ -2482,7 +2448,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
           facecolorname = searchcolor(id, cmap(pointc, :));
         end
         patch2svg(fid, x, y, facecolorname, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, closed)
-        index = index + c(2, index) + 1;
+        index = index+c(2, index)+1;
       end
     elseif strcmp(get(axchild(i), 'Type'), 'patch')
       fromLegend = 0;
@@ -2500,7 +2466,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       if strcmp(get(axchild(i), 'CDataMapping'), 'scaled')
         try
           clim = get(ax, 'CLim');
-          pointc = (pointc - clim(1)) / (clim(2) - clim(1)) * (size(cmap, 1) - 1) + 1;
+          pointc = (pointc-clim(1))/(clim(2)-clim(1))*(size(cmap, 1)-1)+1;
         catch
           fromLegend = 1; % legend patch
         end
@@ -2522,7 +2488,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       linewidth = get(axchild(i), 'LineWidth'); % linewidth = FIG2SVG_globals.resolutionScaling*get(axchild(i),'LineWidth');
       marker = get(axchild(i), 'Marker');
       markeredgecolor = get(axchild(i), 'MarkerEdgeColor');
-      markersize = 2 / 3 * get(axchild(i), 'MarkerSize');
+      markersize = 2/3*get(axchild(i), 'MarkerSize');
 
       linex = get(axchild(i), 'XData');
       linex = linex(:)';
@@ -2578,8 +2544,8 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       else
         [x, y, ~] = project(points(1, :), points(2, :), zeros(size(points(1, :))), projection);
       end
-      x = (x * axpos(3) + axpos(1)) * paperpos(3);
-      y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
+      x = (x*axpos(3)+axpos(1))*paperpos(3);
+      y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
       faces = get(axchild(i), 'Faces');
       face_index = 1:size(faces, 1);
       if size(points, 1) == 3
@@ -2596,10 +2562,10 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
           faces = faces(face_index, :);
         end
       end
-      %      if size(points,1) == 3
-      %        [~,face_index] = sort(sum(z(faces(:,:)),2));
-      %        faces = faces(face_index,:);
-      %      end
+      % if size(points,1) == 3
+      %   [~,face_index] = sort(sum(z(faces(:,:)),2));
+      %   faces = faces(face_index,:);
+      % end
       markerOverlap = 0;
       if ~strcmp(linestyle, 'none')
         markerOverlap = max(markerOverlap, convertunit(linewidth*0.5, 'points', 'pixels', axpos(4)));
@@ -2608,15 +2574,15 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         markerOverlap = max(markerOverlap, convertunit(markersize, 'points', 'pixels', axpos(4)));
       end
       if FIG2SVG_globals.ClippingMode ~= 2
-        boundingBoxElement = [min(x) - markerOverlap, min(y) - markerOverlap, max(x) - min(x) + 2 * markerOverlap, max(y) - min(y) + 2 * markerOverlap];
+        boundingBoxElement = [min(x)-markerOverlap, min(y)-markerOverlap, max(x)-min(x)+2*markerOverlap, max(y)-min(y)+2*markerOverlap];
       else
         boundingBoxElement = boundingBoxAxes;
       end
       [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxElement);
       if FIG2SVG_globals.ClippingMode == 1 && isfield(FIG2SVG_globals, 'BoxOn') && ~FIG2SVG_globals.BoxOn
-        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), [boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0])]];
+        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), [boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0])]];
       elseif FIG2SVG_globals.ClippingMode == 3 || FIG2SVG_globals.ClippingMode == 1 && ~isfield(FIG2SVG_globals, 'BoxOn')
-        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0]), boundingBoxElement(4) + max([boundingBoxElement(2) - boundingBoxAxes(2), 0])])];
+        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0]), boundingBoxElement(4)+max([boundingBoxElement(2)-boundingBoxAxes(2), 0])])];
       end
       if strcmp(get(axchild(i), 'Clipping'), 'on') && FIG2SVG_globals.ClippingMode ~= 0
         clippingIdString = clipping2svg(fid, axchild(i), ax, paperpos, axpos, projection, axIdString);
@@ -2727,11 +2693,11 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         else
           gouraud_patch2svg(fid, x(CurrNodes), y(CurrNodes), cdata, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, id)
         end
-        %        if flat_shading
-        %          patch2svg(fid, x(faces(p,:)), y(faces(p,:)), facecolorname, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, closed)
-        %        else
-        %          gouraud_patch2svg(fid, x(faces(p,:)), y(faces(p,:)), cdata, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, id)
-        %        end
+        %                if flat_shading
+        %                    patch2svg(fid, x(faces(p,:)), y(faces(p,:)), facecolorname, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, closed)
+        %                else
+        %                    gouraud_patch2svg(fid, x(faces(p,:)), y(faces(p,:)), cdata, linestyle, linewidth, edgecolorname, face_opacity, edge_opacity, id)
+        %                end
         if ~strcmp(marker, 'none')
           for q = 1:size(faces, 2)
             xmarker = x(faces(p, q));
@@ -2744,8 +2710,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
                 otherwise
                   % if markeredgecolorname is 'auto' or something
                   % else set the markeredgecolorname to the line color
-                  markeredgecolorname = selectColor(axchild(i), id, p, q, points, pointc, ...
-                    colorname, faces, 'MarkerEdgeColor');
+                  markeredgecolorname = selectColor(axchild(i), id, p, q, points, pointc, colorname, faces, 'MarkerEdgeColor');
               end
             else
               markeredgecolorname = searchcolor(id, markeredgecolor);
@@ -2755,8 +2720,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
               switch markerfacecolor
                 case 'none', markerfacecolorname = 'none';
                 otherwise
-                  markerfacecolorname = selectColor(axchild(i), id, p, q, points, pointc, ...
-                    colorname, faces, 'MarkerFaceColor');
+                  markerfacecolorname = selectColor(axchild(i), id, p, q, points, pointc, colorname, faces, 'MarkerFaceColor');
               end
             else
               markerfacecolorname = searchcolor(id, markerfacecolor);
@@ -2782,12 +2746,8 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
                 %% Octave keeps s, d, p and h in the HandleGraphics object, for the square, diamond, pentagram, and hexagram markers, respectively -- Jakob Malm
               case {'square', 's'}, patch2svg(fid, xmarker'*ones(1, 5)+ones(length(linex), 1)*[-1, -1, 1, 1, -1]*0.75*markersize, ymarker'*ones(1, 5)+ones(length(liney), 1)*[-1, 1, 1, -1, -1]*0.75*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
               case {'diamond', 'd'}, patch2svg(fid, xmarker'*ones(1, 5)+ones(length(linex), 1)*[-0.7071, 0, 0.7071, 0, -0.7071]*1.35*markersize, ymarker'*ones(1, 5)+ones(length(liney), 1)*[0, 1, 0, -1, 0]*1.35*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
-              case {'pentagram', 'p'}, patch2svg(fid, ...
-                  xmarker'*ones(1, 11)+ones(length(linex), 1)*[0, 0.1180, 0.5, 0.1910, 0.3090, 0, -0.3090, -0.1910, -0.5, -0.1180, 0]*2*markersize, ...
-                  ymarker'*ones(1, 11)+ones(length(liney), 1)*[-0.5257, -0.1625, -0.1625, 0.0621, 0.4253, 0.2008, 0.4253, 0.0621, -0.1625, -0.1625, -0.5257]*2*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
-              case {'hexagram', 'h'}, patch2svg(fid, ...
-                  xmarker'*ones(1, 13)+ones(length(linex), 1)*[0, 0.2309, 0.6928, 0.4619, 0.6928, 0.2309, 0, -0.2309, -0.6928, -0.4619, -0.6928, -0.2309, 0]*1.3*markersize, ...
-                  ymarker'*ones(1, 13)+ones(length(liney), 1)*[0.8, 0.4, 0.4, 0, -0.4, -0.4, -0.8, -0.4, -0.4, 0, 0.4, 0.4, 0.8]*1.3*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
+              case {'pentagram', 'p'}, patch2svg(fid, xmarker'*ones(1, 11)+ones(length(linex), 1)*[0, 0.1180, 0.5, 0.1910, 0.3090, 0, -0.3090, -0.1910, -0.5, -0.1180, 0]*2*markersize, ymarker'*ones(1, 11)+ones(length(liney), 1)*[-0.5257, -0.1625, -0.1625, 0.0621, 0.4253, 0.2008, 0.4253, 0.0621, -0.1625, -0.1625, -0.5257]*2*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
+              case {'hexagram', 'h'}, patch2svg(fid, xmarker'*ones(1, 13)+ones(length(linex), 1)*[0, 0.2309, 0.6928, 0.4619, 0.6928, 0.2309, 0, -0.2309, -0.6928, -0.4619, -0.6928, -0.2309, 0]*1.3*markersize, ymarker'*ones(1, 13)+ones(length(liney), 1)*[0.8, 0.4, 0.4, 0, -0.4, -0.4, -0.8, -0.4, -0.4, 0, 0.4, 0.4, 0.8]*1.3*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
               case '^', patch2svg(fid, xmarker'*ones(1, 4)+ones(length(linex), 1)*[-1, 1, 0, -1]*1.15*markersize, ymarker'*ones(1, 4)+ones(length(liney), 1)*[0.577, 0.577, -1.155, 0.577]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
               case 'v', patch2svg(fid, xmarker'*ones(1, 4)+ones(length(linex), 1)*[-1, 1, 0, -1]*1.15*markersize, ymarker'*ones(1, 4)+ones(length(liney), 1)*[-0.577, -0.577, 1.155, -0.577]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
               case '<', patch2svg(fid, xmarker'*ones(1, 4)+ones(length(linex), 1)*[0.577, 0.577, -1.155, 0.577]*1.15*markersize, ymarker'*ones(1, 4)+ones(length(liney), 1)*[-1, 1, 0, -1]*1.15*markersize, markerfacecolorname, '-', linewidth, markeredgecolorname, markerFaceAlpha, markerEdgeAlpha, true);
@@ -2807,7 +2767,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       % Scale color if scaled color mapping is turned on
       if strcmp(get(axchild(i), 'CDataMapping'), 'scaled')
         clim = get(ax, 'CLim');
-        pointc = (pointc - clim(1)) / (clim(2) - clim(1)) * (size(cmap, 1) - 1) + 1;
+        pointc = (pointc-clim(1))/(clim(2)-clim(1))*(size(cmap, 1)-1)+1;
       end
       % Limit index to smallest or biggest color index
       pointc = max(pointc, 1);
@@ -2820,7 +2780,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
             face_opacity = 1.0; % TODO
           case {'scaled'}
             alim = get(ax, 'ALim');
-            face_opacity = (face_opacity - alim(1)) / (alim(2) - alim(1));
+            face_opacity = (face_opacity-alim(1))/(alim(2)-alim(1));
           case {'none'}
             % Clip alpha data
             face_opacity = min(1, face_opacity);
@@ -2855,8 +2815,8 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       else
         [x, y, ~] = project(points(1, :), points(2, :), zeros(size(points(1, :))), projection);
       end
-      x = (x * axpos(3) + axpos(1)) * paperpos(3);
-      y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
+      x = (x*axpos(3)+axpos(1))*paperpos(3);
+      y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
       face_index = 1:size(faces, 1);
       if size(points, 1) == 3
         [~, face_index] = sort(sum(z(faces(:, :)), 2));
@@ -2867,15 +2827,15 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         markerOverlap = max(markerOverlap, convertunit(linewidth*0.5, 'points', 'pixels', axpos(4)));
       end
       if FIG2SVG_globals.ClippingMode ~= 2
-        boundingBoxElement = [min(x) - markerOverlap, min(y) - markerOverlap, max(x) - min(x) + 2 * markerOverlap, max(y) - min(y) + 2 * markerOverlap];
+        boundingBoxElement = [min(x)-markerOverlap, min(y)-markerOverlap, max(x)-min(x)+2*markerOverlap, max(y)-min(y)+2*markerOverlap];
       else
         boundingBoxElement = boundingBoxAxes;
       end
       [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxElement);
       if FIG2SVG_globals.ClippingMode == 1 && isfield(FIG2SVG_globals, 'BoxOn') && ~FIG2SVG_globals.BoxOn
-        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), [boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0])]];
+        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), [boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0])]];
       elseif FIG2SVG_globals.ClippingMode == 3 || FIG2SVG_globals.ClippingMode == 1 && ~isfield(FIG2SVG_globals, 'BoxOn')
-        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0]), boundingBoxElement(4) + max([boundingBoxElement(2) - boundingBoxAxes(2), 0])])];
+        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0]), boundingBoxElement(4)+max([boundingBoxElement(2)-boundingBoxAxes(2), 0])])];
       end
       if strcmp(get(axchild(i), 'Clipping'), 'on') && FIG2SVG_globals.ClippingMode ~= 0
         clippingIdString = clipping2svg(fid, axchild(i), ax, paperpos, axpos, projection, axIdString);
@@ -2974,12 +2934,12 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       face_opacity = get(axchild(i), 'FaceAlpha');
       linewidth = get(axchild(i), 'LineWidth'); % linewidth = FIG2SVG_globals.resolutionScaling*get(axchild(i),'LineWidth');
       position = get(axchild(i), 'Position');
-      posx = [position(1), position(1) + position(3)];
+      posx = [position(1), position(1)+position(3)];
       if strcmp(get(ax, 'XScale'), 'log')
         posx(posx <= 0) = NaN;
         posx = log10(posx);
       end
-      posy = [position(2), position(2) + position(4)];
+      posy = [position(2), position(2)+position(4)];
       if strcmp(get(ax, 'YScale'), 'log')
         posy(posy <= 0) = NaN;
         posy = log10(posy);
@@ -2991,27 +2951,27 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       end
       pattern = lineStyle2svg(linestyle, linewidth);
       [x, y, ~] = project(posx, posy, posz, projection);
-      x = (x * axpos(3) + axpos(1)) * paperpos(3);
-      y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
-      rect = [min(x), min(y), max(x) - min(x), max(y) - min(y)];
+      x = (x*axpos(3)+axpos(1))*paperpos(3);
+      y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
+      rect = [min(x), min(y), max(x)-min(x), max(y)-min(y)];
       curvature = get(axchild(i), 'Curvature');
-      curvature(1) = curvature(1) * rect(3) * 0.5;
-      curvature(2) = curvature(2) * rect(4) * 0.5;
+      curvature(1) = curvature(1)*rect(3)*0.5;
+      curvature(2) = curvature(2)*rect(4)*0.5;
       markerOverlap = 0;
       if ~strcmp(linestyle, 'none')
         markerOverlap = max(markerOverlap, convertunit(linewidth*0.5, 'points', 'pixels', axpos(4)));
       end
       % put a rectangle into a group with its markers
       if FIG2SVG_globals.ClippingMode ~= 2
-        boundingBoxElement = rect + [-markerOverlap, -markerOverlap, 2 * markerOverlap, 2 * markerOverlap];
+        boundingBoxElement = rect+[-markerOverlap, -markerOverlap, 2*markerOverlap, 2*markerOverlap];
       else
         boundingBoxElement = boundingBoxAxes;
       end
       [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxElement);
       if isfield(FIG2SVG_globals, 'BoxOn') && ~FIG2SVG_globals.BoxOn
-        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), [boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0])]];
+        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), [boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0])]];
       elseif FIG2SVG_globals.ClippingMode == 3 || FIG2SVG_globals.ClippingMode == 1 && ~isfield(FIG2SVG_globals, 'BoxOn')
-        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0]), boundingBoxElement(4) + max([boundingBoxElement(2) - boundingBoxAxes(2), 0])])];
+        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0]), boundingBoxElement(4)+max([boundingBoxElement(2)-boundingBoxAxes(2), 0])])];
       end
       if strcmp(get(axchild(i), 'Clipping'), 'on') && FIG2SVG_globals.ClippingMode ~= 0
         clippingIdString = clipping2svg(fid, axchild(i), ax, paperpos, axpos, projection, axIdString);
@@ -3023,8 +2983,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         % Workaround for Inkscape filter bug
         fprintf(fid, '<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" fill = "none" stroke = "none" />\n', boundingBox(1), boundingBox(2), boundingBox(3), boundingBox(4));
       end
-      fprintf(fid, '<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" rx = "%0.3f" ry = "%0.3f" fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" %s />\n', ...
-        rect(1), rect(2), rect(3), rect(4), curvature(1), curvature(2), fcolorname, face_opacity, scolorname, linewidth, pattern);
+      fprintf(fid, '<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" rx = "%0.3f" ry = "%0.3f" fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" %s />\n', rect(1), rect(2), rect(3), rect(4), curvature(1), curvature(2), fcolorname, face_opacity, scolorname, linewidth, pattern);
       % close the rectangle group
       fprintf(fid, '</g>\n');
     elseif strcmp(get(axchild(i), 'Type'), 'text')
@@ -3056,8 +3015,8 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       else
         edgecolorname = searchcolor(id, edgecolor);
       end
-      extentx = [extent(1), extent(1) + extent(3)];
-      extenty = [extent(2), extent(2) + extent(4)];
+      extentx = [extent(1), extent(1)+extent(3)];
+      extenty = [extent(2), extent(2)+extent(4)];
       extentz = [0, 0];
       try
         [x, y, ~] = project(extentx, extenty, extentz, projection);
@@ -3065,23 +3024,23 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         x = extentx;
         y = extenty;
       end
-      x = (x * axpos(3) + axpos(1)) * paperpos(3);
-      y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
-      box = [min(x) - margin, min(y) - margin, max(x) - min(x) + 2 * margin, max(y) - min(y) + 2 * margin];
+      x = (x*axpos(3)+axpos(1))*paperpos(3);
+      y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
+      box = [min(x)-margin, min(y)-margin, max(x)-min(x)+2*margin, max(y)-min(y)+2*margin];
       markerOverlap = 0;
       if ~strcmp(linestyle, 'none')
         markerOverlap = max(markerOverlap, convertunit(linewidth*0.5, 'points', 'pixels', axpos(4)));
       end
       if FIG2SVG_globals.ClippingMode ~= 2
-        boundingBoxElement = [min(x) - markerOverlap, min(y) - markerOverlap, max(x) - min(x) + 2 * markerOverlap, max(y) - min(y) + 2 * markerOverlap];
+        boundingBoxElement = [min(x)-markerOverlap, min(y)-markerOverlap, max(x)-min(x)+2*markerOverlap, max(y)-min(y)+2*markerOverlap];
       else
         boundingBoxElement = boundingBoxAxes;
       end
       [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxElement);
       if FIG2SVG_globals.ClippingMode == 1 && isfield(FIG2SVG_globals, 'BoxOn') && ~FIG2SVG_globals.BoxOn
-        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), [boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0])]];
+        boundingBoxAxes = [boundingBoxAxes(1), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), [boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0])]];
       elseif FIG2SVG_globals.ClippingMode == 3 || FIG2SVG_globals.ClippingMode == 1 && ~isfield(FIG2SVG_globals, 'BoxOn')
-        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3) + max([boundingBoxAxes(1) - boundingBoxElement(1), 0]), boundingBoxElement(3) + max([boundingBoxElement(1) - boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4) + max([boundingBoxAxes(2) - boundingBoxElement(2), 0]), boundingBoxElement(4) + max([boundingBoxElement(2) - boundingBoxAxes(2), 0])])];
+        boundingBoxAxes = [min([boundingBoxAxes(1), boundingBoxElement(1)]), min([boundingBoxAxes(2), boundingBoxElement(2)]), max([boundingBoxAxes(3)+max([boundingBoxAxes(1)-boundingBoxElement(1), 0]), boundingBoxElement(3)+max([boundingBoxElement(1)-boundingBoxAxes(1), 0])]), max([boundingBoxAxes(4)+max([boundingBoxAxes(2)-boundingBoxElement(2), 0]), boundingBoxElement(4)+max([boundingBoxElement(2)-boundingBoxAxes(2), 0])])];
       end
       if strcmp(get(axchild(i), 'Clipping'), 'on') && FIG2SVG_globals.ClippingMode ~= 0
         clippingIdString = clipping2svg(fid, axchild(i), ax, paperpos, axpos, projection, axIdString);
@@ -3095,8 +3054,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       end
       if ~strcmp(edgecolorname, 'none') || ~strcmp(facecolorname, 'none')
         pattern = lineStyle2svg(linestyle, linewidth);
-        fprintf(fid, '<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" %s />\n', ...
-          box(1), box(2), box(3), box(4), facecolorname, edgecolorname, linewidth, pattern);
+        fprintf(fid, '<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" fill = "%s" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" %s />\n', box(1), box(2), box(3), box(4), facecolorname, edgecolorname, linewidth, pattern);
       end
       text2svg(fid, axpos, paperpos, axchild(i), ax, projection)
       fprintf(fid, '</g>\n');
@@ -3121,24 +3079,24 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       %pointcclass = class(pointc);  % Bugfix proposed by Tom
       if strcmp(get(axchild(i), 'CDataMapping'), 'scaled')
         clim = get(ax, 'CLim');
-        pointc = (pointc - clim(1)) / (clim(2) - clim(1)) * (size(cmap, 1) - 1) + 1; % Bugfix proposed by Tom
+        pointc = (pointc-clim(1))/(clim(2)-clim(1))*(size(cmap, 1)-1)+1; % Bugfix proposed by Tom
         %pointcclass = 'double'; % since range is now [0->size(cmap,1)-1]  % Bugfix proposed by Tom
       end
       data_aspect_ratio = get(ax, 'DataAspectRatio');
       if length(x) == 2
         if size(pointc, 2) == 1
-          halfwidthx = abs(x(2)-x(1)) * data_aspect_ratio(1);
+          halfwidthx = abs(x(2)-x(1))*data_aspect_ratio(1);
         else
-          halfwidthx = abs(x(2)-x(1)) / (size(pointc, 2) - 1);
+          halfwidthx = abs(x(2)-x(1))/(size(pointc, 2)-1);
         end
       else
         halfwidthx = data_aspect_ratio(1);
       end
       if length(y) == 2
         if size(pointc, 1) == 1
-          halfwidthy = abs(y(2)-y(1)) * data_aspect_ratio(2);
+          halfwidthy = abs(y(2)-y(1))*data_aspect_ratio(2);
         else
-          halfwidthy = abs(y(2)-y(1)) / (size(pointc, 1) - 1);
+          halfwidthy = abs(y(2)-y(1))/(size(pointc, 1)-1);
         end
       else
         halfwidthy = data_aspect_ratio(2);
@@ -3175,7 +3133,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         if strcmp(get(axchild(i), 'CDataMapping'), 'scaled')
           pointc = double(pointc);
         else
-          pointc = double(pointc) + 1;
+          pointc = double(pointc)+1;
         end
       end
       if ndims(pointc) ~= 3
@@ -3183,7 +3141,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
       end
       % CameraUpVector = get(ax,'CameraUpVector');
       filename = [FIG2SVG_globals.basefilename, sprintf('%03d', FIG2SVG_globals.figurenumber), '.', FIG2SVG_globals.pixelFileType];
-      FIG2SVG_globals.figurenumber = FIG2SVG_globals.figurenumber + 1;
+      FIG2SVG_globals.figurenumber = FIG2SVG_globals.figurenumber+1;
       if isempty(FIG2SVG_globals.basefilepath)
         current_path = pwd;
       else
@@ -3215,14 +3173,14 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         end
         imwrite(pointc, cmap, fullfile(FIG2SVG_globals.basefilepath, filename), FIG2SVG_globals.pixelFileType);
       end
-      lx = (size(pointc, 2) * halfwidthx) * axpos(3) * paperpos(3);
-      ly = (size(pointc, 1) * halfwidthy) * axpos(4) * paperpos(4);
+      lx = (size(pointc, 2)*halfwidthx)*axpos(3)*paperpos(3);
+      ly = (size(pointc, 1)*halfwidthy)*axpos(4)*paperpos(4);
       if strcmp(get(ax, 'DataAspectRatioMode'), 'manual')
-        pointsx = ((min(x) - halfwidthx / 2) * axpos(3) + axpos(1)) * paperpos(3);
-        pointsy = (1 - ((max(y) + halfwidthy / 2) * axpos(4) + axpos(2))) * paperpos(4);
+        pointsx = ((min(x)-halfwidthx/2)*axpos(3)+axpos(1))*paperpos(3);
+        pointsy = (1-((max(y)+halfwidthy/2)*axpos(4)+axpos(2)))*paperpos(4);
       else
-        pointsx = axpos(1) * paperpos(3);
-        pointsy = (1 - (axpos(4) + axpos(2))) * paperpos(4);
+        pointsx = axpos(1)*paperpos(3);
+        pointsy = (1-(axpos(4)+axpos(2)))*paperpos(4);
       end
       [filterString, boundingBox] = filter2svg(fid, axchild(i), boundingBoxAxes, boundingBoxAxes);
       if strcmp(get(axchild(i), 'Clipping'), 'on') && FIG2SVG_globals.ClippingMode
@@ -3295,7 +3253,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         barStyle = get(axchild(i), 'BarLayout');
         userData = get(axchild(i), 'UserData');
 
-        currentBarSetNumber = currentBarSetNumber + 1;
+        currentBarSetNumber = currentBarSetNumber+1;
         if numChildBars > 1
           if strcmp(barStyle, 'grouped') && ~strcmpi(userData, 'ungrouped') % grouped bars unless explicitly specified by UserData property
             [barCenters, barWidth] = groupBarProperties(currentBarSetNumber, barCenters, numChildBars, barWidth, barSep);
@@ -3305,9 +3263,9 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
             end
             stackedBarYprev = stackedBarYref;
             if numel(stackedBarYprev) == 1
-              stackedBarYprev = stackedBarYprev * ones(size(barHeight));
+              stackedBarYprev = stackedBarYprev*ones(size(barHeight));
             end
-            stackedBarYref = stackedBarYref + barHeight;
+            stackedBarYref = stackedBarYref+barHeight;
           end
         end
 
@@ -3325,7 +3283,7 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
             scolorname = searchcolor(id, barColors(iBar, :));
           end
 
-          posx = barCenters(iBar) + barSep * barWidth * ([-0.5, 0.5]);
+          posx = barCenters(iBar)+barSep*barWidth*([-0.5, 0.5]);
           if strcmp(get(ax, 'XScale'), 'log')
             posx(posx <= 0) = NaN;
             posx = log10(posx);
@@ -3342,9 +3300,9 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
           posz = [0, 0];
           pattern = lineStyle2svg(linestyle, linewidth);
           [x, y, ~] = project(posx, posy, posz, projection);
-          x = (x * axpos(3) + axpos(1)) * paperpos(3);
-          y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
-          rect = [min(x), min(y), max(x) - min(x), max(y) - min(y)];
+          x = (x*axpos(3)+axpos(1))*paperpos(3);
+          y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
+          rect = [min(x), min(y), max(x)-min(x), max(y)-min(y)];
           curvature = [0, 0];
           fprintf(fid, '<rect x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" rx = "%0.3f" ry = "%0.3f" fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-opacity = "%0.3f" stroke-width = "%0.3fpt" %s />\n', rect(1), rect(2), rect(3), rect(4), curvature(1), curvature(2), fcolorname, face_opacity, scolorname, edge_opacity, linewidth, pattern);
         end
@@ -3352,11 +3310,11 @@ function boundingBoxAxes = axchild2svg(fid, id, axIdString, ax, paperpos, axchil
         %%% bar baseline %%%
         if (strcmp(showBaseline, 'on') || barBaseline ~= 0) && ~strcmp(barStyle, 'stacked')
           posx = get(ax, 'xlim');
-          posy = barBaseline * ([1, 1]);
+          posy = barBaseline*([1, 1]);
           posz = [0, 0];
           [x, y, ~] = project(posx, posy, posz, projection);
-          x = (x * axpos(3) + axpos(1)) * paperpos(3);
-          y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
+          x = (x*axpos(3)+axpos(1))*paperpos(3);
+          y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
           line2svg(fid, x, y, '#000000', linestyle, linewidth);
         end
       end
@@ -3387,11 +3345,11 @@ end
 function [barCenters, barWidth] = groupBarProperties(currentBarSetNumber, barCenters, numGroups, barWidth, barSep)
   toPower = 0.1;
   tanh_factor = 2.5;
-  minGroupSep = 0.713 - 0.49 * tanh(tanh_factor*(numGroups^toPower - 2^toPower)/(30^toPower - 2^toPower));
-  groupWidth = 1 - minGroupSep;
-  offset = groupWidth * [-0.5:1 / (numGroups - 1):0.5];
-  barCenters = barCenters + barSep * offset(currentBarSetNumber);
-  barWidth = min(diff(offset)) * barWidth;
+  minGroupSep = 0.713-0.49*tanh(tanh_factor*(numGroups^toPower-2^toPower)/(30^toPower-2^toPower));
+  groupWidth = 1-minGroupSep;
+  offset = groupWidth*[-0.5:1/(numGroups-1):0.5];
+  barCenters = barCenters+barSep*offset(currentBarSetNumber);
+  barWidth = min(diff(offset))*barWidth;
 end
 
 function result = selectColor(axchild, id, p, q, points, pointc, colorname, faces, type)
@@ -3448,21 +3406,21 @@ function patch2svg(fid, xtot, ytot, scolorname, style, width, edgecolorname, fac
           if ~isempty(xx) && ~isempty(yy) && (~strcmp(edgecolorname, 'none') || ~strcmp(scolorname, 'none'))
             if strcmp(type, 'polygon')
               if (~strcmp(edgecolorname, 'none')) && ~strcmp(scolorname, 'none')
-                fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
               elseif ~strcmp(scolorname, 'none')
-                fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+                fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
               else % ~strcmp(edgecolorname,'none')
-                fprintf(fid, '    <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname, width, edge_opacity, pattern);
               end
               fprintf(fid, '%0.3f,%0.3f ', [xx; yy]);
               fprintf(fid, '"/>\n');
             else
               if ~strcmp(edgecolorname, 'none') && ~strcmp(scolorname, 'none')
-                fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
               elseif ~strcmp(scolorname, 'none')
-                fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+                fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
               else % ~strcmp(edgecolorname,'none')
-                fprintf(fid, '    <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname, width, edge_opacity, pattern);
               end
               fprintf(fid, '%0.3f,%0.3f ', [xx; yy]);
               fprintf(fid, '"/>\n');
@@ -3477,17 +3435,15 @@ function patch2svg(fid, xtot, ytot, scolorname, style, width, edgecolorname, fac
         if parts(length(parts)) ~= length(x)
           parts = [parts, length(x) + 1];
         end
-        for j = 1:(length(parts) - 1)
-          xx = x((parts(j) + 1):(parts(j+1) - 1));
-          yy = y((parts(j) + 1):(parts(j+1) - 1));
+        for j = 1:(length(parts)-1)
+          xx = x((parts(j)+1):(parts(j+1)-1));
+          yy = y((parts(j)+1):(parts(j+1)-1));
           if ~isempty(xx) && ~isempty(yy) && (~strcmp(edgecolorname, 'none') || ~strcmp(scolorname, 'none'))
             if ~isempty(xx) && ~isempty(yy)
               if strcmp(type, 'polygon')
-                fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', ...
-                  type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
               else
-                fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', ...
-                  type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, scolorname, face_opacity, edgecolorname, width, edge_opacity, pattern);
               end
               fprintf(fid, '%0.3f,%0.3f ', [xx; yy]);
               fprintf(fid, '"/>\n');
@@ -3503,7 +3459,7 @@ function patch2svg(fid, xtot, ytot, scolorname, style, width, edgecolorname, fac
           if ~isempty(xx) && ~isempty(yy)
             if strcmp(type, 'polygon')
               if ~strcmp(scolorname, 'none')
-                fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+                fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
                 fprintf(fid, '%0.3f,%0.3f ', [xx; yy]);
                 fprintf(fid, '"/>\n');
               end
@@ -3515,13 +3471,13 @@ function patch2svg(fid, xtot, ytot, scolorname, style, width, edgecolorname, fac
                   xxx = [xx(k), xx(1)];
                   yyy = [yy(k), yy(1)];
                 end
-                fprintf(fid, '    <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
                 fprintf(fid, '%0.3f,%0.3f ', [xxx; yyy]);
                 fprintf(fid, '"/>\n');
               end
             else
               if ~strcmp(scolorname, 'none')
-                fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+                fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
                 fprintf(fid, '%0.3f,%0.3f ', [xx; yy]);
                 fprintf(fid, '"/>\n');
               end
@@ -3533,7 +3489,7 @@ function patch2svg(fid, xtot, ytot, scolorname, style, width, edgecolorname, fac
                   xxx = [xx(k), xx(1)];
                   yyy = [yy(k), yy(1)];
                 end
-                fprintf(fid, '    <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
                 fprintf(fid, '%0.3f,%0.3f ', [xxx; yyy]);
                 fprintf(fid, '"/>\n');
               end
@@ -3548,11 +3504,11 @@ function patch2svg(fid, xtot, ytot, scolorname, style, width, edgecolorname, fac
         if parts(length(parts)) ~= length(x)
           parts = [parts, length(x) + 1];
         end
-        for j = 1:(length(parts) - 1)
-          xx = x((parts(j) + 1):(parts(j+1) - 1));
-          yy = y((parts(j) + 1):(parts(j+1) - 1));
+        for j = 1:(length(parts)-1)
+          xx = x((parts(j)+1):(parts(j+1)-1));
+          yy = y((parts(j)+1):(parts(j+1)-1));
           if ~isempty(xx) && ~isempty(yy)
-            fprintf(fid, '    <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
+            fprintf(fid, '      <%s fill = "%s" fill-opacity = "%0.3f" stroke = "none" points = "', type, scolorname, face_opacity);
             if strcmp(type, 'polygon')
               for k = 1:numel(edgecolorname)
                 if k ~= numel(edgecolorname)
@@ -3562,7 +3518,7 @@ function patch2svg(fid, xtot, ytot, scolorname, style, width, edgecolorname, fac
                   xxx = [xx(k), xx(1)];
                   yyy = [yy(k), yy(1)];
                 end
-                fprintf(fid, '    <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
               end
               fprintf(fid, '%0.3f,%0.3f ', [xxx; yyy]);
               fprintf(fid, '"/>\n');
@@ -3575,7 +3531,7 @@ function patch2svg(fid, xtot, ytot, scolorname, style, width, edgecolorname, fac
                   xxx = [xx(k), xx(1)];
                   yyy = [yy(k), yy(1)];
                 end
-                fprintf(fid, '    <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
+                fprintf(fid, '      <%s fill = "none" stroke-linecap = "square" stroke-linejoin = "round" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', type, edgecolorname{k}, width, edge_opacity, pattern);
                 fprintf(fid, '%0.3f,%0.3f ', [xxx; yyy]);
                 fprintf(fid, '"/>\n');
               end
@@ -3606,14 +3562,14 @@ function gouraud_patch2svg(fid, xtot, ytot, cdata, style, width, edgecolorname, 
       % to form a triangle
       if length(x) > 2
         for j = 3:length(x)
-          coord = [x([1, j - 1, j]); y([1, j - 1, j])];
+          coord = [x([1, j-1, j]); y([1, j-1, j])];
           if isempty(coord)
             continue
           end
           face_color = cdata(1, :);
           face_color2 = cdata(j-1, :);
           face_color3 = cdata(j, :);
-          delta = coord(:, 3) - coord(:, 2);
+          delta = coord(:, 3)-coord(:, 2);
           if det([delta(coord(:, 1)-coord(:, 2))]) ~= 0
             if ~isnan(face_color)
               IDstring1 = createId;
@@ -3628,20 +3584,18 @@ function gouraud_patch2svg(fid, xtot, ytot, cdata, style, width, edgecolorname, 
               else
                 face_color_name3 = searchcolor(id, face_color3/64);
               end
-              grad_end = (delta) * (delta' * (coord(:, 1) - coord(:, 2))) / (delta' * delta) + coord(:, 2);
+              grad_end = (delta)*(delta'*(coord(:, 1)-coord(:, 2)))/(delta'*delta)+coord(:, 2);
               if size(face_color, 2) == 1
                 face_color_name = ['#', colorname(ceil(face_color), :)];
               else
                 face_color_name = searchcolor(id, face_color/64);
               end
               fprintf(fid, '<defs>\n');
-              fprintf(fid, '<linearGradient id = "%s" gradientUnits = "userSpaceOnUse" x1 = "%0.3f" y1 = "%0.3f" x2 = "%0.3f" y2 = "%0.3f">\n', ...
-                IDstring1, coord(1, 2), coord(2, 2), coord(1, 3), coord(2, 3));
+              fprintf(fid, '<linearGradient id = "%s" gradientUnits = "userSpaceOnUse" x1 = "%0.3f" y1 = "%0.3f" x2 = "%0.3f" y2 = "%0.3f">\n', IDstring1, coord(1, 2), coord(2, 2), coord(1, 3), coord(2, 3));
               fprintf(fid, '<stop offset = "0" stop-color = "%s" stop-opacity = "1"/>\n', face_color_name2);
               fprintf(fid, '<stop offset = "1" stop-color = "%s" stop-opacity = "1"/>\n', face_color_name3);
               fprintf(fid, '</linearGradient>\n');
-              fprintf(fid, '<linearGradient id = "%s" gradientUnits = "userSpaceOnUse" x1 = "%0.3f" y1 = "%0.3f" x2 = "%0.3f" y2 = "%0.3f">\n', ...
-                IDstring2, coord(1, 1), coord(2, 1), grad_end(1), grad_end(2));
+              fprintf(fid, '<linearGradient id = "%s" gradientUnits = "userSpaceOnUse" x1 = "%0.3f" y1 = "%0.3f" x2 = "%0.3f" y2 = "%0.3f">\n', IDstring2, coord(1, 1), coord(2, 1), grad_end(1), grad_end(2));
               fprintf(fid, '<stop offset = "0" stop-color = "%s" stop-opacity = "1"/>\n', face_color_name);
               fprintf(fid, '<stop offset = "1" stop-color = "%s" stop-opacity = "0"/>\n', face_color_name);
               fprintf(fid, '</linearGradient>\n');
@@ -3659,8 +3613,7 @@ function gouraud_patch2svg(fid, xtot, ytot, cdata, style, width, edgecolorname, 
       end
       % Last we draw the line around the patch
       if ~strcmp(edgecolorname, 'none')
-        fprintf(fid, '<polygon fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', ...
-          edgecolorname, width, edge_opacity, pattern);
+        fprintf(fid, '<polygon fill = "none" stroke-linecap = "square" stroke-linejoin = "miter" stroke = "%s" stroke-width = "%0.3fpt" stroke-opacity = "%0.3f" %s points = "', edgecolorname, width, edge_opacity, pattern);
         fprintf(fid, '%0.3f,%0.3f ', [x; y]);
         fprintf(fid, '"/>\n');
       end
@@ -3672,8 +3625,8 @@ function patternString = lineStyle2svg(lineStyle, lineWidth)
   global FIG2SVG_globals
   % Create the string for the line style
   % Note: The line style is not the same on screen as it appears in png files.
-  %     Getting the screen format as reference.
-  scaling = 1 / FIG2SVG_globals.resolutionScaling; % max(1, lineWidth * 0.4);
+  %       Getting the screen format as reference.
+  scaling = 1/FIG2SVG_globals.resolutionScaling; % max(1, lineWidth * 0.4);
   switch lineStyle
     case '--', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 6*scaling, 10*scaling); % updated to be similar to Matlab
     case ':', patternString = sprintf('stroke-dasharray = "%0.3f,%0.3f"', 0.25*scaling, 6*scaling); % updated so it looks better
@@ -3703,31 +3656,31 @@ function line2svg(fid, x, y, scolorname, style, width, linejoin, strokeopacity)
     pattern = lineStyle2svg(style, width);
 
     skip_pts = reshape(find(isnan(x) | isnan(y)), [], 1);
-    start_pts = [1; skip_pts + 1];
-    end_pts = [skip_pts - 1; numel(x)];
+    start_pts = [1; skip_pts+1];
+    end_pts = [skip_pts-1; numel(x)];
     k = 1;
     while k <= numel(start_pts)
-      if (end_pts(k) - start_pts(k)) > SEG_SIZE
+      if (end_pts(k)-start_pts(k)) > SEG_SIZE
         tmp_sPts = zeros(numel(start_pts)+1, 1);
         tmp_ePts = zeros(numel(start_pts)+1, 1);
         tmp_sPts(1:k) = start_pts(1:k);
         tmp_ePts(1:k-1) = end_pts(1:k-1);
-        tmp_ePts(k) = tmp_sPts(k) + SEG_SIZE - 1;
-        tmp_sPts(k+1) = tmp_sPts(k) + SEG_SIZE - 1;
+        tmp_ePts(k) = tmp_sPts(k)+SEG_SIZE-1;
+        tmp_sPts(k+1) = tmp_sPts(k)+SEG_SIZE-1;
         tmp_ePts(k+1:end) = end_pts(k:end);
         tmp_sPts(k+2:end) = start_pts(k+1:end);
         start_pts = tmp_sPts;
         end_pts = tmp_ePts;
       end
-      k = k + 1;
+      k = k+1;
     end
     for j = 1:numel(start_pts)
       xx = x(start_pts(j):end_pts(j));
       yy = y(start_pts(j):end_pts(j));
       if ~isempty(xx) && ~isempty(yy)
         % Scaling stroke is a better default
-        % fprintf(fid,'    <polyline fill = "none" vector-effect = "non-scaling-stroke" stroke = "%s" stroke-width = "%0.3fpt" %s stroke-opacity = "%0.3f" points = "', scolorname, width, pattern, strokeopacity);
-        fprintf(fid, '    <polyline fill = "none" stroke-linecap = "square" stroke-linejoin = "%s" stroke = "%s" stroke-width = "%0.3fpt" %s stroke-opacity = "%0.3f" points = "', linejoin, scolorname, width, pattern, strokeopacity);
+        % fprintf(fid,'      <polyline fill = "none" vector-effect = "non-scaling-stroke" stroke = "%s" stroke-width = "%0.3fpt" %s stroke-opacity = "%0.3f" points = "', scolorname, width, pattern, strokeopacity);
+        fprintf(fid, '      <polyline fill = "none" stroke-linecap = "square" stroke-linejoin = "%s" stroke = "%s" stroke-width = "%0.3fpt" %s stroke-opacity = "%0.3f" points = "', linejoin, scolorname, width, pattern, strokeopacity);
         fprintf(fid, '%0.3f,%0.3f ', [xx; yy]);
         fprintf(fid, '"/>\n');
       end
@@ -3818,7 +3771,7 @@ function control2svg(fid, id, ax, paperpos)
     pict.colormap = colormap;
   end
   filename = [FIG2SVG_globals.basefilename, sprintf('%03d', FIG2SVG_globals.figurenumber), '.', FIG2SVG_globals.pixelFileType];
-  FIG2SVG_globals.figurenumber = FIG2SVG_globals.figurenumber + 1;
+  FIG2SVG_globals.figurenumber = FIG2SVG_globals.figurenumber+1;
   if isempty(FIG2SVG_globals.basefilepath)
     current_path = pwd;
   else
@@ -3834,14 +3787,14 @@ function control2svg(fid, id, ax, paperpos)
   imwrite(pict.cdata, fullfile(FIG2SVG_globals.basefilepath, filename), FIG2SVG_globals.pixelFileType);
   set(ax, 'Units', 'normalized');
   posNorm = get(ax, 'Position');
-  posInches(1) = posNorm(1) * paperpos(3);
-  posInches(2) = posNorm(2) * paperpos(4);
-  posInches(3) = posNorm(3) * paperpos(3);
-  posInches(4) = posNorm(4) * paperpos(4);
+  posInches(1) = posNorm(1)*paperpos(3);
+  posInches(2) = posNorm(2)*paperpos(4);
+  posInches(3) = posNorm(3)*paperpos(3);
+  posInches(4) = posNorm(4)*paperpos(4);
   lx = posInches(3);
   ly = posInches(4);
   pointsx = posInches(1);
-  pointsy = paperpos(4) - posInches(2) - posInches(4);
+  pointsy = paperpos(4)-posInches(2)-posInches(4);
   fprintf(fid, '<image x = "%0.3f" y = "%0.3f" width = "%0.3f" height = "%0.3f" image-rendering = "optimizeQuality" xlink:href = "%s" />\n', pointsx, pointsy, lx, ly, filename);
 end
 
@@ -3875,8 +3828,8 @@ function text2svg(fid, axpos, paperpos, id, ax, projection)
       x = textpos(1);
       y = textpos(2);
     end
-    x = (x * axpos(3) + axpos(1)) * paperpos(3);
-    y = (1 - (y * axpos(4) + axpos(2))) * paperpos(4);
+    x = (x*axpos(3)+axpos(1))*paperpos(3);
+    y = (1-(y*axpos(4)+axpos(2)))*paperpos(4);
   else
     x = axpos(1);
     y = axpos(2);
@@ -3907,8 +3860,8 @@ function text2svg(fid, axpos, paperpos, id, ax, projection)
   else
     textrot = get(id, 'Rotation');
   end
-  dx = sin(textrot*pi/180) * convertunit(fontsize*1.2, 'points', 'pixels');
-  dy = cos(textrot*pi/180) * convertunit(fontsize*1.2, 'points', 'pixels');
+  dx = sin(textrot*pi/180)*convertunit(fontsize*1.2, 'points', 'pixels');
+  dy = cos(textrot*pi/180)*convertunit(fontsize*1.2, 'points', 'pixels');
   lines = max(size(get(id, 'String'), 1), 1);
   if size(texttext, 2) ~= 0
     j = 1;
@@ -3918,7 +3871,7 @@ function text2svg(fid, axpos, paperpos, id, ax, projection)
       else
         label2svg(fid, axpos, id, x+i*dx, y+i*dy, convertString(texttext(j, :)), textalign, textrot, textvalign, lines, font_color)
       end
-      j = j + 1;
+      j = j+1;
     end
   else
     label2svg(fid, axpos, id, x, y, '', textalign, textrot, textvalign, lines, font_color)
@@ -3965,13 +3918,13 @@ function exponent2svg(fid, axpos, paperpos, ax, axxtick, axytick, axztick)
     indexnz = find(labelpos ~= 0);
     if (~isempty(indexnz) && ~isempty(numlabels))
       if (max(indexnz) <= length(numlabels))
-        ratio = numlabels(labelpos ~= 0) ./ labelpos(labelpos ~= 0);
+        ratio = numlabels(labelpos ~= 0)./labelpos(labelpos ~= 0);
       else
         ratio = 1;
       end
       if round(log10(ratio(1))) ~= 0 && ratio(1) ~= 0
-        exptext = sprintf('&#215; 10<tspan style = "font-size:65%%;baseline-shift:super">%g</tspan>', -log10(ratio(1)));
-        label2svg(fid, axpos, ax, (axpos(1) + axpos(3))*paperpos(3), (1 - axpos(2))*paperpos(4)+3*fontsize, exptext, 'right', 0, 'top', 1, font_color)
+        exptext = sprintf('&#215; 10<tspan style = "font-size:65%%; baseline-shift:super">%g</tspan>', -log10(ratio(1)));
+        label2svg(fid, axpos, ax, (axpos(1)+axpos(3))*paperpos(3), (1-axpos(2))*paperpos(4)+3*fontsize, exptext, 'right', 0, 'top', 1, font_color)
       end
     end
   else
@@ -4005,13 +3958,13 @@ function exponent2svg(fid, axpos, paperpos, ax, axxtick, axytick, axztick)
       indexnz = find(labelpos ~= 0);
       if (~isempty(indexnz) && ~isempty(numlabels))
         if (max(indexnz) <= length(numlabels))
-          ratio = numlabels(labelpos ~= 0) ./ labelpos(labelpos ~= 0);
+          ratio = numlabels(labelpos ~= 0)./labelpos(labelpos ~= 0);
         else
           ratio = 1;
         end
         if round(log10(ratio(1))) ~= 0 && ratio(1) ~= 0
-          exptext = sprintf('&#215; 10<tspan style = "font-size:65%%;baseline-shift:super">%g</tspan>', -log10(ratio(1)));
-          label2svg(fid, axpos, ax, (axpos(1) + axpos(3))*paperpos(3), (1 - axpos(2))*paperpos(4)+3*fontsize, exptext, 'right', 0, 'top', 1, font_color)
+          exptext = sprintf('&#215; 10<tspan style = "font-size:65%%; baseline-shift:super">%g</tspan>', -log10(ratio(1)));
+          label2svg(fid, axpos, ax, (axpos(1)+axpos(3))*paperpos(3), (1-axpos(2))*paperpos(4)+3*fontsize, exptext, 'right', 0, 'top', 1, font_color)
         end
       end
     end
@@ -4045,13 +3998,13 @@ function exponent2svg(fid, axpos, paperpos, ax, axxtick, axytick, axztick)
       indexnz = find(labelpos ~= 0);
       if (~isempty(indexnz) && ~isempty(numlabels))
         if (max(indexnz) <= length(numlabels))
-          ratio = numlabels(labelpos ~= 0) ./ labelpos(labelpos ~= 0);
+          ratio = numlabels(labelpos ~= 0)./labelpos(labelpos ~= 0);
         else
           ratio = 1;
         end
         if round(log10(ratio(1))) ~= 0 && ratio(1) ~= 0
-          exptext = sprintf('&#215; 10<tspan style = "font-size:65%%;baseline-shift:super">%g</tspan>', -log10(ratio(1)));
-          label2svg(fid, axpos, ax, axpos(1)*paperpos(3), (1 - (axpos(2) + axpos(4)))*paperpos(4)-0.5*fontsize, exptext, 'left', 0, 'bottom', 1, font_color)
+          exptext = sprintf('&#215; 10<tspan style = "font-size:65%%; baseline-shift:super">%g</tspan>', -log10(ratio(1)));
+          label2svg(fid, axpos, ax, axpos(1)*paperpos(3), (1-(axpos(2)+axpos(4)))*paperpos(4)-0.5*fontsize, exptext, 'left', 0, 'bottom', 1, font_color)
         end
       end
     end
@@ -4085,13 +4038,13 @@ function exponent2svg(fid, axpos, paperpos, ax, axxtick, axytick, axztick)
       indexnz = find(labelpos ~= 0);
       if (~isempty(indexnz) && ~isempty(numlabels))
         if (max(indexnz) <= length(numlabels))
-          ratio = numlabels(labelpos ~= 0) ./ labelpos(labelpos ~= 0);
+          ratio = numlabels(labelpos ~= 0)./labelpos(labelpos ~= 0);
         else
           ratio = 1;
         end
         if round(log10(ratio(1))) ~= 0 && ratio(1) ~= 0
-          exptext = sprintf('&#215; 10<tspan style = "font-size:65%%;baseline-shift:super">%g</tspan>', -log10(ratio(1)));
-          label2svg(fid, axpos, ax, axpos(1)*paperpos(3), (1 - (axpos(2) + axpos(4)))*paperpos(4)-0.5*fontsize, exptext, 'left', 0, 'top', 1, font_color)
+          exptext = sprintf('&#215; 10<tspan style = "font-size:65%%; baseline-shift:super">%g</tspan>', -log10(ratio(1)));
+          label2svg(fid, axpos, ax, axpos(1)*paperpos(3), (1-(axpos(2)+axpos(4)))*paperpos(4)-0.5*fontsize, exptext, 'left', 0, 'top', 1, font_color)
         end
       end
     end
@@ -4168,22 +4121,22 @@ function label2svg(fid, axpos, id, x, y, tex, align, angle, valign, lines, font_
     else
       anchor = 'start';
     end
-    dx = sin(angle * pi / 180) * convertunit(fontsize*(-0.5), 'points', 'pixels');
-    dy = cos(angle * pi / 180) * convertunit(fontsize*0, 'points', 'pixels');
+    dx = sin(angle * pi / 180)*convertunit(fontsize*(-0.5), 'points', 'pixels');
+    dy = cos(angle * pi / 180)*convertunit(fontsize*0, 'points', 'pixels');
   elseif abs(angle) > 1e-10 && (strcmp(valign, 'bottom') && ~strcmp(get(id, 'Type'), 'text') || strcmp(valign, '3d-top'))
     if angle > 1e-10
       anchor = 'start';
     else
       anchor = 'end';
     end
-    dx = sin(angle * pi / 180) * convertunit(fontsize*0.5, 'points', 'pixels');
-    dy = cos(angle * pi / 180) * convertunit(fontsize*0, 'points', 'pixels');
+    dx = sin(angle * pi / 180)*convertunit(fontsize*0.5, 'points', 'pixels');
+    dy = cos(angle * pi / 180)*convertunit(fontsize*0, 'points', 'pixels');
   elseif abs(angle) > 1e-10 && strcmpi(align, 'left')
-    dx = cos(angle * pi / 180) * convertunit(fontsize*0, 'points', 'pixels');
-    dy = sin(angle * pi / 180) * convertunit(fontsize*0.25, 'points', 'pixels');
+    dx = cos(angle * pi / 180)*convertunit(fontsize*0, 'points', 'pixels');
+    dy = sin(angle * pi / 180)*convertunit(fontsize*0.25, 'points', 'pixels');
   elseif abs(angle) > 1e-10 && strcmpi(align, 'right')
-    dx = cos(angle * pi / 180) * convertunit(fontsize*(-0.25), 'points', 'pixels');
-    dy = sin(angle * pi / 180) * convertunit(fontsize*0, 'points', 'pixels');
+    dx = cos(angle * pi / 180)*convertunit(fontsize*(-0.25), 'points', 'pixels');
+    dy = sin(angle * pi / 180)*convertunit(fontsize*0, 'points', 'pixels');
   else
     dx = 0;
     dy = 0;
@@ -4297,7 +4250,6 @@ function label2svg(fid, axpos, id, x, y, tex, align, angle, valign, lines, font_
     % &#8243; double prime
     % &#8254; oline
 
-
     tex = strrep(tex, '\\', '{&#92;}');
     tex = strrep(tex, '\{', '{&#123;}');
     tex = strrep(tex, '\}', '{&#125;}');
@@ -4312,8 +4264,8 @@ function label2svg(fid, axpos, id, x, y, tex, align, angle, valign, lines, font_
     return;
   end
   fprintf(fid, '  <g transform = "translate(%0.3f,%0.3f)">\n', x+dx, y+dy);
-  fprintf(fid, '  <g transform = "rotate(%0.3f)">\n', -angle);
-  fprintf(fid, '    <text x = "%0.3f" y = "%s" font-family = "%s" text-anchor = "%s" dominant-baseline = "%s" font-size = "%0.3fpt"%s%s fill = "%s">', 0, y_offset, textfontname, anchor, balign, textfontsize, fweight, fangle, font_color);
+  fprintf(fid, '    <g transform = "rotate(%0.3f)">\n', -angle);
+  fprintf(fid, '      <text x = "%0.3f" y = "%s" font-family = "%s" text-anchor = "%s" dominant-baseline = "%s" font-size = "%0.3fpt"%s%s fill = "%s">', 0, y_offset, textfontname, anchor, balign, textfontsize, fweight, fangle, font_color);
   % tex = strrep(tex, '<tspan>', '');
   % tex = strrep(tex, '</tspan>', '');
   if ~strncmp(tex, '<tspan>', 7)
@@ -4326,7 +4278,7 @@ function label2svg(fid, axpos, id, x, y, tex, align, angle, valign, lines, font_
     fprintf('balign = "%s" y_offset = "%s" angle = "%0.3f" type = "%s" valign = "%s" tex = "%s"\n', balign, y_offset, angle, get(id, 'Type'), valign, tex);
   end
   fprintf(fid, '</text>\n');
-  fprintf(fid, '  </g>\n');
+  fprintf(fid, '    </g>\n');
   fprintf(fid, '  </g>\n');
 end
 
@@ -4387,7 +4339,7 @@ function returnvalue = latex2svg(StringText)
               % Found '}'
               returnvalue = [returnvalue, singleLatex2svg(StringText(lastValidCharacter:bracket(i)-1)), '</tspan>'];
             end
-            lastValidCharacter = bracket(i) + lastValidCharacterOffset;
+            lastValidCharacter = bracket(i)+lastValidCharacterOffset;
           end
           if lastValidCharacter <= length(StringText)
             returnvalue = [returnvalue, singleLatex2svg(StringText(lastValidCharacter:end))];
@@ -4419,17 +4371,9 @@ function StringText = singleLatex2svg(StringText)
     end
     for i = length(index):-1:1
       if StringText(index(i)) == '_'
-        StringText = [StringText(1:index(i)-1), ...
-          '<tspan style = "baseline-shift:sub;font-size:65%%">', ...
-          StringText(index(i)+1), ...
-          '</tspan>', ...
-          StringText(index(i)+2:end)];
+        StringText = [StringText(1:index(i)-1), '<tspan style = "baseline-shift:sub;font-size:65%%">', StringText(index(i)+1), '</tspan>', StringText(index(i)+2:end)];
       else
-        StringText = [StringText(1:index(i)-1), ...
-          '<tspan style = "baseline-shift:super;font-size:65%%">', ...
-          StringText(index(i)+1), ...
-          '</tspan>', ...
-          StringText(index(i)+2:end)];
+        StringText = [StringText(1:index(i)-1), '<tspan style = "baseline-shift:super;font-size:65%%">', StringText(index(i)+1), '</tspan>', StringText(index(i)+2:end)];
       end
     end
   end
@@ -4472,19 +4416,19 @@ function rvalue = convertunit(value, from, to, parentheight)
     parentheight = 1.25; % Default
   end
   switch lower(from) % convert from input unit to points
-    case 'pixels', rvalue = value * 72 / FIG2SVG_globals.ScreenPixelsPerInch / FIG2SVG_globals.resolutionScaling;
+    case 'pixels', rvalue = value*72/FIG2SVG_globals.ScreenPixelsPerInch/FIG2SVG_globals.resolutionScaling;
     case 'points', rvalue = value;
-    case 'centimeters', rvalue = value / 2.54 * 72;
-    case 'inches', rvalue = value * 72; % 72 points = 1 inch
-    case 'normalized', rvalue = value * (parentheight * 0.8);
+    case 'centimeters', rvalue = value/2.54*72;
+    case 'inches', rvalue = value*72; % 72 points = 1 inch
+    case 'normalized', rvalue = value*(parentheight*0.8);
     otherwise, error(['Unknown unit ', from, '.']);
   end
   switch lower(to) % convert from points to specified unit
-    case 'pixels', rvalue = rvalue * FIG2SVG_globals.ScreenPixelsPerInch / 72;
+    case 'pixels', rvalue = rvalue*FIG2SVG_globals.ScreenPixelsPerInch/72;
     case 'points' % do nothing
-    case 'centimeters', rvalue = rvalue * 2.54 / 72;
-    case 'inches', rvalue = rvalue / 72; % 72 points = 1 inch
-    case 'normalized', rvalue = value / (parentheight * 0.8);
+    case 'centimeters', rvalue = rvalue*2.54/72;
+    case 'inches', rvalue = rvalue/72; % 72 points = 1 inch
+    case 'normalized', rvalue = value/(parentheight*0.8);
     otherwise, error(['Unknown unit ', to, '.']);
   end
 end
@@ -4604,7 +4548,7 @@ end
 function IdString = createId
   global FIG2SVG_globals
   IdString = ['ID', sprintf('%06d', FIG2SVG_globals.runningIdNumber)];
-  FIG2SVG_globals.runningIdNumber = FIG2SVG_globals.runningIdNumber + 1;
+  FIG2SVG_globals.runningIdNumber = FIG2SVG_globals.runningIdNumber+1;
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -4670,27 +4614,27 @@ function [projection, edges] = get_projection(ax, id)
     projection.xi = xi;
     projection.yi = yi;
     projection.zi = zi;
-    xc(1) = (xc(1) - xi(1)) / (xi(2) - xi(1));
-    xc(2) = (xc(2) - yi(1)) / (yi(2) - yi(1));
-    xc(3) = (xc(3) - zi(1)) / (zi(2) - zi(1));
+    xc(1) = (xc(1)-xi(1))/(xi(2)-xi(1));
+    xc(2) = (xc(2)-yi(1))/(yi(2)-yi(1));
+    xc(3) = (xc(3)-zi(1))/(zi(2)-zi(1));
     if strcmp(get(ax, 'XScale'), 'log')
-      x = [xi(1), xi(2), xi(1), xi(2), xi(1), xi(2), xi(1), xi(2)] - log10(projection.aspect_scaling(1));
+      x = [xi(1), xi(2), xi(1), xi(2), xi(1), xi(2), xi(1), xi(2)]-log10(projection.aspect_scaling(1));
     else
-      x = [xi(1), xi(2), xi(1), xi(2), xi(1), xi(2), xi(1), xi(2)] / projection.aspect_scaling(1);
+      x = [xi(1), xi(2), xi(1), xi(2), xi(1), xi(2), xi(1), xi(2)]/projection.aspect_scaling(1);
     end
     if strcmp(get(ax, 'YScale'), 'log')
-      y = [yi(1), yi(1), yi(2), yi(2), yi(1), yi(1), yi(2), yi(2)] - log10(projection.aspect_scaling(2));
+      y = [yi(1), yi(1), yi(2), yi(2), yi(1), yi(1), yi(2), yi(2)]-log10(projection.aspect_scaling(2));
     else
-      y = [yi(1), yi(1), yi(2), yi(2), yi(1), yi(1), yi(2), yi(2)] / projection.aspect_scaling(2);
+      y = [yi(1), yi(1), yi(2), yi(2), yi(1), yi(1), yi(2), yi(2)]/projection.aspect_scaling(2);
     end
     if strcmp(get(ax, 'ZScale'), 'log')
-      z = [zi(1), zi(1), zi(1), zi(1), zi(2), zi(2), zi(2), zi(2)] - log10(projection.aspect_scaling(3));
+      z = [zi(1), zi(1), zi(1), zi(1), zi(2), zi(2), zi(2), zi(2)]-log10(projection.aspect_scaling(3));
     else
-      z = [zi(1), zi(1), zi(1), zi(1), zi(2), zi(2), zi(2), zi(2)] / projection.aspect_scaling(3);
+      z = [zi(1), zi(1), zi(1), zi(1), zi(2), zi(2), zi(2), zi(2)]/projection.aspect_scaling(3);
     end
     if FIG2SVG_globals.octave
       if strcmp(get(ax, 'Projection'), 'orthographic')
-        projection.A = [cos(vi(1)*pi/180), sin(vi(1)*pi/180), 0, 0; -sin(vi(1)*pi/180) * sin(vi(2)*pi/180), cos(vi(1)*pi/180) * sin(vi(2)*pi/180), cos(vi(2)*pi/180), 0; sin(vi(1)*pi/180) * cos(vi(2)*pi/180), -cos(vi(1)*pi/180) * cos(vi(2)*pi/180), sin(vi(2)*pi/180), 0; 0, 0, 0, 1];
+        projection.A = [cos(vi(1)*pi/180), sin(vi(1)*pi/180), 0, 0; -sin(vi(1)*pi/180)*sin(vi(2)*pi/180), cos(vi(1)*pi/180)*sin(vi(2)*pi/180), cos(vi(2)*pi/180), 0; sin(vi(1)*pi/180)*cos(vi(2)*pi/180), -cos(vi(1)*pi/180)*cos(vi(2)*pi/180), sin(vi(2)*pi/180), 0; 0, 0, 0, 1];
       else
         error('Unknown projection: %s', get(ax, 'Projection'))
       end
@@ -4710,26 +4654,26 @@ function [projection, edges] = get_projection(ax, id)
     figpos = get(id, 'Position');
     [m, n] = size(x);
     x4d = [x(:), y(:), z(:), ones(m*n, 1)]';
-    x2d = projection.A * x4d;
+    x2d = projection.A*x4d;
     x2 = zeros(m, n);
     y2 = zeros(m, n);
     z2 = zeros(m, n);
-    x2(:) = x2d(1, :) ./ x2d(4, :);
-    y2(:) = x2d(2, :) ./ x2d(4, :);
+    x2(:) = x2d(1, :)./x2d(4, :);
+    y2(:) = x2d(2, :)./x2d(4, :);
     projection.ax = ax;
-    projection.xrange = max(x2) - min(x2);
-    projection.yrange = max(y2) - min(y2);
-    projection.xoffset = (max(x2) + min(x2)) / 2;
-    projection.yoffset = (max(y2) + min(y2)) / 2;
+    projection.xrange = max(x2)-min(x2);
+    projection.yrange = max(y2)-min(y2);
+    projection.xoffset = (max(x2)+min(x2))/2;
+    projection.yoffset = (max(y2)+min(y2))/2;
     if (strcmp(get(ax, 'PlotBoxAspectRatioMode'), 'manual') || strcmp(get(ax, 'DataAspectRatioMode'), 'manual'))
-      if (projection.xrange * axpos(4) * figpos(4) < projection.yrange * axpos(3) * figpos(3))
-        projection.xrange = projection.yrange * axpos(3) * figpos(3) / axpos(4) / figpos(4);
+      if (projection.xrange*axpos(4)*figpos(4) < projection.yrange*axpos(3)*figpos(3))
+        projection.xrange = projection.yrange*axpos(3)*figpos(3)/axpos(4)/figpos(4);
       else
-        projection.yrange = projection.xrange * axpos(4) * figpos(4) / axpos(3) / figpos(3);
+        projection.yrange = projection.xrange*axpos(4)*figpos(4)/axpos(3)/figpos(3);
       end
     end
-    x2(:) = (x2d(1, :) ./ x2d(4, :) - projection.xoffset) / projection.xrange + 0.5;
-    y2(:) = (x2d(2, :) ./ x2d(4, :) - projection.yoffset) / projection.yrange + 0.5;
+    x2(:) = (x2d(1, :)./x2d(4, :)-projection.xoffset)/projection.xrange+0.5;
+    y2(:) = (x2d(2, :)./x2d(4, :)-projection.yoffset)/projection.yrange+0.5;
     z2(:) = x2d(3, :);
     edges = [x2; y2; z2];
   else % colorbar
@@ -4749,18 +4693,18 @@ function [projection, edges] = get_projection(ax, id)
     figpos = get(id, 'Position');
     [m, n] = size(x);
     x3d = [x(:), y(:), ones(m*n, 1)]';
-    x2d = projection.A * x3d;
+    x2d = projection.A*x3d;
     x2 = zeros(m, n);
     y2 = zeros(m, n);
-    x2(:) = x2d(1, :) ./ x2d(3, :);
-    y2(:) = x2d(2, :) ./ x2d(3, :);
+    x2(:) = x2d(1, :)./x2d(3, :);
+    y2(:) = x2d(2, :)./x2d(3, :);
     projection.ax = ax;
-    projection.xrange = max(x2) - min(x2);
-    projection.yrange = max(y2) - min(y2);
-    projection.xoffset = (max(x2) + min(x2)) / 2;
-    projection.yoffset = (max(y2) + min(y2)) / 2;
-    x2(:) = (x2d(1, :) ./ x2d(3, :) - projection.xoffset) / projection.xrange + 0.5;
-    y2(:) = (x2d(2, :) ./ x2d(3, :) - projection.yoffset) / projection.yrange + 0.5;
+    projection.xrange = max(x2)-min(x2);
+    projection.yrange = max(y2)-min(y2);
+    projection.xoffset = (max(x2)+min(x2))/2;
+    projection.yoffset = (max(y2)+min(y2))/2;
+    x2(:) = (x2d(1, :)./x2d(3, :)-projection.xoffset)/projection.xrange+0.5;
+    y2(:) = (x2d(2, :)./x2d(3, :)-projection.yoffset)/projection.yrange+0.5;
     edges = [x2; y2];
   end
 end
@@ -4770,34 +4714,34 @@ function [x2, y2, z2] = project(x, y, z, projection)
   [m, n] = size(x);
   if strcmp(get(projection.ax, 'XDir'), 'reverse')
     xi = projection.xi;
-    x = (1 - (x - xi(1)) / (xi(2) - xi(1))) * (xi(2) - xi(1)) + xi(1);
+    x = (1-(x-xi(1))/(xi(2)-xi(1)))*(xi(2)-xi(1))+xi(1);
   end
   if strcmp(get(projection.ax, 'YDir'), 'reverse')
     yi = projection.yi;
-    y = (1 - (y - yi(1)) / (yi(2) - yi(1))) * (yi(2) - yi(1)) + yi(1);
+    y = (1-(y-yi(1))/(yi(2)-yi(1)))*(yi(2)-yi(1))+yi(1);
   end
   if strcmp(get(projection.ax, 'XScale'), 'log')
-    x = x - log10(projection.aspect_scaling(1));
+    x = x-log10(projection.aspect_scaling(1));
   else
-    x = x / projection.aspect_scaling(1);
+    x = x/projection.aspect_scaling(1);
   end
   if strcmp(get(projection.ax, 'YScale'), 'log')
-    y = y - log10(projection.aspect_scaling(2));
+    y = y-log10(projection.aspect_scaling(2));
   else
-    y = y / projection.aspect_scaling(2);
+    y = y/projection.aspect_scaling(2);
   end
   if strcmp(get(projection.ax, 'ZScale'), 'log')
-    z = z - log10(projection.aspect_scaling(3));
+    z = z-log10(projection.aspect_scaling(3));
   else
-    z = z / projection.aspect_scaling(3);
+    z = z/projection.aspect_scaling(3);
   end
   x4d = [x(:), y(:), z(:), ones(m*n, 1)]';
-  x2d = projection.A * x4d;
+  x2d = projection.A*x4d;
   x2 = zeros(m, n);
   y2 = zeros(m, n);
   z2 = zeros(m, n);
-  x2(:) = (x2d(1, :) ./ x2d(4, :) - projection.xoffset) / projection.xrange + 0.5;
-  y2(:) = (x2d(2, :) ./ x2d(4, :) - projection.yoffset) / projection.yrange + 0.5;
+  x2(:) = (x2d(1, :)./x2d(4, :)-projection.xoffset)/projection.xrange+0.5;
+  y2(:) = (x2d(2, :)./x2d(4, :)-projection.yoffset)/projection.yrange+0.5;
   z2(:) = x2d(3, :);
   %x = [0 1 0 1 0 1 0 1];
   %y = [0 0 1 1 0 0 1 1];
@@ -4822,19 +4766,19 @@ function [f, v, fvc, fva] = surface2patch(s)
   end
   [cm, cn, cp] = size(c);
   [am, an, ap] = size(a);
-  %if cm == (m-1) & cn == (n-1)
-  %  cmode = 'f';
-  %elseif cm == m & cn == n
-  %  cmode = 'v';
-  %else
-  %  cmode = '';
-  %end
+  % if cm == (m-1) & cn == (n-1)
+  %   cmode = 'f';
+  % elseif cm == m & cn == n
+  %   cmode = 'v';
+  % else
+  %   cmode = '';
+  % end
   v = [x(:), y(:), z(:)];
-  q = (1:m * n - m - 1)';
+  q = (1:m*n-m-1)';
   q(m:m:end) = [];
-  fvc = reshape(c, [cm * cn, cp]);
-  fva = reshape(a, [am * an, ap]);
-  f = [q, q + m, q + m + 1, q + 1];
+  fvc = reshape(c, [cm*cn, cp]);
+  fva = reshape(a, [am*an, ap]);
+  f = [q, q+m, q+m+1, q+1];
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -4845,8 +4789,7 @@ function [xlims, ylims, zlims] = AxesChildBounds(ax)
   children = findobj(ax, '-depth', 1, '-not', 'Type', 'axes');
 
   % Now get all children of those objects that have data we can analyze
-  dataObjs = findobj(children, 'Type', 'line', ...
-    '-or', 'Type', 'patch', '-or', 'Type', 'Rectangle', '-or', 'Type', 'Surface', '-or', 'Type', 'image', '-or', 'Type', 'bar', '-or', 'Type', 'errorbar');
+  dataObjs = findobj(children, 'Type', 'line', '-or', 'Type', 'patch', '-or', 'Type', 'Rectangle', '-or', 'Type', 'Surface', '-or', 'Type', 'image', '-or', 'Type', 'bar', '-or', 'Type', 'errorbar');
 
   % SA: remove data that is outside of the axis limits (see below)
   for j = 1:numel(dataObjs)
@@ -4937,12 +4880,12 @@ function RemoveDataOffLimits(dataObj, ax)
       try % 3D patch
         data(cont, :, :) = get(dataObj, typesData{i});
         datatype{cont} = typesData{i};
-        cont = cont + 1;
+        cont = cont+1;
       catch
         try % 2D patch
           data(cont, :) = get(dataObj, typesData{i})';
           datatype{cont} = typesData{i};
-          cont = cont + 1;
+          cont = cont+1;
         catch % different dimension for either ZData or CData
         end
       end
@@ -4961,18 +4904,18 @@ function RemoveDataOffLimits(dataObj, ax)
             data(i, data(i, :) < axlim(i, 1)) = axlim(i, 1);
             data(i, data(i, :) > axlim(i, 2)) = axlim(i, 2);
           end
-          setDataStr = [setDataStr, 'datatype{', num2str(i), '},data(', num2str(i), ',:)'','];
+          setDataStr = [setDataStr, 'datatype{', num2str(i), '}, data(', num2str(i), ', :)'','];
         else % 3D patch
           % display('3D patch')
           data_i = squeeze(data(i, :, :));
           data(:, data_i < axlim(i, 1) | data_i > axlim(i, 2)) = nan;
-          setDataStr = [setDataStr, 'datatype{', num2str(i), '},squeeze(data(', num2str(i), ',:,:)),'];
+          setDataStr = [setDataStr, 'datatype{', num2str(i), '}, squeeze(data(', num2str(i), ', :, :)),'];
         end
       end
     end
     % Set the new data
     if length(sizeData) == 3 && sizeData(1) == 4
-      setDataStr = [setDataStr, 'datatype{4},squeeze(data(4,:,:))'];
+      setDataStr = [setDataStr, 'datatype{4}, squeeze(data(4, :, :))'];
     else
       setDataStr = setDataStr(1:end-1);
     end
@@ -4985,7 +4928,7 @@ function RemoveDataOffLimits(dataObj, ax)
       try
         data(cont, :, :) = get(dataObj, typesData{i});
         datatype{cont} = typesData{i};
-        cont = cont + 1;
+        cont = cont+1;
       catch % different dimension for CData
         if strcmp(typesData{i}, 'CData')
           cdata = get(dataObj, typesData{i});
@@ -5002,12 +4945,12 @@ function RemoveDataOffLimits(dataObj, ax)
           % a trick to discard points that we don't want to show
           data(i, 1, data(i, 1, :) < axlim(i, 1)) = axlim(i, 1);
           data(i, 1, data(i, 1, :) > axlim(i, 2)) = axlim(i, 2);
-          setDataStr = [setDataStr, 'datatype{', num2str(i), '},squeeze(data(', num2str(i), ',1,:)),'];
+          setDataStr = [setDataStr, 'datatype{', num2str(i), '}, squeeze(data(', num2str(i), ', 1, :)),'];
         end
         sqdata = squeeze(data);
         if sqdata(cdim, 1) ~= sqdataprev(cdim, 1) || sqdata(cdim, end) ~= sqdataprev(cdim, end)
-          b1 = round(0.5+(length(cdata) - 1)*(sqdata(cdim, 1) - sqdataprev(cdim, 1))/(sqdataprev(cdim, end) - sqdataprev(cdim, 1)));
-          b2 = round(0.5+(length(cdata) - 1)*(sqdata(cdim, end) - sqdataprev(cdim, 1))/(sqdataprev(cdim, end) - sqdataprev(cdim, 1)));
+          b1 = round(0.5+(length(cdata)-1)*(sqdata(cdim, 1)-sqdataprev(cdim, 1))/(sqdataprev(cdim, end)-sqdataprev(cdim, 1)));
+          b2 = round(0.5+(length(cdata)-1)*(sqdata(cdim, end)-sqdataprev(cdim, 1))/(sqdataprev(cdim, end)-sqdataprev(cdim, 1)));
           cdata = cdata(b1:b2);
         end
       end
@@ -5017,19 +4960,19 @@ function RemoveDataOffLimits(dataObj, ax)
         % a trick to discard points that we don't want to show
         data(i, 1, data(i, 1, :) < axlim(i, 1)) = ceil(axlim(i, 1))
         data(i, 1, data(i, 1, :) > axlim(i, 2)) = floor(axlim(i, 2))
-        setDataStr = [setDataStr, 'datatype{', num2str(i), '},squeeze(data(', num2str(i), ',1,:)),'];
+        setDataStr = [setDataStr, 'datatype{', num2str(i), '}, squeeze(data(', num2str(i), ', 1, :)),'];
       end
       sqdata = squeeze(data);
-      if size(cdata, 1) ~= 1 + sqdata(2, end) - sqdata(2, 1)
+      if size(cdata, 1) ~= 1+sqdata(2, end)-sqdata(2, 1)
         cdata = cdata(sqdata(2, 1):sqdata(2, end), :);
       end
-      if size(cdata, 2) ~= 1 + sqdata(1, end) - sqdata(1, 1)
+      if size(cdata, 2) ~= 1+sqdata(1, end)-sqdata(1, 1)
         cdata = cdata(:, sqdata(1, 1):sqdata(1, end));
       end
     end
     % setDataStr = setDataStr(1:end-1);
-    setDataStr = [setDataStr, 'datatype{end},cdata'];
-    eval(['set(dataObj,', setDataStr, ');']);
+    setDataStr = [setDataStr, 'datatype{end}, cdata'];
+    eval(['set(dataObj, ', setDataStr, ');']);
   else % 2D regular plot
     % Get the data
     setDataStr = '';
@@ -5038,7 +4981,7 @@ function RemoveDataOffLimits(dataObj, ax)
       try
         data(cont, :, :) = get(dataObj, typesData{i});
         datatype{cont} = typesData{i};
-        cont = cont + 1;
+        cont = cont+1;
       catch % different dimension for either ZData or CData
       end
     end
@@ -5053,7 +4996,7 @@ function RemoveDataOffLimits(dataObj, ax)
         else
           data(:, 1, data(i, 1, :) < axlim(i, 1) | data(i, 1, :) > axlim(i, 2)) = nan;
         end
-        setDataStr = [setDataStr, 'datatype{', num2str(i), '},squeeze(data(', num2str(i), ',1,:)),'];
+        setDataStr = [setDataStr, 'datatype{', num2str(i), '}, squeeze(data(', num2str(i), ', 1, :)),'];
       end
     end
     setDataStr = setDataStr(1:end-1);
