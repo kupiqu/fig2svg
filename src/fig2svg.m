@@ -26,7 +26,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2019.05.2'; % year.month.incremental
+  release_version = '2019.07.0'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
@@ -643,7 +643,7 @@ function [filterString, boundingBox] = filter2svg(fid, id, boundingBoxAxes, boun
                 printAttributeIn(fid, 'in', filter(i).Subfilter, 'Source', 'SourceGraphic', resultStrings);
                 printAttributeList(fid, 'type', filter(i).Subfilter, 'ColorType', {'matrix', 'saturate', 'hueRotate', 'luminanceToAlpha'}); % 'matrix' | 'saturate' | 'hueRotate' | 'luminanceToAlpha'
                 if isfield(filter(i).Subfilter, 'ColorType') && strcmp(filter(i).Subfilter.ColorType, 'matrix')
-                  if isfield(filter(i).Subfilter, 'Matrix') && (lenght(filter(i).Subfilter.Matrix) == 20)
+                  if isfield(filter(i).Subfilter, 'Matrix') && (length(filter(i).Subfilter.Matrix) == 20)
                     fprintf(fid, ' values = "');
                     fprintf(fid, ' %0.3f', filter(i).Subfilter.Matrix);
                     fprintf(fid, '"');
@@ -718,7 +718,7 @@ function [filterString, boundingBox] = filter2svg(fid, id, boundingBoxAxes, boun
   end
 end
 
-function printAttributeArray(fid, names, svgstruct, svgfield)
+function printAttributeArray(fid, names, svgstruct, svgfield, default)
   if isfield(svgstruct, svgfield)
     if isnumeric(svgstruct.(svgfield))
       if length(svgstruct.(svgfield)) ~= length(names)
@@ -1009,6 +1009,11 @@ function group = colorbar_axes2svg(fid, id, ax, group, paperpos)
       valid_xsticks = axxindex_inner;
       valid_ysticks = axyindex_inner;
       if ~strcmp(get(ax, 'Type'), 'colorbar')
+        if strcmp(get(ax, 'Box'), 'on')
+          axzindex_inner = find((axztick > axlimori(3)) & (axztick < (axlimori(3)+axlimori(6))));
+        else
+          axzindex_inner = find((axztick >= axlimori(3)) & (axztick <= (axlimori(3)+axlimori(6))));
+        end
         valid_zsticks = axzindex_inner;
       end
     end
