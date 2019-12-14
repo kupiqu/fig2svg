@@ -96,9 +96,9 @@ x_az = 90; % left
 % x_az = 225; % ticks direction now ok
 % x_az = 315;  % ticks direction ok
 
-x_az = 0; % ticks length missing
+x_az = 0; % ticks direction now ok
 x_az = 90; % ticks direction ok
-x_az = 180; % ticks length missing
+x_az = 180; % ticks direction now ok
 % x_az = 270; % ticks direction ok
 
 view(x_az, 30);
@@ -113,7 +113,7 @@ xlabel('X','Fontsize',fontSize);
 ylabel('Y','Fontsize',fontSize);
 zlabel('Z','Fontsize',fontSize);
 title('Sphere^2 with Alpha_{Data}','Fontsize',fontSize);
-% fig2svg('sphere.svg'); % ,'',1);
-fig2svg('sphere.svg'); % ,'',1); % debug
+fig2svg('sphere.svg');
+% fig2svg('sphere.svg','',1); % debug
 
 set(0,'defaultAxesFontName',prevFontName);

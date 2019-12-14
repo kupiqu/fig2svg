@@ -26,7 +26,7 @@ function varargout = fig2svg(filename, id, debug, legendIcons, clippingMode, fig
 
   global FIG2SVG_globals
   global colorname
-  release_version = '2019.07.0'; % year.month.incremental
+  release_version = '2019.12.0'; % year.month.incremental
   FIG2SVG_globals.runningIdNumber = 0;
   FIG2SVG_globals.UI = reportUI;
   FIG2SVG_globals.octave = false;
@@ -1983,24 +1983,43 @@ function group = axes2svg(fid, id, ax, group, paperpos)
         else
           lim = [axlimz(1), axlimz(2)];
         end
-        x_tick_end1 = interp1([0, 1], [x(z_axis_point_index), x(edge_neighbours(z_axis_point_index, 2))], ticklength*tick_ratio(3), 'linear', 'extrap');
-        x_tick_end2 = interp1([0, 1], [x(edge_neighbours(z_axis_point_index, 3)), x(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 2))], ticklength*tick_ratio(3), 'linear', 'extrap');
-        x_label_end1 = interp1([0, 1], [x(z_axis_point_index), x(edge_neighbours(z_axis_point_index, 2))], zlabel_distance, 'linear', 'extrap');
-        x_label_end2 = interp1([0, 1], [x(edge_neighbours(z_axis_point_index, 3)), x(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 2))], zlabel_distance, 'linear', 'extrap');
+        if z_axis_point_index == 1 || z_axis_point_index == 4
+          x_tick_end1 = interp1([0, 1], [x(z_axis_point_index), x(edge_neighbours(z_axis_point_index, 1))], ticklength*tick_ratio(3), 'linear', 'extrap')
+          x_tick_end2 = interp1([0, 1], [x(edge_neighbours(z_axis_point_index, 3)), x(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 1))], ticklength*tick_ratio(3), 'linear', 'extrap');
+          x_label_end1 = interp1([0, 1], [x(z_axis_point_index), x(edge_neighbours(z_axis_point_index, 1))], zlabel_distance, 'linear', 'extrap');
+          x_label_end2 = interp1([0, 1], [x(edge_neighbours(z_axis_point_index, 3)), x(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 1))], zlabel_distance, 'linear', 'extrap');
+
+          v = get(ax, 'view');
+          if v(1) >= 0 && v(1) < 90 || v(1) >= 180 && v(1) < 270
+           tick_ratio(3) = -tick_ratio(3);
+           zlabel_distance = -zlabel_distance;
+          end
+
+          y_tick_end1 = interp1([0, 1], [y(z_axis_point_index), y(edge_neighbours(z_axis_point_index, 1))], ticklength*tick_ratio(3), 'linear', 'extrap');
+          y_tick_end2 = interp1([0, 1], [y(edge_neighbours(z_axis_point_index, 3)), y(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 1))], ticklength*tick_ratio(3), 'linear', 'extrap');
+          y_label_end1 = interp1([0, 1], [y(z_axis_point_index), y(edge_neighbours(z_axis_point_index, 1))], zlabel_distance, 'linear', 'extrap');
+          y_label_end2 = interp1([0, 1], [y(edge_neighbours(z_axis_point_index, 3)), y(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 1))], zlabel_distance, 'linear', 'extrap');
+        else
+          x_tick_end1 = interp1([0, 1], [x(z_axis_point_index), x(edge_neighbours(z_axis_point_index, 2))], ticklength*tick_ratio(3), 'linear', 'extrap');
+          x_tick_end2 = interp1([0, 1], [x(edge_neighbours(z_axis_point_index, 3)), x(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 2))], ticklength*tick_ratio(3), 'linear', 'extrap');
+          x_label_end1 = interp1([0, 1], [x(z_axis_point_index), x(edge_neighbours(z_axis_point_index, 2))], zlabel_distance, 'linear', 'extrap');
+          x_label_end2 = interp1([0, 1], [x(edge_neighbours(z_axis_point_index, 3)), x(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 2))], zlabel_distance, 'linear', 'extrap');
+
+          v = get(ax, 'view');
+          if v(1) >= 0 && v(1) < 90 || v(1) >= 180 && v(1) < 270
+           tick_ratio(3) = -tick_ratio(3);
+           zlabel_distance = -zlabel_distance;
+          end
+
+          y_tick_end1 = interp1([0, 1], [y(z_axis_point_index), y(edge_neighbours(z_axis_point_index, 2))], ticklength*tick_ratio(3), 'linear', 'extrap');
+          y_tick_end2 = interp1([0, 1], [y(edge_neighbours(z_axis_point_index, 3)), y(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 2))], ticklength*tick_ratio(3), 'linear', 'extrap');
+          y_label_end1 = interp1([0, 1], [y(z_axis_point_index), y(edge_neighbours(z_axis_point_index, 2))], zlabel_distance, 'linear', 'extrap');
+          y_label_end2 = interp1([0, 1], [y(edge_neighbours(z_axis_point_index, 3)), y(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 2))], zlabel_distance, 'linear', 'extrap');
+        end
+
         xg_line_start = interp1(lim, [x(z_axis_point_index), x(edge_neighbours(z_axis_point_index, 3))], axztick);
         xg_line_end = interp1(lim, [x_tick_end1, x_tick_end2], axztick);
         xg_label_end = interp1(lim, [x_label_end1, x_label_end2], axztick);
-
-        v = get(ax, 'view');
-        if v(1) >= 0 && v(1) < 90 || v(1) >= 180 && v(1) < 270
-          tick_ratio(3) = -tick_ratio(3);
-          zlabel_distance = -zlabel_distance;
-        end
-
-        y_tick_end1 = interp1([0, 1], [y(z_axis_point_index), y(edge_neighbours(z_axis_point_index, 2))], ticklength*tick_ratio(3), 'linear', 'extrap');
-        y_tick_end2 = interp1([0, 1], [y(edge_neighbours(z_axis_point_index, 3)), y(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 2))], ticklength*tick_ratio(3), 'linear', 'extrap');
-        y_label_end1 = interp1([0, 1], [y(z_axis_point_index), y(edge_neighbours(z_axis_point_index, 2))], zlabel_distance, 'linear', 'extrap');
-        y_label_end2 = interp1([0, 1], [y(edge_neighbours(z_axis_point_index, 3)), y(edge_neighbours(edge_neighbours(z_axis_point_index, 3), 2))], zlabel_distance, 'linear', 'extrap');
 
         yg_line_start = interp1(lim, [y(z_axis_point_index), y(edge_neighbours(z_axis_point_index, 3))], axztick);
         yg_line_end = interp1(lim, [y_tick_end1, y_tick_end2], axztick);
